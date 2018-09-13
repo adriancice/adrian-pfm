@@ -47,6 +47,7 @@
 	</header>
 
 	<footer th:fragment="footer">
+		<hr />
 		<div class="container">
 			<p sec:authorize="isAuthenticated()">
 				Usuario logeado: <span sec:authentication="name"></span> | Roles: <span
