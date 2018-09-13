@@ -73,7 +73,7 @@ public class UserController {
 		}
 
 		reqUser.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
-		reqUser.setRole(Roles.ROLE_ADMIN.getValue());
+		reqUser.setRole(Roles.ROLE_USER.getValue());
 
 		if (userService.save(reqUser) != null) {
 			redirectAttributes.addFlashAttribute("saveUser", "success");
