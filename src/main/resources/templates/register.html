@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+<body>
+	<header th:replace="fragments/layout :: header"></header>
+	<!-- Register form Bootstrap4 -->
+	<form class="form-signin" id="registerForm" th:object="${reqUser}"
+		th:action="@{/user/register}" method="post">
+		<h1 class="h3 mb-3 font-weight-normal">Create your account</h1>
+		<div th:if="${saveUser eq 'success'}"
+			class="alert alert-success alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			<strong>User registered Successfully</strong> Please Login
+		</div>
+
+		<div th:if="${saveUser eq 'exist-name'}"
+			class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			<strong>Error!</strong> Username already used !!!
+		</div>
+		<div th:if="${saveUser eq 'exist-email'}"
+			class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			<strong>Error!</strong> User email already used !!!
+		</div>
+		<div th:if="${saveUser eq 'fail'}"
+			class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			<strong>Error!</strong> Unexpected error !!!
+		</div>
+		<input th:field="*{username}" type="text" name="register_username"
+			class="form-control" placeholder="Username" required="required"
+			value="" /> <input th:field="*{email}" type="email"
+			name="register_email" class="form-control" placeholder="Email"
+			required="required" value="" /> <input th:field="*{password}"
+			type="password" name="register_password" class="form-control"
+			id="password" placeholder="Password" required="required" /> <input
+			th:field="*{password_2}" type="password" name="register_cpassword"
+			class="form-control" id="confirm_password"
+			placeholder="Confirm Password" required="required" />
+			<p>Have a accout, <a th:href="@{/login}">login !</a></p>
+		<input type="submit" value="Create account"
+			class="btn btn-lg btn-success btn-block" />
+	</form>
+	<!-- End register form Bootstrap4 -->
+
+	<div id="footerSeparator"></div>
+
+	<footer th:replace="fragments/layout :: footer"></footer>
+	<script>
+		var password = document.getElementById("password"), confirm_password = document
+				.getElementById("confirm_password");
+
+		function validatePassword() {
+			if (password.value != confirm_password.value) {
+				confirm_password.setCustomValidity("Passwords Don't Match");
+			} else {
+				confirm_password.setCustomValidity('');
+			}
+		}
+		password.onchange = validatePassword;
+		confirm_password.onkeyup = validatePassword;
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+<meta charset="UTF-8" />
+<title th:text="${titulo}">Adrian´s page</title>
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/signin.css}" rel="stylesheet" media="screen" />
+</head>
+
+<body>
+
+	<header class="container py-3 bg-light" th:fragment="header">
+		<div
+			class="row flex-nowrap justify-content-between align-items-center">
+			<div class="col-4 pt-1">
+				<a class="text-muted" th:href="@{/subscribe}">Subscribe</a>
+			</div>
+
+			<div class="col-4 text-center">
+				<a class="blog-header-logo text-dark" th:href="@{/}">Home</a>
+			</div>
+
+
+			<div class="col-4 d-flex justify-content-end align-items-center">
+				<a sec:authorize="!isAuthenticated()"
+					class="btn btn-sm btn-outline-secondary mr-2" th:href="@{/login}">Sign
+					in</a> <a sec:authorize="isAuthenticated()"
+					class="btn btn-outline-secundary dropdown-toggle" href="#"
+					role="button" id="dropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> <span
+					sec:authentication="name"></span></a>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
+						th:href="@{/listar}">Ver usuarios</a>
+					<form id="logoutForm" th:action="@{/logout}" method="post">
+						<button class="dropdown-item"
+							onclick="document.getElementById('logoutForm').submit();"
+							type="submit">Logout</button>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		<hr />
+	</header>
+
+	<footer th:fragment="footer">
+		<div class="container">
+			<p sec:authorize="isAuthenticated()">
+				Usuario logeado: <span sec:authentication="name"></span> | Roles: <span
+					sec:authentication="principal.authorities"></span>
+			</p>
+			<p>
+				&copy; 2018 Blog template built for <a
+					href="https://getbootstrap.com/">Bootstrap</a> by <a
+					href="https://github.com/adriancice">Adrian</a>.
+			</p>
+			<p>
+				<a href="#">Back to top</a>
+			</p>
+		</div>
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Bootstrap JS -->
+		<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+		<script th:src="@{/js/popper.min.js}"></script>
+		<script th:src="@{/js/bootstrap.min.js}"></script>
+	</footer>
+
+</body>
+
+</html>
