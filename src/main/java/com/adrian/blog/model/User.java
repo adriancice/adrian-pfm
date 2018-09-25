@@ -1,6 +1,7 @@
 package com.adrian.blog.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.Objects;
@@ -21,9 +22,11 @@ public class User {
 	private int id;
 
 	@Column(name = "username")
+	@NotNull
 	private String username;
 
 	@Column(name = "password")
+	@NotNull
 	private String password;
 
 	@Transient
@@ -31,14 +34,19 @@ public class User {
 	private String password_2;
 
 	@Column(name = "email")
+	@NotNull
 	private String email;
 
 	@Column(name = "role")
+	@NotNull
 	private int role;
 
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+
+	@Column(name = "last_session")
+	private Date lastSession;
 
 	@PrePersist
 	public void PrePersist() {
@@ -109,6 +117,14 @@ public class User {
 
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	public Date getLastSession() {
+		return lastSession;
+	}
+
+	public void setLastSession(Date lastSession) {
+		this.lastSession = lastSession;
 	}
 
 	@Override

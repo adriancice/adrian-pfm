@@ -16,61 +16,53 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * The WebSecurityConfig class
  *
  * @author Adrian Paul
- * @version 1.0
- * Date 14/09/2018.
+ * @version 1.0 Date 14/09/2018.
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDS;
+	@Autowired
+	private UserDetailsService userDS;
 
-    @Autowired
-    private MyAuthenticationSuccessHandler successHandler;
+	@Autowired
+	private MyAuthenticationSuccessHandler successHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDS);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDS);
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+	}
 
-    @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDS);
-        auth.authenticationProvider(authenticationProvider());
-    }
+	@Autowired
+	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDS);
+		auth.authenticationProvider(authenticationProvider());
+	}
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDS);
-    }
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDS);
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/", "/login", "/register", "/user/register", "/css/**", "/js/**").permitAll()
-                .antMatchers("/listar/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .successHandler(successHandler)
-                .usernameParameter("username").passwordParameter("password")
-                .and()
-                .logout().permitAll().and().exceptionHandling().accessDeniedPage("/login");
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/", "/login", "/register", "/user/register", "/subscribe", "/forgot")
+				.permitAll().antMatchers("/css/**", "/js/**").permitAll().antMatchers("/listar/**")
+				.access("hasRole('ROLE_ADMIN')").anyRequest().authenticated().and().formLogin().loginPage("/login")
+				.permitAll().successHandler(successHandler).usernameParameter("username").passwordParameter("password")
+				.and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/login");
+	}
 
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return userDS;
-    }
+	@Override
+	protected UserDetailsService userDetailsService() {
+		return userDS;
+	}
 }

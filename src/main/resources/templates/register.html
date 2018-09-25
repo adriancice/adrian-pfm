@@ -1,5 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head"></head>
+<!-- Custom styles for this template -->
+<link th:href="@{/css/signin.css}" rel="stylesheet" media="screen" />
 <body>
 	<header th:replace="fragments/layout :: header"></header>
 	<!-- Register form Bootstrap4 -->
@@ -46,8 +48,6 @@
 			class="btn btn-lg btn-success btn-block" />
 	</form>
 	<!-- End register form Bootstrap4 -->
-
-	<div id="footerSeparator"></div>
 
 	<footer th:replace="fragments/layout :: footer"></footer>
 	<script>

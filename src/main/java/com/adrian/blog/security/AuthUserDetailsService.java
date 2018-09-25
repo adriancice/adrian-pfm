@@ -3,7 +3,7 @@ package com.adrian.blog.security;
 import org.springframework.stereotype.Service;
 
 import com.adrian.blog.model.User;
-import com.adrian.blog.service.UserService;
+import com.adrian.blog.service.IUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class AuthUserDetailsService implements UserDetailsService {
 	private static final Logger logger = LoggerFactory.getLogger(AuthUserDetailsService.class);
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	private org.springframework.security.core.userdetails.User springUser;
 

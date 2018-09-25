@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+<!-- Custom styles for this template -->
+<link th:href="@{/css/signin.css}" rel="stylesheet" media="screen" />
+<body>
+	<header th:replace="fragments/layout :: header"></header>
+
+	<div class="form-signin">
+		<div class="container">
+			<h5 class="text-center">Has olvidado tu contrase&ntilde;a?</h5>
+		</div>
+		<div class="container">
+			<p>Introduce tu correo electronico:</p>
+		</div>
+		<div class="container my-2">
+			<input type="email" name="forgotPassword" class="form-control "
+				placeholder="Email" required="required" value="" />
+		</div>
+		<div class="container">
+			<a class="btn btn-primary" th:href="@{/login}">Login</a>
+			<button type="button" class="btn btn-primary">Enviar</button>
+		</div>
+	</div>
+	<footer th:replace="fragments/layout :: footer"></footer>
+
+
+</body>
+</html>

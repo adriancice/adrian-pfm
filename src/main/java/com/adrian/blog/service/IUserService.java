@@ -13,7 +13,7 @@ import com.adrian.blog.model.User;
  * @author Adrian Paul
  * @version 1.0 Date 14/09/2018.
  */
-public interface UserService {
+public interface IUserService {
 
 	User save(User user);
 

@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.adrian.blog.model.User;
-import com.adrian.blog.service.UserService;
+import com.adrian.blog.service.IUserService;
 
 /**
  * The GlobalController Class
@@ -21,7 +21,7 @@ import com.adrian.blog.service.UserService;
 public class GlobalController {
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	private User loginUser;
 

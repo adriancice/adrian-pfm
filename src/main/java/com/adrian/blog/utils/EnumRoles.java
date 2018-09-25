@@ -7,11 +7,11 @@ package com.adrian.blog.utils;
  * @version 1.0
  * Date 14/09/2018.
  */
-public enum Roles {
+public enum EnumRoles {
     ROLE_ADMIN(1), ROLE_USER(2);
     private int value;
 
-    Roles(int value) {
+    EnumRoles(int value) {
         this.value = value;
     }
 

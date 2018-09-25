@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.adrian.blog.model.User;
-import com.adrian.blog.repository.UserRepository;
-import com.adrian.blog.service.UserService;
+import com.adrian.blog.repository.IUserRepository;
+import com.adrian.blog.service.IUserService;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -20,10 +20,10 @@ import java.util.Collection;
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private IUserRepository userRepository;
 
 	@Override
 	public User save(User user) {

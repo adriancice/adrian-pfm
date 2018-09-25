@@ -16,9 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
-import com.adrian.blog.service.UserService;
+import com.adrian.blog.service.IUserService;
 import com.adrian.blog.utils.PassEncoding;
-import com.adrian.blog.utils.Roles;
+import com.adrian.blog.utils.EnumRoles;
 
 /**
  * The UserController Class
@@ -35,7 +35,7 @@ public class UserController {
 	GlobalController globalController;
 
 	@Autowired
-	UserService userService;
+	IUserService userService;
 
 	@RequestMapping("/login")
 	public String login(Model model) {
@@ -50,11 +50,23 @@ public class UserController {
 		return "home";
 	}
 
+	@RequestMapping("/subscribe")
+	public String subscribe(Model model) {
+		logger.info("subscribe");
+		return "subscribe";
+	}
+
 	@RequestMapping("/register")
 	public String register(Model model) {
 		model.addAttribute("reqUser", new User());
 		logger.info("register");
 		return "register";
+	}
+
+	@RequestMapping("/forgot")
+	public String forgot(Model model) {
+		logger.info("forgot");
+		return "forgot";
 	}
 
 	@RequestMapping(value = { "/user/register" }, method = RequestMethod.POST)
@@ -73,7 +85,7 @@ public class UserController {
 		}
 
 		reqUser.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
-		reqUser.setRole(Roles.ROLE_USER.getValue());
+		reqUser.setRole(EnumRoles.ROLE_USER.getValue());
 
 		if (userService.save(reqUser) != null) {
 			redirectAttributes.addFlashAttribute("saveUser", "success");

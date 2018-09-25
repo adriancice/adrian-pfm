@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+
+<body>
+
+	<header th:replace="fragments/layout :: header"></header>
+	<!-- form Bootstrap -->
+	<form class="container" th:object="${reqEntrada}"
+		th:action="@{/entrada-add}" method="post">
+		<h1 class="h3 mb-3 font-weight-normal">Crear nueva entrada ...</h1>
+		<div class="form-group">
+			<label for="exampleFormControlInput1">Título</label> <input
+				type="text" class="form-control" id="tituloEntrada"
+				placeholder="Título de la entrada">
+		</div>
+		<div class="form-group">
+			<label for="exampleFormControlSelect1">Categoria</label> 
+			<select	class="form-control" id="categoriaEntrada">
+				<option>Android</option>
+				<option>Apple</option>
+				<option>Móviles</option>
+				<option>Tecnología</option>
+				<option>Culture</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="exampleFormControlTextarea1">Contenido de la
+				entrada</label>
+			<textarea class="form-control" id="contenidoEntrada" rows="3"></textarea>
+		</div>
+		<input type="submit" value="Login"
+			class="btn btn-lg btn-primary btn-block" />
+	</form>
+	<!-- end of Bootstrap form -->
+
+	<footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>
