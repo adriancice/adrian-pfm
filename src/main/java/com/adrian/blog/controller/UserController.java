@@ -111,4 +111,11 @@ public class UserController {
 		return "listar";
 	}
 
+	@RequestMapping(value = { "/misAnuncios" }, method = RequestMethod.GET)
+	public String misAnuncios() {
+		logger.info("misAnuncios");
+
+		return "misAnuncios";
+	}
+
 }

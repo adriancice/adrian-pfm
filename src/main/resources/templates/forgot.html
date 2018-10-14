@@ -13,14 +13,16 @@
 		<div class="container">
 			<p>Introduce tu correo electronico:</p>
 		</div>
-		<div class="container my-2">
-			<input type="email" name="forgotPassword" class="form-control "
-				placeholder="Email" required="required" value="" />
-		</div>
-		<div class="container">
-			<a class="btn btn-primary" th:href="@{/login}">Login</a>
-			<button type="button" class="btn btn-primary">Enviar</button>
-		</div>
+		<form>
+			<div class="container my-2">
+				<input type="email" name="forgotPassword" class="form-control "
+					placeholder="Email" value="" required autofocus />
+			</div>
+			<div class="container">
+				<a class="btn btn-primary" th:href="@{/login}">Login</a>
+				<button type="submit" class="btn btn-primary">Enviar</button>
+			</div>
+		</form>
 	</div>
 	<footer th:replace="fragments/layout :: footer"></footer>
 

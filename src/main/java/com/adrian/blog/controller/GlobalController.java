@@ -32,4 +32,5 @@ public class GlobalController {
 		}
 		return loginUser;
 	}
+
 }
