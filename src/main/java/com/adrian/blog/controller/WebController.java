@@ -18,4 +18,5 @@ public class WebController {
 		modelAndView.setViewName("contacto");
 		return modelAndView;
 	}
+
 }
