@@ -1,13 +1,114 @@
+body {
+	background-color: #ECF0F1;
+}
+
 /* Subscribe css */
 .simple-subscription-form {
-  background: #0c3e5f;
-  color: #fefefe;
-  padding: 2rem;
-  border-radius: 0;
+	background: #0c3e5f;
+	color: #fefefe;
+	padding: 2rem;
+	border-radius: 0;
 }
 
 .simple-subscription-form .button {
-  margin-bottom: 0;
-  border-radius: 0 0 0 0;
+	margin-bottom: 0;
+	border-radius: 0 0 0 0;
 }
 /* End of subscribe css */
+
+/* Card css link */
+a.card {
+	color: inherit;
+	text-decoration: inherit;
+	border-style: none;
+}
+
+a.card button {
+	z-index: 1;
+}
+
+a.card.disabled, a.card[disabled] {
+	pointer-events: none;
+	opacity: .8;
+}
+/* End card css link */
+
+/* multiple file upload */
+.preview-images-zone {
+	width: 100%;
+	border: 1px solid #ddd;
+	min-height: 180px;
+	/* display: flex; */
+	padding: 5px 5px 0px 5px;
+	position: relative;
+	overflow: auto;
+}
+
+.preview-images-zone>.preview-image:first-child {
+	height: 185px;
+	width: 185px;
+	position: relative;
+	margin-right: 5px;
+}
+
+.preview-images-zone>.preview-image {
+	height: 90px;
+	width: 90px;
+	position: relative;
+	margin-right: 5px;
+	float: left;
+	margin-bottom: 5px;
+}
+
+.preview-images-zone>.preview-image>.image-zone {
+	width: 100%;
+	height: 100%;
+}
+
+.preview-images-zone>.preview-image>.image-zone>img {
+	width: 100%;
+	height: 100%;
+}
+
+.preview-images-zone>.preview-image>.tools-edit-image {
+	position: absolute;
+	z-index: 100;
+	color: #fff;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 10px;
+	display: none;
+}
+
+.preview-images-zone>.preview-image>.image-cancel {
+	font-size: 18px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-weight: bold;
+	margin-right: 10px;
+	cursor: pointer;
+	display: none;
+	z-index: 100;
+}
+
+.preview-image:hover>.image-zone {
+	cursor: move;
+	opacity: .5;
+}
+
+.preview-image:hover>.tools-edit-image, .preview-image:hover>.image-cancel
+	{
+	display: block;
+}
+
+.ui-sortable-helper {
+	width: 90px !important;
+	height: 90px !important;
+}
+
+.container {
+	padding-top: 50px;
+}
+/* end multiple file upload */

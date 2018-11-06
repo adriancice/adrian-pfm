@@ -8,10 +8,14 @@ public interface IVehiculoService {
 
 	Vehiculo save(Vehiculo vehiculo);
 
-	Vehiculo update(Vehiculo vehiculo);
-
-	Vehiculo delete(Vehiculo vehiculo);
+	void delete(Vehiculo vehiculo);
 
 	Collection<Vehiculo> findAll();
+
+	Collection<Vehiculo> findByMarca(String marca);
+
+	Collection<Vehiculo> findByIdUser(int id);
+
+	Vehiculo findById(int id);
 
 }

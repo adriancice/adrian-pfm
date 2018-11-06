@@ -6,19 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
+import com.adrian.blog.repository.IProvinciaRepository;
+import com.adrian.blog.security.AuthUserDetailsService;
+import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IUserService;
-import com.adrian.blog.utils.PassEncoding;
+import com.adrian.blog.service.IVehiculoService;
 import com.adrian.blog.utils.EnumRoles;
+import com.adrian.blog.utils.PassEncoding;
 
 /**
  * The UserController Class
@@ -35,19 +42,30 @@ public class UserController {
 	GlobalController globalController;
 
 	@Autowired
+	IVehiculoService vehiculoService;
+
+	@Autowired
 	IUserService userService;
+
+	@Autowired
+	IProvinciaService provinciaService;
+
+	@Autowired
+	AuthUserDetailsService userDetailsService;
 
 	@RequestMapping("/login")
 	public String login(Model model) {
-		model.addAttribute("reqUser", new User());
+		// model.addAttribute("reqUser", new User());
 		logger.info("login");
 		return "login";
 	}
 
-	@RequestMapping({ "/home", "/" })
+	@RequestMapping({ "/index", "/" })
 	public String home(Model model) {
-		logger.info("home");
-		return "home";
+		logger.info("index");
+		model.addAttribute("listaVehiculos", vehiculoService.findAll());
+		model.addAttribute("prueba", "prueba para ver si pasan los string");
+		return "index";
 	}
 
 	@RequestMapping("/subscribe")
@@ -58,8 +76,9 @@ public class UserController {
 
 	@RequestMapping("/register")
 	public String register(Model model) {
-		model.addAttribute("reqUser", new User());
 		logger.info("register");
+		model.addAttribute("reqUser", new User());
+		model.addAttribute("listaProvincias", provinciaService.findAll());
 		return "register";
 	}
 
@@ -96,6 +115,7 @@ public class UserController {
 		return "redirect:/register";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = { "/listar" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("listar");
@@ -112,9 +132,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = { "/misAnuncios" }, method = RequestMethod.GET)
-	public String misAnuncios() {
+	public String misAnuncios(Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("misAnuncios");
-
+		User u = userDetailsService.getUserDetail(authentication.getName());
+		model.addAttribute("listaVehiculos", vehiculoService.findByIdUser(u.getId()));
+		if (vehiculoService.findByIdUser(u.getId()).isEmpty()) {
+			model.addAttribute("vacio", "vacio");
+		}
 		return "misAnuncios";
 	}
 

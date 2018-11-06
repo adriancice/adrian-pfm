@@ -3,6 +3,10 @@ package com.adrian.blog.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
@@ -18,7 +22,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true)
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "username")
@@ -33,9 +37,11 @@ public class User {
 	@Column(name = "password_2")
 	private String password_2;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	@NotNull
 	private String email;
+
+	private String provincia;
 
 	@Column(name = "role")
 	@NotNull
@@ -103,6 +109,14 @@ public class User {
 		this.email = email;
 	}
 
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
 	public int getRole() {
 		return role;
 	}
@@ -144,4 +158,5 @@ public class User {
 
 		return Objects.hash(id, username, password, password_2, email, role);
 	}
+
 }

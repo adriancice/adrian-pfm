@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+
+<body>
+	<header th:replace="fragments/layout :: header"></header>
+
+	<div class="container">
+		<h4>Dettalles del anuncio</h4>
+	</div>
+	<!-- /// Lista de vehiculos/anuncios -->
+	<div class="container">
+		<div class="container-fluid gedf-wrapper">
+			<div class="row">
+				<div class="col-md-9">
+					<div class="card mb-4">
+						<img class="card-img-top"
+							th:src="@{'/uploads/' + ${vehiculo.foto}}"
+							th:alt="${vehiculo.foto}">
+						<div class="card-body">
+							<h5 class="card-title"
+								th:text="${vehiculo.marca} + ' ' +${vehiculo.modelo} + ' ' + ${vehiculo.puertas} + 'p'"></h5>
+							<p class="card-text"
+								th:text="${vehiculo.combustible} + ' | ' + ${vehiculo.anio} + ' | ' 
+								+ ${vehiculo.kilometros} + ' km' + ' | ' + ${vehiculo.color}"></p>
+							<p th:text="${user.email}"></p>
+							<p th:text="${vehiculo.provincia}"></p>
+							<p th:text="${vehiculo.descripcion}"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  Final lista de vehiculos/anuncios ///-->
+	<footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

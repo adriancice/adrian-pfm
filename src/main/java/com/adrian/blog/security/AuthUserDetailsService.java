@@ -66,9 +66,10 @@ public class AuthUserDetailsService implements UserDetailsService {
 		return authList;
 	}
 
-	private User getUserDetail(String username) {
+	public User getUserDetail(String username) {
 
 		User user = userService.findByUserName(username);
+
 		if (user == null) {
 			logger.warn("user '" + username + "' on null!");
 		} else {

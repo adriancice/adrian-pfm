@@ -25,7 +25,7 @@
 			class="alert alert-danger alert-dismissable">
 			<button type="button" class="close" data-dismiss="alert"
 				aria-hidden="true">&times;</button>
-			<strong>Error!</strong> User email already used !!!
+			<strong>Error!</strong> Email already used !!!
 		</div>
 		<div th:if="${saveUser eq 'fail'}"
 			class="alert alert-danger alert-dismissable">
@@ -36,21 +36,27 @@
 		<input th:field="*{username}" type="text" name="register_username"
 			class="form-control" placeholder="Username" required="required"
 			value="" /> <input th:field="*{email}" type="email"
-			name="register_email" class="form-control my-2" placeholder="Email"
-			required="required" value="" /> <input th:field="*{password}"
-			type="password" name="register_password" class="form-control"
-			id="password" placeholder="Password" required="required" /> <input
+			name="register_email" id="email" class="form-control my-2"
+			placeholder="Email" required="required" value="" /> 
+		<select	th:field="*{provincia}" id="provincia" class="custom-select mb-2" required>
+			<option value="" selected>Elige una provincia . . .</option>
+			<option th:each="p : ${listaProvincias}" th:value="${p.provincia}" th:text="${p.provincia}"></option>
+		</select> 
+		<input th:field="*{password}" type="password" name="register_password" class="form-control" id="password"
+			placeholder="Password" required="required" /> <input
 			th:field="*{password_2}" type="password" name="register_cpassword"
 			class="form-control" id="confirm_password"
 			placeholder="Confirm Password" required="required" />
-			<p>Have a accout, <a th:href="@{/login}">login !</a></p>
+		<p>
+			Have a accout, <a th:href="@{/login}">login !</a>
+		</p>
 		<input type="submit" value="Create account"
 			class="btn btn-lg btn-success btn-block" />
 	</form>
 	<!-- End register form Bootstrap4 -->
 
 	<footer th:replace="fragments/layout :: footer"></footer>
-	<!-- script para verificar si las contraseñas coinciden -->
+	<!-- script para verificar si las contraseÃ±as coinciden -->
 	<script>
 		var password = document.getElementById("password"), confirm_password = document
 				.getElementById("confirm_password");

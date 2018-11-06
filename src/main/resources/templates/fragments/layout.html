@@ -12,9 +12,9 @@
 <link th:href="@{/css/css.css}" rel="stylesheet" media="screen" />
 <!-- Font awesome CSS  -->
 <link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-	integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-	crossorigin="anonymous">
+	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -46,7 +46,9 @@
 						sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
 						th:href="@{/vehiculoAdd}">Añadir vehiculo</a> <a
 						sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
-						th:href="@{/misAnuncios}">Mis anuncios</a>
+						th:href="@{/misAnuncios}">Mis anuncios</a> <a
+						sec:authorize="isAuthenticated()" class="dropdown-item"
+						th:href="@{/crearAnuncio}">Vender coche</a>
 					<form id="logoutForm" th:action="@{/logout}" method="post">
 						<button class="dropdown-item"
 							onclick="document.getElementById('logoutForm').submit();"
@@ -64,11 +66,21 @@
 					class="p-2 text-muted" href="#">lorem ipsum</a> <a
 					class="p-2 text-muted" href="#">lorem ipsum</a> <a
 					class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" th:href="contacto">Contacto</a>
+					class="p-2 text-muted" href="#">lorem ipsum</a>
 			</nav>
 		</div>
-
+		<!-- mensajes  -->
+		<div class="alert alert-info" th:if="${vacio != null}">No tienes
+			anuncios</div>
+		<div class="alert alert-success" th:if="${success != null}"
+			th:text="${success}"></div>
+		<div class="alert alert-danger" th:if="${error != null}"
+			th:text="${error}"></div>
+		<div class="alert alert-warning" th:if="${warning != null}"
+			th:text="${warning}"></div>
+		<div class="alert alert-info" th:if="${info != null}"
+			th:text="${info}"></div>
+		<!-- end mensajes -->
 	</header>
 
 
@@ -97,10 +109,11 @@
 			</div>
 			<!-- Optional JavaScript -->
 			<!-- jQuery first, then Bootstrap JS -->
-			<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+			<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 			<script th:src="@{/js/popper.min.js}"></script>
 			<script th:src="@{/js/bootstrap.min.js}"></script>
 			<script th:src="@{/js/js.js}"></script>
+			<script th:src="@{/js/ajax.js}"></script>
 		</div>
 	</footer>
 
