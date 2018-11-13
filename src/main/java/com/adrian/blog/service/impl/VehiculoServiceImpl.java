@@ -2,9 +2,12 @@ package com.adrian.blog.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.repository.IVehiculoRepository;
 import com.adrian.blog.service.IVehiculoService;
@@ -12,11 +15,8 @@ import com.adrian.blog.service.IVehiculoService;
 @Service("vehiculoService")
 public class VehiculoServiceImpl implements IVehiculoService {
 
+	@Autowired
 	private IVehiculoRepository vehiculoRepository;
-
-	public VehiculoServiceImpl(IVehiculoRepository vehiculoRepository) {
-		this.vehiculoRepository = vehiculoRepository;
-	}
 
 	@Override
 	public Vehiculo save(Vehiculo vehiculo) {
@@ -54,6 +54,100 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	@Override
 	public Vehiculo findById(int id) {
 		return vehiculoRepository.findById(id).orElse(null);
+	}
+
+	/**
+	 * @Override public Collection<Vehiculo> findPalabra(String palabra) {
+	 *           Collection<Vehiculo> vehiculos = new ArrayList<>(); for (Vehiculo v
+	 *           : vehiculoRepository.findAll()) { if
+	 *           (v.getMarca().toLowerCase().contains(palabra.toLowerCase()) ||
+	 *           v.getModelo().toLowerCase().contains(palabra.toLowerCase()) ||
+	 *           v.getDescripcion().toLowerCase().contains(palabra.toLowerCase()) ||
+	 *           v.getCombustible().toLowerCase().contains(palabra.toLowerCase()) ||
+	 *           v.getProvincia().toLowerCase().contains(palabra.toLowerCase()) ||
+	 *           v.getColor().toLowerCase().contains(palabra.toLowerCase())) {
+	 *           vehiculos.add(v); } } return vehiculos; }
+	 */
+
+	@Override
+	public int totalVehiculos(Collection<Vehiculo> vehiculos) {
+		int contador = 0;
+		for (Vehiculo v : vehiculos) {
+			contador++;
+		}
+		return contador;
+	}
+
+	@Override
+	public Collection<Vehiculo> filtrar(Filtro filtro) {
+		Collection<Vehiculo> vehiculos = new ArrayList<>();
+		int pMin, pMax, anioMin, anioMax, kmMin, kmMax;
+		if (filtro.getPrecioMin().isEmpty()) {
+			pMin = 0;
+		} else {
+			pMin = Integer.parseInt(filtro.getPrecioMin());
+		}
+		if (filtro.getPrecioMax().isEmpty()) {
+			pMax = 999999;
+		} else {
+			pMax = Integer.parseInt(filtro.getPrecioMax());
+		}
+
+		if (filtro.getAnioMin().isEmpty()) {
+			anioMin = 1950;
+		} else {
+			anioMin = Integer.parseInt(filtro.getAnioMin());
+		}
+		if (filtro.getAnioMax().isEmpty()) {
+			anioMax = 2999;
+		} else {
+			anioMax = Integer.parseInt(filtro.getAnioMax());
+		}
+
+		if (filtro.getKmMin().isEmpty()) {
+			kmMin = 0;
+		} else {
+			kmMin = Integer.parseInt(filtro.getKmMin());
+		}
+		if (filtro.getKmMax().isEmpty()) {
+			kmMax = 999999;
+		} else {
+			kmMax = Integer.parseInt(filtro.getKmMax());
+		}
+
+		System.err.println("pMin: " + pMin + " --- pMax: " + pMax + "añoMin: " + anioMin + "anioMax: " + anioMax
+				+ "kmMin: " + kmMin + "kmMax: " + kmMax);
+		for (Vehiculo v : vehiculoRepository.findAll()) {
+			if (v.getMarca().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getModelo().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getDescripcion().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getCombustible().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getProvincia().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getColor().toLowerCase().contains(filtro.getPalabra().toLowerCase())) {
+				vehiculos.add(v);
+			}
+		}
+
+		Iterator<Vehiculo> it = vehiculos.iterator();
+		try {
+			while (it.hasNext()) {
+				Vehiculo v = it.next();
+				if (v.getPrecio() < pMin || v.getPrecio() > pMax) {
+					it.remove();
+				}
+				if (v.getAnio() < anioMin || v.getAnio() > anioMax) {
+					it.remove();
+				}
+				if (v.getKilometros() < kmMin || v.getKilometros() > kmMax) {
+					it.remove();
+				}
+			}
+
+		} catch (Exception e) {
+			System.err.println("Error");
+		}
+
+		return vehiculos;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.adrian.blog.service;
 
 import java.util.Collection;
 
+import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.Vehiculo;
 
 public interface IVehiculoService {
@@ -17,5 +18,9 @@ public interface IVehiculoService {
 	Collection<Vehiculo> findByIdUser(int id);
 
 	Vehiculo findById(int id);
+
+	int totalVehiculos(Collection<Vehiculo> vehiculos);
+
+	Collection<Vehiculo> filtrar(Filtro filtro);
 
 }

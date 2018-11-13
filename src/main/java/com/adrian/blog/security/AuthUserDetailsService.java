@@ -71,7 +71,7 @@ public class AuthUserDetailsService implements UserDetailsService {
 		User user = userService.findByUserName(username);
 
 		if (user == null) {
-			logger.warn("user '" + username + "' on null!");
+			logger.warn("Username '" + username + "' on null!");
 		} else {
 			logger.info(user.toString());
 		}

@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.security.AuthUserDetailsService;
@@ -171,8 +174,20 @@ public class VehiculoController {
 		Vehiculo vehiculo = vehiculoService.findById(id);
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
-
 		return "detallesAnuncio";
+	}
+
+	@RequestMapping("/vehiculos/filtrarPalabraClave/")
+	public String home(@ModelAttribute("reqFiltro") Filtro reqFiltro, Model model, HttpServletRequest req,
+			final RedirectAttributes redirectAttributes) {
+		logger.info("index");
+		model.addAttribute("listaVehiculos", vehiculoService.filtrar(reqFiltro));
+		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.filtrar(reqFiltro)));
+		if (vehiculoService.filtrar(reqFiltro).isEmpty()) {
+			model.addAttribute("palabra", "No se han encontrado resultados");
+		}
+		model.addAttribute("limpiar", "limpiar");
+		return "index";
 	}
 
 }

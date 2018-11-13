@@ -7,24 +7,83 @@
 
 	<div class="container">
 		<h1>BUSCAR</h1>
-		<h4>Bienvenido a nuestro concesionario</h4>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 	</div>
 
 	<div class="container">
 		<div class="container-fluid gedf-wrapper">
+			<div class="inline mb-3">
+				<span style="font-size: 2em;" th:text="${total}"></span> <span
+					class="text-muted">Coches de segunda mano</span>
+			</div>
 			<div class="row">
 				<div class="col-md-3">
-					<div class="card">
-						<div class="card-body">
-							<div class="h5">Aqui van los filtrar</div>
-						</div>
+					<div th:if="${limpiar != null}">
+						<a href="/">Limpiar filtros</a>
 					</div>
+					<form th:action="@{/vehiculos/filtrarPalabraClave/}"
+						th:object="${reqFiltro}">
+						<label class="text-muted">Palabra clave</label>
+						<div class="input-group">
+							<input th:field="*{palabra}" type="text" class="form-control"
+								name="palabra">
+						</div>
+						<div class="mt-3">
+							<label class="text-muted">Precio</label>
+							<div class="input-group">
+								<input th:field="*{precioMin}" type="text" class="form-control"
+									name="precioMin" placeholder="Precio minimo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="6">
+							</div>
+							<div class="input-group my-1">
+								<input th:field="*{precioMax}" type="text" class="form-control"
+									name="precioMax" placeholder="Precio maximo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="6">
+							</div>
+						</div>
+						<div class="mt-3">
+							<label class="text-muted">Año</label>
+							<div class="input-group">
+								<input th:field="*{anioMin}" type="text" class="form-control"
+									name="anioMin" placeholder="Año minimo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="4">
+							</div>
+							<div class="input-group my-1">
+								<input th:field="*{anioMax}" type="text" class="form-control"
+									name="anioMax" placeholder="Año maximo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="4">
+							</div>
+						</div>
+						<div class="mt-3">
+							<label class="text-muted">Kilómetros</label>
+							<div class="input-group">
+								<input th:field="*{kmMin}" type="text" class="form-control"
+									name="kmMin" placeholder="Kilómetros minimo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="6">
+							</div>
+							<div class="input-group my-1">
+								<input th:field="*{kmMax}" type="text" class="form-control"
+									name="kmMax" placeholder="Kilómetros maximo"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									maxlength="6">
+							</div>
+						</div>
+						<input type="submit" value="Aplicar filtros"
+							class="btn btn-lg btn-success btn-block my-3" />
+					</form>
 				</div>
 
 
 				<!-- /// Lista de vehiculos/anuncios -->
 				<div class="col-md-9">
+					<div class="alert alert-warning" th:if="${palabra != null}"
+						th:text="${palabra}"></div>
+					<div class="alert alert-warning" th:if="${palabra != null}">Modifica
+						o quita alguno de los filtros seleccionados !</div>
 					<div class="card p-3 mb-3" th:each="v : ${listaVehiculos}">
 						<a class="card" th:href="@{'/anuncio/detalle/' + ${v.id}}">
 							<div class="row mb-3">

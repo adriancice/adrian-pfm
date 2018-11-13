@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.repository.IProvinciaRepository;
@@ -63,8 +64,10 @@ public class UserController {
 	@RequestMapping({ "/index", "/" })
 	public String home(Model model) {
 		logger.info("index");
+		model.addAttribute("reqFiltro", new Filtro());
+		model.addAttribute("listaProvincias", provinciaService.findAll());
 		model.addAttribute("listaVehiculos", vehiculoService.findAll());
-		model.addAttribute("prueba", "prueba para ver si pasan los string");
+		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";
 	}
 
