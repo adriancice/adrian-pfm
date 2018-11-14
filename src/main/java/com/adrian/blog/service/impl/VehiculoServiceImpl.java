@@ -1,5 +1,6 @@
 package com.adrian.blog.service.impl;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,19 +57,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		return vehiculoRepository.findById(id).orElse(null);
 	}
 
-	/**
-	 * @Override public Collection<Vehiculo> findPalabra(String palabra) {
-	 *           Collection<Vehiculo> vehiculos = new ArrayList<>(); for (Vehiculo v
-	 *           : vehiculoRepository.findAll()) { if
-	 *           (v.getMarca().toLowerCase().contains(palabra.toLowerCase()) ||
-	 *           v.getModelo().toLowerCase().contains(palabra.toLowerCase()) ||
-	 *           v.getDescripcion().toLowerCase().contains(palabra.toLowerCase()) ||
-	 *           v.getCombustible().toLowerCase().contains(palabra.toLowerCase()) ||
-	 *           v.getProvincia().toLowerCase().contains(palabra.toLowerCase()) ||
-	 *           v.getColor().toLowerCase().contains(palabra.toLowerCase())) {
-	 *           vehiculos.add(v); } } return vehiculos; }
-	 */
-
 	@Override
 	public int totalVehiculos(Collection<Vehiculo> vehiculos) {
 		int contador = 0;
@@ -114,20 +102,20 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		} else {
 			kmMax = Integer.parseInt(filtro.getKmMax());
 		}
-
-		System.err.println("pMin: " + pMin + " --- pMax: " + pMax + "añoMin: " + anioMin + "anioMax: " + anioMax
-				+ "kmMin: " + kmMin + "kmMax: " + kmMax);
+		
+		//buscamos la palabra clave en los campos de: marca-modelo-descripcion-combustible-provincia-color
 		for (Vehiculo v : vehiculoRepository.findAll()) {
 			if (v.getMarca().toLowerCase().contains(filtro.getPalabra().toLowerCase())
 					|| v.getModelo().toLowerCase().contains(filtro.getPalabra().toLowerCase())
 					|| v.getDescripcion().toLowerCase().contains(filtro.getPalabra().toLowerCase())
 					|| v.getCombustible().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| v.getProvincia().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| normalizeString(v.getProvincia()).toLowerCase().contains(normalizeString(filtro.getPalabra()).toLowerCase())
 					|| v.getColor().toLowerCase().contains(filtro.getPalabra().toLowerCase())) {
 				vehiculos.add(v);
 			}
 		}
-
+		
+		//filtramos por: precio-año-kilometros
 		Iterator<Vehiculo> it = vehiculos.iterator();
 		try {
 			while (it.hasNext()) {
@@ -148,6 +136,17 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		}
 
 		return vehiculos;
+	}
+
+	/**
+	 * Metodo para ignorar los accentos de los string
+	 * 
+	 * @param str
+	 * @return str sin accentos
+	 */
+	public static String normalizeString(String str) {
+		str = Normalizer.normalize(str, Normalizer.Form.NFKD);
+		return str.replaceAll("[^a-z,^A-Z,^0-9]", "");
 	}
 
 }

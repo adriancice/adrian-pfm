@@ -65,7 +65,6 @@ public class UserController {
 	public String home(Model model) {
 		logger.info("index");
 		model.addAttribute("reqFiltro", new Filtro());
-		model.addAttribute("listaProvincias", provinciaService.findAll());
 		model.addAttribute("listaVehiculos", vehiculoService.findAll());
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";

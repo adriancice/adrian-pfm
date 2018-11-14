@@ -7,7 +7,7 @@
 	<!-- Register form Bootstrap4 -->
 	<form class="form-signin" id="registerForm" th:object="${reqUser}"
 		th:action="@{/user/register}" method="post">
-		<h1 class="h3 mb-3 font-weight-normal">Create your account</h1>
+		<h1 class="h3 mb-3 font-weight-normal text-center">Registrate</h1>
 		<div th:if="${saveUser eq 'success'}"
 			class="alert alert-success alert-dismissable">
 			<button type="button" class="close" data-dismiss="alert"
@@ -37,18 +37,20 @@
 			class="form-control" placeholder="Username" required="required"
 			value="" /> <input th:field="*{email}" type="email"
 			name="register_email" id="email" class="form-control my-2"
-			placeholder="Email" required="required" value="" /> 
-		<select	th:field="*{provincia}" id="provincia" class="custom-select mb-2" required>
+			placeholder="Email" required="required" value="" /> <select
+			th:field="*{provincia}" id="provincia" class="custom-select mb-2"
+			required>
 			<option value="" selected>Elige una provincia . . .</option>
-			<option th:each="p : ${listaProvincias}" th:value="${p.provincia}" th:text="${p.provincia}"></option>
-		</select> 
-		<input th:field="*{password}" type="password" name="register_password" class="form-control" id="password"
+			<option th:each="p : ${listaProvincias}" th:value="${p.provincia}"
+				th:text="${p.provincia}"></option>
+		</select> <input th:field="*{password}" type="password"
+			name="register_password" class="form-control" id="password"
 			placeholder="Password" required="required" /> <input
 			th:field="*{password_2}" type="password" name="register_cpassword"
 			class="form-control" id="confirm_password"
 			placeholder="Confirm Password" required="required" />
 		<p>
-			Have a accout, <a th:href="@{/login}">login !</a>
+			Ya tienes una cuenta, <a th:href="@{/login}">login !</a>
 		</p>
 		<input type="submit" value="Create account"
 			class="btn btn-lg btn-success btn-block" />

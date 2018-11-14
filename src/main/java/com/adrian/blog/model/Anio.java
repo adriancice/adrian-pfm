@@ -17,39 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vehiculos")
-public class Vehiculo {
+@Table(name = "anios")
+public class Anio {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", unique = true)
 	private int id;
 
-	private String marca;
-
-	private String modelo;
-
-	private int precio;
-
-	private int anio;
-
-	private int kilometros;
-
-	private String combustible;
-
-	private String color;
-
-	private int puertas;
-
-	private String foto;
-
-	private String tipoCambio;
-
-	private String descripcion;
-
-	private String provincia;
-
-	@Column(name = "id_user")
-	private int idUser;
+	private short anio;
 
 }

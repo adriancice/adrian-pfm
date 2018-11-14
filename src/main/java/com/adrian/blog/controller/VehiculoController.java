@@ -32,6 +32,10 @@ import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.security.AuthUserDetailsService;
+import com.adrian.blog.service.IAnioService;
+import com.adrian.blog.service.ICombustibleService;
+import com.adrian.blog.service.IMarcaService;
+import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IUploadFileService;
 import com.adrian.blog.service.IUserService;
 import com.adrian.blog.service.IVehiculoService;
@@ -53,6 +57,18 @@ public class VehiculoController {
 	@Autowired
 	IUserService userService;
 
+	@Autowired
+	IProvinciaService provinciaService;
+
+	@Autowired
+	IMarcaService marcaService;
+
+	@Autowired
+	IAnioService anioService;
+
+	@Autowired
+	ICombustibleService combustibleService;
+
 	@RequestMapping(value = "/vehiculoAdd", method = RequestMethod.GET)
 	public ModelAndView vehiculoAdd() {
 		logger.info("vehiculoAdd");
@@ -66,6 +82,10 @@ public class VehiculoController {
 		model.addAttribute("vehiculo", new Vehiculo());
 		model.addAttribute("titulo", "Crear anuncio");
 		logger.info("crearAnuncio");
+		model.addAttribute("listaProvincias", provinciaService.findAll());
+		model.addAttribute("listaMarcas", marcaService.findAll());
+		model.addAttribute("listaAnios", anioService.findAll());
+		model.addAttribute("listaCombustibles", combustibleService.findAll());
 		return "crearAnuncio";
 	}
 
@@ -79,8 +99,7 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/crearAnuncio/{id}")
-	public String editar(@PathVariable(value = "id") Integer id, Map<String, Object> model, RedirectAttributes flash,
-			Locale locale, Authentication authentication) {
+	public String editar(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash, Locale locale, Authentication authentication) {
 		User u = userDetailsService.getUserDetail(authentication.getName());
 
 		Vehiculo vehiculo = null;
@@ -99,16 +118,24 @@ public class VehiculoController {
 			flash.addFlashAttribute("error", "El id del vehiculo no puede ser 0 o negativo !");
 			return "redirect:/misAnuncios";
 		}
-		model.put("vehiculo", vehiculo);
-		model.put("titulo", "Editar anuncio");
+		model.addAttribute("listaProvincias", provinciaService.findAll());
+		model.addAttribute("vehiculo", vehiculo);
+		model.addAttribute("titulo", "Editar anuncio");
+		model.addAttribute("listaMarcas", marcaService.findAll());
+		model.addAttribute("listaAnios", anioService.findAll());
+		model.addAttribute("listaCombustibles", combustibleService.findAll());
 		return "crearAnuncio";
 	}
 
 	@RequestMapping(value = { "/vehiculo/crearAnuncio" }, method = RequestMethod.POST)
 	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("file") MultipartFile foto,
-			final RedirectAttributes redirectAttributes, Authentication authentication, SessionStatus status) {
-
+			final RedirectAttributes redirectAttributes, Authentication authentication, SessionStatus status, RedirectAttributes flash) {
 		logger.info("/vehiculo/crearAnuncio");
+		String redirect = "redirect:/crearAnuncio";
+		if (vehiculo != null) {
+			redirect = "redirect:/misAnuncios";
+			flash.addFlashAttribute("success", "Has editado correctamente el anuncio !");
+		}
 		User u = userDetailsService.getUserDetail(authentication.getName());
 		Vehiculo veh = vehiculo;
 		if (!foto.isEmpty()) {
@@ -130,7 +157,7 @@ public class VehiculoController {
 		status.setComplete();
 		redirectAttributes.addFlashAttribute("saveVehiculo", "success");
 
-		return "redirect:/crearAnuncio";
+		return redirect;
 	}
 
 	/**
@@ -149,9 +176,7 @@ public class VehiculoController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-				.body(recurso);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"").body(recurso);
 	}
 
 	@RequestMapping(value = "/anuncio/eliminar/{id}")
@@ -178,8 +203,7 @@ public class VehiculoController {
 	}
 
 	@RequestMapping("/vehiculos/filtrarPalabraClave/")
-	public String home(@ModelAttribute("reqFiltro") Filtro reqFiltro, Model model, HttpServletRequest req,
-			final RedirectAttributes redirectAttributes) {
+	public String home(@ModelAttribute("reqFiltro") Filtro reqFiltro, Model model, HttpServletRequest req, final RedirectAttributes redirectAttributes) {
 		logger.info("index");
 		model.addAttribute("listaVehiculos", vehiculoService.filtrar(reqFiltro));
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.filtrar(reqFiltro)));

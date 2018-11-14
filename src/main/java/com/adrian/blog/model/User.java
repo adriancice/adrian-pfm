@@ -146,17 +146,14 @@ public class User {
 		this.lastSession = lastSession;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		User user = (User) o;
-		return id == user.id && role == user.role && Objects.equals(username, user.username)
-				&& Objects.equals(password, user.password) && Objects.equals(password_2, user.password_2)
-				&& Objects.equals(email, user.email);
-	}
+	/**
+	 * @Override public boolean equals(Object o) { if (this == o) return true; if (o
+	 *           == null || getClass() != o.getClass()) return false; User user =
+	 *           (User) o; return id == user.id && role == user.role &&
+	 *           Objects.equals(username, user.username) && Objects.equals(password,
+	 *           user.password) && Objects.equals(password_2, user.password_2) &&
+	 *           Objects.equals(email, user.email); }
+	 */
 
 	@Override
 	public int hashCode() {
