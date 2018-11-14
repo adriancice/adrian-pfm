@@ -29,11 +29,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
+import com.adrian.blog.model.Foto;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IAnioService;
 import com.adrian.blog.service.ICombustibleService;
+import com.adrian.blog.service.IFotoService;
 import com.adrian.blog.service.IMarcaService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IUploadFileService;
@@ -68,6 +70,9 @@ public class VehiculoController {
 
 	@Autowired
 	ICombustibleService combustibleService;
+
+	@Autowired
+	IFotoService fotoService;
 
 	@RequestMapping(value = "/vehiculoAdd", method = RequestMethod.GET)
 	public ModelAndView vehiculoAdd() {
@@ -150,7 +155,12 @@ public class VehiculoController {
 				e.printStackTrace();
 			}
 			veh.setFoto(uniqueFilename);
+			Foto f = new Foto();
+			f.setFoto(uniqueFilename);
+			f.setIdVehiculo(vehiculo.getId());
+			fotoService.save(f);
 		}
+
 		veh.setProvincia(u.getProvincia());
 		veh.setIdUser(u.getId());
 		vehiculoService.save(veh);
@@ -199,6 +209,8 @@ public class VehiculoController {
 		Vehiculo vehiculo = vehiculoService.findById(id);
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
+		model.addAttribute("fotosA", fotoService.findByIdVehiculo(id));
+		System.err.println("ID: "+id+" ,size" + fotoService.findByIdVehiculo(id).size());
 		return "detallesAnuncio";
 	}
 
