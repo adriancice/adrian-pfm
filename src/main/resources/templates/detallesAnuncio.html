@@ -28,15 +28,18 @@
 							<p th:text="${vehiculo.descripcion}"></p>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-3">
-					<div>Contactar con el anunciante</div>
 
-					<!-- carousel -->
+					<!-- el primer carousel -->
+					<p>carousel con las fotos de la bbdd
 					<div id="carouselExampleControls" class="carousel slide"
 						data-ride="carousel">
 						<div class="carousel-inner">
-							<div th:each="f : ${fotosA}" class="carousel-item active">
+							<div class="carousel-item active">
+								<img class="d-block w-100"
+									src="/uploads/0538f98a-3897-41ed-812d-28d269864757_leon.jpg"
+									alt="first">
+							</div>
+							<div th:each="f : ${fotosA}" class="carousel-item">
 								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
 									th:alt="${f.foto}">
 							</div>
@@ -51,7 +54,11 @@
 							class="sr-only">Next</span>
 						</a>
 					</div>
-					<!-- end of carousel -->
+					<!--  end of 1er carousel-->
+				</div>
+				<div class="col-md-3">
+					<div>Contactar con el anunciante</div>
+
 				</div>
 			</div>
 		</div>
