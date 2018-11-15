@@ -1,13 +1,10 @@
 package com.adrian.blog.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Vehiculo {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true)
 	private int id;
 
@@ -54,6 +51,5 @@ public class Vehiculo {
 
 	@Column(name = "id_user")
 	private int idUser;
-
 
 }
