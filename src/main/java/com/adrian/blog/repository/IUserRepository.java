@@ -18,4 +18,6 @@ public interface IUserRepository extends PagingAndSortingRepository<User, Intege
 
 	User findByEmail(String email);
 
+	User findByResetToken(String resetToken);
+
 }

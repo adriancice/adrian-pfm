@@ -30,4 +30,6 @@ public interface IUserService {
 	Collection<User> findAll();
 
 	Page<User> findAll(Pageable pageable);
+
+	User findByResetToken(String resetToken);
 }

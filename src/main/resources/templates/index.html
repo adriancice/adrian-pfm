@@ -11,18 +11,58 @@
 
 	<div class="container">
 		<div class="container-fluid gedf-wrapper">
-			<div class="inline mb-3">
-				<span style="font-size: 2em;" th:text="${total}"></span> <span
-					class="text-muted">Coches de segunda mano</span>
+			<div class="d-flex bd-highlight">
+				<div class="p-2 flex-fill bd-highlight">
+					<span style="font-size: 1.5em;" th:text="${total}"></span> <span
+						class="text-muted">Coches de segunda mano</span>
+				</div>
+				<div class="dropdown ml-auto p-2 bd-highlight ">
+					Esto no funciona todavia ->
+					<button class="btn btn-secondary dropdown-toggle" type="button"
+						id="dropdownMenuButton" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">Ordenar por
+						...</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<div class="form-check">
+							<label class="form-check-label" for="radio1"> <input
+								type="radio" class="form-check-input" id="radio1"
+								name="optradio" value="option1" checked>Los precios más
+								bajos
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label" for="radio1"> <input
+								type="radio" class="form-check-input" id="radio1"
+								name="optradio" value="option1" checked>Los precios más
+								altos
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label" for="radio1"> <input
+								type="radio" class="form-check-input" id="radio1"
+								name="optradio" value="option1" checked>Los de mas km
+							</label>
+						</div>
+						<div class="form-check">
+							<label class="form-check-label" for="radio1"> <input
+								type="radio" class="form-check-input" id="radio1"
+								name="optradio" value="option1" checked>Los de menos km
+							</label>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-3">
 					<div th:if="${limpiar != null}">
-						<a href="/">Limpiar filtros</a>
+						<a href="/">Reiniciar busqueda</a>
 					</div>
 					<form th:action="@{/vehiculos/filtrarPalabraClave/}"
 						th:object="${reqFiltro}">
-						<label class="text-muted">Palabra clave</label>
+						<label class="text-muted">Palabra clave</label> <i
+							class="far fa-question-circle" data-toggle="popover"
+							data-trigger="hover" data-placement="right"
+							data-content="Buscar por las palabras clave que describan lo que estas buscando. Solamente obtendrás los vehiculos que tengan todos los elementos que hayas indicado."></i>
 						<div class="input-group">
 							<input th:field="*{palabra}" type="text" class="form-control"
 								name="palabra">
@@ -110,6 +150,9 @@
 			</div>
 		</div>
 	</div>
-	<footer th:replace="fragments/layout :: footer"></footer>
+	<footer th:replace="fragments/layout :: footer">
+		<!-- Initialize Bootstrap functionality -->
+
+	</footer>
 </body>
 </html>

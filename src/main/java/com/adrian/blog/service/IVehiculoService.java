@@ -22,5 +22,11 @@ public interface IVehiculoService {
 	int totalVehiculos(Collection<Vehiculo> vehiculos);
 
 	Collection<Vehiculo> filtrar(Filtro filtro);
-
+	
+	Collection<Vehiculo> findAllOrderByPrecio();
+	
+	Collection<Vehiculo> findAllOrderBykm();
+	
+	void deleteByIdUser(int id);
+	
 }

@@ -39,7 +39,6 @@ public class User {
 	private String password;
 
 	@Transient
-	@Column(name = "password_2")
 	private String password_2;
 
 	@Column(name = "email", unique = true)
@@ -63,6 +62,9 @@ public class User {
 	public void PrePersist() {
 		createAt = new Date();
 	}
+
+	@Column(name = "reset_token")
+	private String resetToken;
 
 	public User() {
 	}
@@ -144,6 +146,14 @@ public class User {
 
 	public void setLastSession(Date lastSession) {
 		this.lastSession = lastSession;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
 	}
 
 	/**

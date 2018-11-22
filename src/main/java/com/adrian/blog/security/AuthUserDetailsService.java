@@ -43,13 +43,11 @@ public class AuthUserDetailsService implements UserDetailsService {
 
 		User user = getUserDetail(username);
 		if (user != null) {
-			springUser = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-					enabled, accountNonExpired, credentialsNonExpired, accountNonLocked,
-					getAuthorities(user.getRole()));
+			springUser = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired,
+					accountNonLocked, getAuthorities(user.getRole()));
 			return springUser;
 		} else {
-			springUser = new org.springframework.security.core.userdetails.User("empty", "empty", false, true, true,
-					false, getAuthorities(1));
+			springUser = new org.springframework.security.core.userdetails.User("empty", "empty", false, true, true, false, getAuthorities(1));
 			return springUser;
 		}
 	}

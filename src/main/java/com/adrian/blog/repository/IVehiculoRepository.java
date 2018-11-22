@@ -13,7 +13,5 @@ public interface IVehiculoRepository extends JpaRepository<Vehiculo, Integer> {
 	Collection<Vehiculo> findByMarca(String marca);
 
 	Collection<Vehiculo> findByIdUser(int id);
-	
-
 
 }

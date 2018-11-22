@@ -2,12 +2,16 @@ package com.adrian.blog.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import com.adrian.blog.model.User;
+import com.adrian.blog.service.IUserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,63 +24,73 @@ import java.util.List;
  * The MyAuthenticationSuccessHandler class
  *
  * @author Adrian Paul
- * @version 1.0
- * Date 14/09/2018.
+ * @version 1.0 Date 14/09/2018.
  */
 @Component
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyAuthenticationSuccessHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(MyAuthenticationSuccessHandler.class);
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+	@Autowired
+	private IUserService userService;
 
-    @Override
-    protected void handle(HttpServletRequest request,
-                          HttpServletResponse response, Authentication authentication) throws IOException {
-        String targetUrl = determineTargetUrl(authentication);
-        System.out.println("handle: " + targetUrl);
+	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-        if (response.isCommitted()) {
-            logger.warn("Can't redirect");
-            return;
-        }
+	@Override
+	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+		String targetUrl = determineTargetUrl(authentication);
+		System.out.println("handle: " + targetUrl);
 
-        redirectStrategy.sendRedirect(request, response, targetUrl);
-    }
+		if (response.isCommitted()) {
+			logger.warn("Can't redirect");
+			return;
+		}
 
-    protected String determineTargetUrl(Authentication authentication) {
-        logger.info("determineTargetUrl: " + authentication.getName());
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        List<String> roles = new ArrayList<>();
-        for (GrantedAuthority a : authorities) {
-            System.out.println("Authority: " + a.getAuthority());
-            roles.add(a.getAuthority());
-        }
+		redirectStrategy.sendRedirect(request, response, targetUrl);
+	}
 
-        if (isAdmin(roles)) {
-            return "/";
-        } else if (isUser(roles)) {
-            return "/";
-        } else {
-            return "/login?error";
-        }
-    }
+	protected String determineTargetUrl(Authentication authentication) {
+		logger.info("determineTargetUrl: " + authentication.getName());
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+		List<String> roles = new ArrayList<>();
+		for (GrantedAuthority a : authorities) {
+			System.out.println("Authority: " + a.getAuthority());
+			roles.add(a.getAuthority());
+		}
 
-    @Override
-    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
+		// borramos el token al iniciar sesion
+		try {
+			User u = userService.findByUserName(authentication.getName());
+			u.setResetToken(null);
+			userService.save(u);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    @Override
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
+		if (isAdmin(roles)) {
+			return "/";
+		} else if (isUser(roles)) {
+			return "/";
+		} else {
+			return "/login?error";
+		}
+	}
 
-    private boolean isUser(List<String> roles) {
-        return roles.contains("ROLE_USER");
-    }
+	@Override
+	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+		this.redirectStrategy = redirectStrategy;
+	}
 
-    private boolean isAdmin(List<String> roles) {
-        return roles.contains("ROLE_ADMIN");
-    }
+	@Override
+	protected RedirectStrategy getRedirectStrategy() {
+		return redirectStrategy;
+	}
+
+	private boolean isUser(List<String> roles) {
+		return roles.contains("ROLE_USER");
+	}
+
+	private boolean isAdmin(List<String> roles) {
+		return roles.contains("ROLE_ADMIN");
+	}
 }

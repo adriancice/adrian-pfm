@@ -9,18 +9,20 @@
 	<div class="form-signin">
 		<div class="container">
 			<h5 class="text-center">Has olvidado tu contrase&ntilde;a?</h5>
+			<span style="font-size: 2em;" th:text="${emailSend}"></span><span
+				class="text-muted"> email ok?</span>
 		</div>
 		<div class="container">
 			<p>Introduce tu correo electronico:</p>
 		</div>
-		<form>
+		<form th:action="@{/forgot}" method="post">
 			<div class="container my-2">
-				<input type="email" name="forgotPassword" class="form-control "
-					placeholder="Email" value="" required autofocus />
+				<input type="email" name="email" class="form-control "
+					placeholder="Email" required autofocus />
 			</div>
 			<div class="container">
 				<a class="btn btn-primary" th:href="@{/login}">Login</a>
-				<button type="submit" class="btn btn-primary">Enviar</button>
+				<button type="submit" class="btn btn-success">Enviar</button>
 			</div>
 		</form>
 	</div>

@@ -15,71 +15,114 @@
 					aria-hidden="true">&times;</button>
 				<strong>Anuncio creado correctamente</strong>
 			</div>
-			<!-- upload multiple fotos -->
-			<fieldset class="form-group">
-				<a href="javascript:void(0)" onclick="$('#pro-image').click()">Upload
-					Image</a> <input type="file" id="pro-image" name="pro-image"
-					style="display: none;" class="form-control" multiple>
-			</fieldset>
-			<div class="preview-images-zone"></div>
-			<!-- end upload multiple fotos -->
-
-			<div class="form-group">
-				<label for="file">Selecciona las fotos</label> <input type="file"
-					class="form-control-file" name="file" id="exampleFormControlFile1">
-			</div>
-			<select th:field="*{marca}" id="marca" class="custom-select mb-2"
-				required>
-				<option value="" selected>Elige una marca . . .</option>
-				<option th:each="m : ${listaMarcas}" th:value="${m.marca}"
-					th:text="${m.marca}"></option>
-			</select>
-			<div class="form-group">
-				<input th:field="*{modelo}" class="form-control" type="text"
-					name="modelo" placeholder="Modelo">
-			</div>
-			<select th:field="*{anio}" id="anio" class="custom-select mb-2"
-				required>
-				<option value="0" selected>Elige una año . . .</option>
-				<option th:each="a : ${listaAnios}" th:value="${a.anio}"
-					th:text="${a.anio}"></option>
-			</select> <select th:field="*{combustible}" id="combustible"
-				class="custom-select mb-2" required>
-				<option value="" selected>Elige un combustible . . .</option>
-				<option th:each="c : ${listaCombustibles}"
-					th:value="${c.combustible}" th:text="${c.combustible}"></option>
-			</select>
-			<div class="form-group">
-				<input th:field="*{kilometros}" class="form-control" type="text"
-					name="kilometros"
-					onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-					placeholder="kilometros">
-			</div>
-			<div class="form-group">
-				<input th:field="*{precio}" class="form-control" type="text"
-					name="precio"
-					onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-					placeholder="precio">
-			</div>
-			<div class="form-group">
-				<input th:field="*{puertas}" class="form-control" type="text"
-					name="puertas"
-					onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-					placeholder="puertas">
-			</div>
-			<div class="form-group">
-				<input th:field="*{tipoCambio}" class="form-control" type="text"
-					name="tipoCambio" placeholder="Tipo de cambio">
-			</div>
-			<div class="form-group">
-				<input th:field="*{descripcion}" class="form-control" type="text"
-					name="descripcion" placeholder="Descripcion">
+			<div class="form-group row mt-5">
+				<label class="col-lg-3 col-form-label form-control-label">Selecciona
+					las fotos</label>
+				<div class="col-lg-9">
+					<input type="file" class="form-control-file" name="file"
+						id="exampleFormControlFile1">
+				</div>
 			</div>
 
-			<div class="form-group">
-				<input th:field="*{color}" class="form-control" type="text"
-					name="color" placeholder="Color">
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Modelo</label>
+				<div class="col-lg-9">
+					<select th:field="*{marca}" id="marca" class="custom-select mb-2"
+						required>
+						<option value="" selected>Elige una marca . . .</option>
+						<option th:each="m : ${listaMarcas}" th:value="${m.marca}"
+							th:text="${m.marca}"></option>
+					</select>
+				</div>
 			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
+				<div class="col-lg-9">
+					<input th:field="*{modelo}" class="form-control" type="text"
+						name="modelo" placeholder="Modelo">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Año</label>
+				<div class="col-lg-9">
+					<select th:field="*{anio}" id="anio" class="custom-select mb-2"
+						required>
+						<option value="0" selected>Elige una año . . .</option>
+						<option th:each="a : ${listaAnios}" th:value="${a.anio}"
+							th:text="${a.anio}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Combustible</label>
+				<div class="col-lg-9">
+					<select th:field="*{combustible}" id="combustible"
+						class="custom-select mb-2" required>
+						<option value="" selected>Elige un combustible . . .</option>
+						<option th:each="c : ${listaCombustibles}"
+							th:value="${c.combustible}" th:text="${c.combustible}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Kilómetros</label>
+				<div class="col-lg-9">
+					<input th:field="*{kilometros}" class="form-control" type="text"
+						name="kilometros"
+						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+						placeholder="kilometros">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Precio</label>
+				<div class="col-lg-9">
+					<input th:field="*{precio}" class="form-control" type="text"
+						name="precio"
+						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+						placeholder="precio">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Puertas</label>
+				<div class="col-lg-9">
+					<input th:field="*{puertas}" class="form-control" type="text"
+						name="puertas"
+						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+						placeholder="puertas">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Tipo
+					de cambio</label>
+				<div class="col-lg-9">
+					<input th:field="*{tipoCambio}" class="form-control" type="text"
+						name="tipoCambio" placeholder="Tipo de cambio">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Color</label>
+				<div class="col-lg-9">
+					<input th:field="*{color}" class="form-control" type="text"
+						name="color" placeholder="Color">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Descripcion</label>
+				<div class="col-lg-9">
+					<textarea th:field="*{descripcion}" class="form-control"
+						name="descripcion" placeholder="Descripcion"></textarea>
+				</div>
+			</div>
+
+
+
+			<!--  -->
+			<div class="form-group"></div>
 			<input type="submit" th:value="${titulo}" class="btn btn-primary" />
 		</form>
 	</div>

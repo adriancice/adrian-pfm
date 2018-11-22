@@ -55,12 +55,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/", "/login", "/register", "/user/register", "/subscribe", "/forgot", "/images/**",
-						"/anuncio/detalle/**", "/uploads/**", "/locale", "/vehiculos/**")
-				.permitAll().antMatchers("/css/**", "/js/**").permitAll().antMatchers("/listar/**")
-				.access("hasRole('ROLE_ADMIN')").anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.permitAll().successHandler(successHandler).usernameParameter("username").passwordParameter("password")
-				.and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/login");
+				.antMatchers("/", "/login", "/register", "/user/register", "/subscribe", "/forgot", "/images/**", "/anuncio/detalle/**", "/uploads/**", "/locale", "/vehiculos/**",
+						"/reset/**")
+				.permitAll().antMatchers("/css/**", "/js/**").permitAll().antMatchers("/listar/**").access("hasRole('ROLE_ADMIN')").anyRequest().authenticated().and().formLogin()
+				.loginPage("/login").permitAll().successHandler(successHandler).usernameParameter("username").passwordParameter("password").and().logout().permitAll().and()
+				.exceptionHandling().accessDeniedPage("/login");
 	}
 
 	@Override

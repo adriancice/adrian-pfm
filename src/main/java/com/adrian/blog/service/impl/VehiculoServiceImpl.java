@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.adrian.blog.model.Filtro;
@@ -102,20 +103,19 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		} else {
 			kmMax = Integer.parseInt(filtro.getKmMax());
 		}
-		
-		//buscamos la palabra clave en los campos de: marca-modelo-descripcion-combustible-provincia-color
+
+		// buscamos la palabra clave en los campos de:
+		// marca-modelo-descripcion-combustible-provincia-color
 		for (Vehiculo v : vehiculoRepository.findAll()) {
-			if (v.getMarca().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| v.getModelo().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| v.getDescripcion().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| v.getCombustible().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+			if (v.getMarca().toLowerCase().contains(filtro.getPalabra().toLowerCase()) || v.getModelo().toLowerCase().contains(filtro.getPalabra().toLowerCase())
+					|| v.getDescripcion().toLowerCase().contains(filtro.getPalabra().toLowerCase()) || v.getCombustible().toLowerCase().contains(filtro.getPalabra().toLowerCase())
 					|| normalizeString(v.getProvincia()).toLowerCase().contains(normalizeString(filtro.getPalabra()).toLowerCase())
 					|| v.getColor().toLowerCase().contains(filtro.getPalabra().toLowerCase())) {
 				vehiculos.add(v);
 			}
 		}
-		
-		//filtramos por: precio-año-kilometros
+
+		// filtramos por: precio-año-kilometros
 		Iterator<Vehiculo> it = vehiculos.iterator();
 		try {
 			while (it.hasNext()) {
@@ -147,6 +147,34 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	public static String normalizeString(String str) {
 		str = Normalizer.normalize(str, Normalizer.Form.NFKD);
 		return str.replaceAll("[^a-z,^A-Z,^0-9]", "");
+	}
+
+	@Override
+	public Collection<Vehiculo> findAllOrderByPrecio() {
+		Collection<Vehiculo> vehiculos = new ArrayList<>();
+		for (Vehiculo v : vehiculoRepository.findAll(new Sort(Sort.Direction.ASC, "precio"))) {
+			vehiculos.add(v);
+		}
+		return vehiculos;
+	}
+
+	@Override
+	public Collection<Vehiculo> findAllOrderBykm() {
+		Collection<Vehiculo> vehiculos = new ArrayList<>();
+		for (Vehiculo v : vehiculoRepository.findAll(new Sort(Sort.Direction.ASC, "kilometros"))) {
+			vehiculos.add(v);
+		}
+		return vehiculos;
+	}
+
+	@Override
+	public void deleteByIdUser(int id) {
+		for (Vehiculo v : vehiculoRepository.findAll()) {
+			if (v.getIdUser() == id) {
+				vehiculoRepository.delete(v);
+			}
+		}
+
 	}
 
 }

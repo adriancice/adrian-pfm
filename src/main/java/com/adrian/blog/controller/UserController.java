@@ -1,5 +1,9 @@
 package com.adrian.blog.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +15,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
-import com.adrian.blog.repository.IProvinciaRepository;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IUserService;
@@ -65,7 +68,7 @@ public class UserController {
 	public String home(Model model) {
 		logger.info("index");
 		model.addAttribute("reqFiltro", new Filtro());
-		model.addAttribute("listaVehiculos", vehiculoService.findAll());
+		model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";
 	}
@@ -82,12 +85,6 @@ public class UserController {
 		model.addAttribute("reqUser", new User());
 		model.addAttribute("listaProvincias", provinciaService.findAll());
 		return "register";
-	}
-
-	@RequestMapping("/forgot")
-	public String forgot(Model model) {
-		logger.info("forgot");
-		return "forgot";
 	}
 
 	@RequestMapping(value = { "/user/register" }, method = RequestMethod.POST)
@@ -142,6 +139,63 @@ public class UserController {
 			model.addAttribute("vacio", "vacio");
 		}
 		return "misAnuncios";
+	}
+
+	@RequestMapping("/verPerfil")
+	public String verPerfil(Model model, Authentication authentication) {
+		logger.info("editarCuenta");
+		User u = userDetailsService.getUserDetail(authentication.getName());
+		model.addAttribute("reqUser", u);
+		return "verPerfil";
+	}
+
+	@RequestMapping("/editarCuenta/{id}")
+	public String editarCuenta(@PathVariable(value = "id") Integer id, Model model, Authentication authentication, RedirectAttributes flash) {
+		logger.info("editarCuenta/{id}");
+		User us = userDetailsService.getUserDetail(authentication.getName());
+		if (id > 0) {
+			User u = userService.findById(id);
+			if (u == null) {
+				flash.addFlashAttribute("error", "No existe ningun usuario con este id !");
+				return "redirect:/verPerfil";
+			}
+			if (u.getId() != us.getId()) {
+				flash.addFlashAttribute("error", "No puedes editar este usuario !");
+				return "redirect:/verPerfil";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El id del usuario no puede ser 0 o negativo !");
+			return "redirect:/verPerfil";
+		}
+		model.addAttribute("listaProvincias", provinciaService.findAll());
+		model.addAttribute("reqUser", us);
+		return "editarCuenta";
+	}
+
+	@RequestMapping(value = "/editCuenta", method = RequestMethod.POST)
+	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req) {
+		logger.info("editCuenta/");
+
+		String username = reqUser.getUsername();
+		String email = reqUser.getEmail();
+		String provincia = reqUser.getProvincia();
+		System.err.println(reqUser.getId());
+		String oldPass = req.getParameter("oldPass");
+		String pass = req.getParameter("newPass");
+		reqUser.setPassword(pass);
+		User user = reqUser;
+		Date date = reqUser.getCreateAt();
+		user.setCreateAt(date);
+		userService.update(user);
+		return "verPerfil";
+	}
+
+	@RequestMapping("/borrarCuenta/{id}")
+	public String borrarCuenta(@PathVariable(value = "id") Integer id, Model model) {
+		logger.info("borrarCuenta/{id}");
+		userService.delete(id);
+		vehiculoService.deleteByIdUser(id);
+		return "login";
 	}
 
 }

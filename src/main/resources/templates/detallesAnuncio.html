@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head"></head>
+<head th:replace="fragments/layout :: head">
+
+</head>
 
 <body>
 	<header th:replace="fragments/layout :: header"></header>
@@ -28,33 +30,15 @@
 							<p th:text="${vehiculo.descripcion}"></p>
 						</div>
 					</div>
-
-					<!-- el primer carousel 
-					<p>carousel con las fotos de la bbdd
-					<div id="carouselExampleControls" class="carousel slide"
-						data-ride="carousel">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img class="d-block w-100"
-									src="/uploads/0538f98a-3897-41ed-812d-28d269864757_leon.jpg"
-									alt="first">
-							</div>
-							<div th:each="f : ${fotosA}" class="carousel-item">
-								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
-									th:alt="${f.foto}">
-							</div>
+					<div class="row">
+						<div th:each="f : ${fotosA}" class="col-md-6 col-lg-4 item">
+							<a class="lightbox" th:href="@{'/uploads/' + ${f.foto}}"> <img
+								class="img-fluid image scale-on-hover"
+								th:src="@{'/uploads/' + ${f.foto}}">
+							</a>
 						</div>
-						<a class="carousel-control-prev" href="#carouselExampleControls"
-							role="button" data-slide="prev"> <span
-							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-							class="sr-only">Previous</span>
-						</a> <a class="carousel-control-next" href="#carouselExampleControls"
-							role="button" data-slide="next"> <span
-							class="carousel-control-next-icon" aria-hidden="true"></span> <span
-							class="sr-only">Next</span>
-						</a>
 					</div>
-					 end of 1er carousel-->
+
 				</div>
 				<div class="col-md-3">
 					<div>Contactar con el anunciante</div>

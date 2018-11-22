@@ -25,6 +25,7 @@
 <!-- Font awesome CSS  -->
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+<script src="/js/js.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -42,27 +43,39 @@
 
 
 			<div class="col-4 d-flex justify-content-end align-items-center">
+
 				<a sec:authorize="!isAuthenticated()"
 					class="btn btn-sm btn-outline-secondary mr-2" th:href="@{/login}">Sign
-					in</a> <a sec:authorize="isAuthenticated()">Bienvenido</a> <a
-					sec:authorize="isAuthenticated()"
-					class="btn btn-outline-secundary dropdown-toggle" href="#"
-					role="button" id="dropdownMenuLink" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false"> <span
-					sec:authentication="name"></span></a>
+					in&nbsp;&nbsp;<i class="fas fa-sign-in-alt"></i>
+				</a>
+				<button sec:authorize="isAuthenticated()"
+					class="btn btn-outline-info dropdown-toggle" type="button"
+					id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">
+					Welcome <span sec:authentication="name"></span>
+				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 					<a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
-						th:href="@{/listar}">Ver usuarios</a> <a
-						sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
-						th:href="@{/vehiculoAdd}">Añadir vehiculo</a> <a
-						sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
-						th:href="@{/misAnuncios}">Mis anuncios</a> <a
+						th:href="@{/listar}"><i class="fas fa-users"></i>&nbsp;&nbsp;Ver
+						usuarios</a> <a sec:authorize="hasRole('ROLE_ADMIN')"
+						class="dropdown-item" th:href="@{/vehiculoAdd}"><i
+						class="fas fa-car-crash"></i>&nbsp;&nbsp;Añadir vehiculo</a><a
 						sec:authorize="isAuthenticated()" class="dropdown-item"
-						th:href="@{/crearAnuncio}">Vender coche</a>
+						th:href="@{/verPerfil/}"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;Ver
+						mi cuenta</a> <a sec:authorize="isAuthenticated()"
+						class="dropdown-item" th:href="@{/misAnuncios}"><i
+						class="fas fa-star"></i>&nbsp;&nbsp;Favoritos (en desarollo)</a><a
+						sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
+						th:href="@{/misAnuncios}"><i class="fas fa-edit"></i>&nbsp;&nbsp;Mis
+						anuncios</a> <a sec:authorize="isAuthenticated()"
+						class="dropdown-item" th:href="@{/crearAnuncio}"><i
+						class="fas fa-car"></i>&nbsp;&nbsp;Vender coche</a>
+					<hr>
 					<form id="logoutForm" th:action="@{/logout}" method="post">
-						<button class="dropdown-item"
-							onclick="document.getElementById('logoutForm').submit();"
-							type="submit">Logout</button>
+						<button class="dropdown-item" type="submit">
+							<i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout
+						</button>
+
 					</form>
 
 				</div>
@@ -70,15 +83,6 @@
 		</div>
 		<hr />
 
-		<div class="nav-scroller py-1 mb-2">
-			<nav class="nav d-flex justify-content-between">
-				<a class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" href="#">lorem ipsum</a> <a
-					class="p-2 text-muted" href="#">lorem ipsum</a>
-			</nav>
-		</div>
 		<!-- mensajes  -->
 		<div class="alert alert-success alert-dismissible show"
 			th:if="${success != null}" role="alert">

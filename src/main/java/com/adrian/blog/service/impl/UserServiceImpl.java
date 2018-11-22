@@ -69,4 +69,9 @@ public class UserServiceImpl implements IUserService {
 	public Page<User> findAll(Pageable pageable) {
 		return userRepository.findAll(pageable);
 	}
+
+	@Override
+	public User findByResetToken(String resetToken) {
+		return userRepository.findByResetToken(resetToken);
+	}
 }

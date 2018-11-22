@@ -133,13 +133,13 @@ public class VehiculoController {
 	}
 
 	@RequestMapping(value = { "/vehiculo/crearAnuncio" }, method = RequestMethod.POST)
-	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("file") MultipartFile foto,
-			final RedirectAttributes redirectAttributes, Authentication authentication, SessionStatus status, RedirectAttributes flash) {
+	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("file") MultipartFile foto, final RedirectAttributes redirectAttributes,
+			Authentication authentication, SessionStatus status, RedirectAttributes flash) {
 		logger.info("/vehiculo/crearAnuncio");
-		String redirect = "redirect:/crearAnuncio";
-		if (vehiculo != null) {
-			redirect = "redirect:/misAnuncios";
-			flash.addFlashAttribute("success", "Has editado correctamente el anuncio !");
+		String mensaje = "El anuncio se ha creado con exito !";
+		if (vehiculo.getId() != 0) {
+			mensaje = "Has editado correctamente el anuncio !";
+			flash.addFlashAttribute("success", mensaje);
 		}
 		User u = userDetailsService.getUserDetail(authentication.getName());
 		Vehiculo veh = vehiculo;
@@ -165,9 +165,10 @@ public class VehiculoController {
 		veh.setIdUser(u.getId());
 		vehiculoService.save(veh);
 		status.setComplete();
+		flash.addFlashAttribute("success", mensaje);
 		redirectAttributes.addFlashAttribute("saveVehiculo", "success");
 
-		return redirect;
+		return "redirect:/misAnuncios";
 	}
 
 	/**
@@ -210,7 +211,6 @@ public class VehiculoController {
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
 		model.addAttribute("fotosA", fotoService.findByIdVehiculo(id));
-		System.err.println("ID: "+id+" ,size" + fotoService.findByIdVehiculo(id).size());
 		return "detallesAnuncio";
 	}
 
