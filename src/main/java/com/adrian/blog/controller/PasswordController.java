@@ -34,20 +34,15 @@ public class PasswordController {
 	@Autowired
 	private EmailService emailService;
 
-	@RequestMapping("/forgot")
-	public String forgot(Model model) {
-		logger.info("forgot");
-		return "forgot";
-	}
-
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
-	public String processForgotPasswordForm(@RequestParam("email") String userEmail, final RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
+	public String processForgotPasswordForm(@RequestParam("email") String userEmail, final RedirectAttributes flash, HttpServletRequest request, Model model) {
 		logger.info("processForgotPasswordForm");
 
 		// Lookup user in database by e-mail
 		User optional = userService.findByEmail(userEmail);
 		if (optional == null) {
-			System.err.println("user no existe");
+			flash.addFlashAttribute("error", "Email '" + userEmail + "' doesn´t exist !");
+			return "redirect:/login";
 		} else {
 			optional.setResetToken(UUID.randomUUID().toString());
 
@@ -57,7 +52,6 @@ public class PasswordController {
 
 			// Email message
 			SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-			passwordResetEmail.setFrom("adrianpaul6291@gmail.com");
 			passwordResetEmail.setTo(optional.getEmail());
 			passwordResetEmail.setSubject("Password Reset Request");
 			passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl + "/reset?token=" + optional.getResetToken());
@@ -65,8 +59,8 @@ public class PasswordController {
 			model.addAttribute("emailSend", "El correo se envio correctamente");
 			logger.info("Email enviado correctamente");
 		}
-
-		return "forgot";
+		flash.addFlashAttribute("success", "Password reset link send successful !");
+		return "redirect:/login";
 	}
 
 	// Display form to reset password

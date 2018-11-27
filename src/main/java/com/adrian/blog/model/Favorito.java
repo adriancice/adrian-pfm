@@ -17,14 +17,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "marcas")
-public class Marca {
+@Table(name = "favoritos")
+public class Favorito {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_marca", unique = true)
-	private int idMarca;
+	@Column(name = "id_favorito", unique = true)
+	private int idFavorito;
 
-	private String marca;
+	@Column(name = "id_vehiculo")
+	private int idVehiculo;
+
+	@Column(name = "id_user")
+	private int idUser;
 
 }

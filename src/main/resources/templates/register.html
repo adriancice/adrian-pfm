@@ -1,4 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <head th:replace="fragments/layout :: head"></head>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
@@ -47,6 +48,8 @@
 			th:field="*{password_2}" type="password" name="register_cpassword"
 			class="form-control" id="confirm_password"
 			placeholder="Confirm Password" required="required" />
+		<div class="g-recaptcha"
+			data-sitekey="6LcRoXwUAAAAAI2Fv3FSvvU4G8j7kv8btMkKU4FE"></div>
 		<p>
 			Ya tienes una cuenta, <a th:href="@{/login}">login !</a>
 		</p>

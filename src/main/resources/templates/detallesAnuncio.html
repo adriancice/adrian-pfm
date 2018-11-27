@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/layout :: head">
 
 </head>
@@ -14,7 +15,7 @@
 	<div class="container">
 		<div class="container-fluid gedf-wrapper">
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-8">
 					<div class="card mb-4">
 						<img class="card-img-top"
 							th:src="@{'/uploads/' + ${vehiculo.foto}}"
@@ -22,27 +23,84 @@
 						<div class="card-body">
 							<h5 class="card-title"
 								th:text="${vehiculo.marca} + ' ' +${vehiculo.modelo} + ' ' + ${vehiculo.puertas} + 'p'"></h5>
-							<p class="card-text"
+							<p class="card-text text-monospace"
 								th:text="${vehiculo.combustible} + ' | ' + ${vehiculo.anio} + ' | ' 
 								+ ${vehiculo.kilometros} + ' km' + ' | ' + ${vehiculo.color}"></p>
-							<p th:text="${user.email}"></p>
 							<p th:text="${vehiculo.provincia}"></p>
 							<p th:text="${vehiculo.descripcion}"></p>
 						</div>
+
 					</div>
-					<div class="row">
-						<div th:each="f : ${fotosA}" class="col-md-6 col-lg-4 item">
-							<a class="lightbox" th:href="@{'/uploads/' + ${f.foto}}"> <img
-								class="img-fluid image scale-on-hover"
-								th:src="@{'/uploads/' + ${f.foto}}">
-							</a>
+					<!-- ///// Post-->
+					<div class="card gedf-card">
+						<div class="card-body">
+							<div class="text-muted h7 mb-2">
+								<i class="fa fa-clock-o"></i>Publicado <span
+									th:text="${vehiculo.createAt}"></span>
+							</div>
+
+							<h5 class="font-weight-bold">Descripcion del anunciante</h5>
+
+							<p th:text="${vehiculo.descripcion}"></p>
+						</div>
+						<div sec:authorize="isAuthenticated()" class="card-footer">
+							<a th:if="${existeFav == null}"
+								th:href="@{'/addFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
+								class="card-link">Add Favorito</a> <a
+								th:if="${existeFav != null}"
+								th:href="@{'/deleteFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
+								class="card-link">Quitar favorito</a>
 						</div>
 					</div>
-
+					<!-- Post /////-->
 				</div>
-				<div class="col-md-3">
-					<div>Contactar con el anunciante</div>
+				<div class="col-md-4">
+					<div class="mb-3">Contacta con el anunciante</div>
+					<div>
+						<a><i class="fas fa-phone"></i>&nbsp;&nbsp;&nbsp;<span
+							th:text="${user.telefono}"></span></a>
+					</div>
+					<form th:action="@{/contactar-anunciante}" method="post">
+						<div class="form-group mt-3">
+							<textarea name="descripcion" class="form-control"
+								placeholder="Estoy interesado/a en este vehiculo..."></textarea>
+						</div>
+						<div sec:authorize="isAuthenticated()">
+							<div class="form-group">
+								<label>Tu nombre</label> <input th:field="${myUser.username}"
+									type="text" class="form-control" readonly>
+							</div>
+							<div class="form-group">
+								<label>Email:</label> <input th:field="${myUser.email}"
+									type="email" class="form-control" readonly>
+							</div>
 
+							<div class="form-group">
+								<label>Número de telefono</label> <input type="text"
+									class="form-control" th:field="${myUser.telefono}" readonly>
+							</div>
+
+						</div>
+						<div sec:authorize="!isAuthenticated()">
+							<div class="form-group">
+								<label>Tu nombre</label> <input type="text" class="form-control"
+									name="username" placeholder="Introduce tu nombre">
+							</div>
+							<div class="form-group">
+								<label>Email:</label> <input type="email" class="form-control"
+									name="email" placeholder="Introduce tu email" required>
+							</div>
+							<div class="form-group">
+								<label>Número de telefono</label> <input type="text"
+									class="form-control" name="telefono"
+									placeholder="Introduce tu teléfono" maxlength="9"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+							</div>
+						</div>
+						<input name="idAnunciante" th:field="${vehiculo.id}" type="hidden">
+						<button type="submit" class="btn btn-info">Contactar</button>
+
+					</form>
 				</div>
 			</div>
 		</div>

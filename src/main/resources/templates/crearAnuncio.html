@@ -23,24 +23,24 @@
 						id="exampleFormControlFile1">
 				</div>
 			</div>
-
 			<div class="form-group row">
-				<label class="col-lg-3 col-form-label form-control-label">Modelo</label>
+				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
 				<div class="col-lg-9">
-					<select th:field="*{marca}" id="marca" class="custom-select mb-2"
-						required>
+					<select th:field="*{marca}" id="provincias"
+						class="custom-select mb-2" required autofocus>
 						<option value="" selected>Elige una marca . . .</option>
-						<option th:each="m : ${listaMarcas}" th:value="${m.marca}"
+						<option th:each="m : ${listaMarcas}" th:value="${m.idMarca}"
 							th:text="${m.marca}"></option>
 					</select>
 				</div>
 			</div>
-
 			<div class="form-group row">
-				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
+				<label class="col-lg-3 col-form-label form-control-label">Modelo</label>
 				<div class="col-lg-9">
-					<input th:field="*{modelo}" class="form-control" type="text"
-						name="modelo" placeholder="Modelo">
+					<select id="localidades" class="custom-select mb-2" required>
+						<option value="" selected disabled>Elige una marca para
+							ver los modelos . . .</option>
+					</select>
 				</div>
 			</div>
 			<div class="form-group row">
@@ -94,6 +94,11 @@
 				</div>
 			</div>
 
+
+
+
+
+
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Tipo
 					de cambio</label>
@@ -102,6 +107,8 @@
 						name="tipoCambio" placeholder="Tipo de cambio">
 				</div>
 			</div>
+
+
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Color</label>
@@ -128,6 +135,6 @@
 	</div>
 
 	<footer th:replace="fragments/layout :: footer"></footer>
-
+	<script src="js/modelos.js"></script>
 </body>
 </html>

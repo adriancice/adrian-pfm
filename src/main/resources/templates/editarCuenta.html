@@ -12,8 +12,8 @@
 				<label class="col-lg-3 col-form-label form-control-label">Username
 				</label>
 				<div class="col-lg-9">
-					<input th:field="*{username}" class="form-control" name="username" type="text"
-						required>
+					<input th:field="*{username}" class="form-control" name="username"
+						type="text" required>
 				</div>
 			</div>
 			<div class="form-group row">
@@ -32,6 +32,13 @@
 						<option th:each="p : ${listaProvincias}" th:value="${p.provincia}"
 							th:text="${p.provincia}"></option>
 					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Teléfono</label>
+				<div class="col-lg-9">
+					<input th:field="*{telefono}" class="form-control" name="username"
+						type="text" required>
 				</div>
 			</div>
 
@@ -54,21 +61,24 @@
 								<label class="col-lg-3 col-form-label form-control-label">Contraseña
 									actual</label>
 								<div class="col-lg-9">
-									<input th:field="*{password}" class="form-control" type="password" name="oldPass">
+									<input th:field="*{password}" class="form-control"
+										type="password" name="oldPass">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-lg-3 col-form-label form-control-label">Nueva
 									contraseña</label>
 								<div class="col-lg-9">
-									<input class="form-control" type="password" name="newPass" id="pass">
+									<input class="form-control" type="password" name="newPass"
+										id="pass">
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-lg-3 col-form-label form-control-label">Confirmar
 									nueva contraseña</label>
 								<div class="col-lg-9">
-									<input class="form-control" type="password" name="repeatNewPass" id="c_pass">
+									<input class="form-control" type="password"
+										name="repeatNewPass" id="c_pass">
 								</div>
 							</div>
 						</div>
@@ -79,15 +89,15 @@
 				<button type="submit" class="btn btn-success btn-sm">Guardar</button>
 				<button type="button" class="btn btn-warning btn-sm">Cancelar</button>
 			</div>
-			<input th:field="*{id}" type="hidden"> 
-			<input th:field="*{role}" type="hidden"> 
+			<input th:field="*{id}" type="hidden"> <input
+				th:field="*{role}" type="hidden">
 		</form>
 	</div>
 
 
 	<hr>
 	<footer th:replace="fragments/layout :: footer"></footer>
-		<!-- script para verificar si las contraseñas coinciden -->
+	<!-- script para verificar si las contraseñas coinciden -->
 	<script>
 		var pass = document.getElementById("pass"), c_pass = document
 				.getElementById("c_pass");

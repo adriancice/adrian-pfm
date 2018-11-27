@@ -4,6 +4,8 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -175,6 +177,16 @@ public class VehiculoServiceImpl implements IVehiculoService {
 			}
 		}
 
+	}
+
+	@Override
+	public List<Vehiculo> findVehiculosByUserFavorito(int idUser) {
+
+		Optional<List<Vehiculo>> searchVehiculo = vehiculoRepository.findByUserFavorito(idUser);
+		if (searchVehiculo.isPresent()) {
+			return searchVehiculo.get();
+		}
+		return null;
 	}
 
 }

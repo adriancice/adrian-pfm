@@ -32,7 +32,9 @@
 								<a th:href="@{'/crearAnuncio/' + ${v.id}}"
 									class="btn btn-warning">Editar anuncio</a> <a
 									th:href="@{'/anuncio/eliminar/' + ${v.id}}"
-									class="btn btn-danger">Borrar anuncio</a>
+									class="btn btn-danger"
+									onclick="return confirm('Estás seguro que quieres eliminar ?');">Borrar
+									anuncio</a>
 							</div>
 						</div>
 					</div>
@@ -41,7 +43,7 @@
 		</div>
 	</div>
 
-
 	<footer th:replace="fragments/layout :: footer"></footer>
+
 </body>
 </html>

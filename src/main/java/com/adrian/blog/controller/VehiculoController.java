@@ -3,7 +3,6 @@ package com.adrian.blog.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,10 +33,13 @@ import com.adrian.blog.model.Foto;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.security.AuthUserDetailsService;
+import com.adrian.blog.service.EmailService;
 import com.adrian.blog.service.IAnioService;
 import com.adrian.blog.service.ICombustibleService;
+import com.adrian.blog.service.IFavoritoService;
 import com.adrian.blog.service.IFotoService;
 import com.adrian.blog.service.IMarcaService;
+import com.adrian.blog.service.IModeloService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IUploadFileService;
 import com.adrian.blog.service.IUserService;
@@ -46,6 +49,8 @@ import com.adrian.blog.service.IVehiculoService;
 @SessionAttributes("vehiculo")
 public class VehiculoController {
 	private static final Logger logger = LoggerFactory.getLogger(VehiculoController.class);
+
+	private static final String fotoDefault = "default_photo.png";
 
 	@Autowired
 	IVehiculoService vehiculoService;
@@ -73,6 +78,15 @@ public class VehiculoController {
 
 	@Autowired
 	IFotoService fotoService;
+
+	@Autowired
+	EmailService emailService;
+
+	@Autowired
+	IModeloService modeloService;
+
+	@Autowired
+	IFavoritoService favoritoService;
 
 	@RequestMapping(value = "/vehiculoAdd", method = RequestMethod.GET)
 	public ModelAndView vehiculoAdd() {
@@ -163,6 +177,9 @@ public class VehiculoController {
 
 		veh.setProvincia(u.getProvincia());
 		veh.setIdUser(u.getId());
+		if (veh.getFoto() == null) {
+			veh.setFoto(fotoDefault);
+		}
 		vehiculoService.save(veh);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensaje);
@@ -197,20 +214,32 @@ public class VehiculoController {
 			Vehiculo vehiculo = vehiculoService.findById(id);
 			vehiculoService.delete(vehiculo);
 			flash.addFlashAttribute("success", "Anuncio eliminado correctamente");
-			if (uploadFileService.delete(vehiculo.getFoto())) {
+			if (!vehiculo.getFoto().equals(fotoDefault)) {
+				uploadFileService.delete(vehiculo.getFoto());
 				flash.addFlashAttribute("info", "Foto borrada correctamente");
 			}
+
 		}
 		return "redirect:/misAnuncios";
 	}
 
 	@RequestMapping("/anuncio/detalle/{id}")
-	public String subscribe(@PathVariable(value = "id") int id, Model model) {
+	public String anuncioDetalle(@PathVariable(value = "id") int id, Model model, Authentication authentication) {
 		logger.info("anuncio/detalle");
+		try {
+			User u = userDetailsService.getUserDetail(authentication.getName());
+			model.addAttribute("myUser", u);
+			if (favoritoService.existeFav(id, u.getId()) != null) {
+				model.addAttribute("existeFav", "existeFav");
+			}
+		} catch (Exception e) {
+			System.err.println("No hay ningun user logueado !");
+		}
 		Vehiculo vehiculo = vehiculoService.findById(id);
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
 		model.addAttribute("fotosA", fotoService.findByIdVehiculo(id));
+
 		return "detallesAnuncio";
 	}
 
@@ -224,6 +253,28 @@ public class VehiculoController {
 		}
 		model.addAttribute("limpiar", "limpiar");
 		return "index";
+	}
+
+	@RequestMapping(value = "/contactar-anunciante", method = RequestMethod.POST)
+	public String contactarAnunciante(Model model, Authentication authentication, HttpServletRequest req, RedirectAttributes flash) {
+		logger.info("contactar-anunciante");
+		Integer id = Integer.parseInt(req.getParameter("id"));
+		String descripcion = req.getParameter("descripcion");
+		if (descripcion.isEmpty()) {
+			descripcion = "Estoy interesado en este vehiculo...";
+		}
+		Vehiculo veh = vehiculoService.findById(id);
+		User u = userService.findById(veh.getIdUser());
+
+		// Email message
+		SimpleMailMessage contacto = new SimpleMailMessage();
+		contacto.setTo(u.getEmail());
+		contacto.setSubject("Anuncio " + veh.getMarca() + " " + veh.getModelo());
+		contacto.setText("Tienes un mensaje sobre tu anuncio en nuestra web\n\n" + descripcion + "\nNombre: " + req.getParameter("username") + "\nTelefono: "
+				+ req.getParameter("telefono") + "\nEmail: " + req.getParameter("email") + "\n\n Por favor no conteste a este correo");
+		emailService.sendEmail(contacto);
+		flash.addFlashAttribute("success", "Mensaje enviado correctamente !");
+		return "redirect:/anuncio/detalle/" + id;
 	}
 
 }

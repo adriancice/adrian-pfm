@@ -8,7 +8,6 @@
 	<div class="container">
 		<h1>BUSCAR</h1>
 	</div>
-
 	<div class="container">
 		<div class="container-fluid gedf-wrapper">
 			<div class="d-flex bd-highlight">
@@ -139,20 +138,18 @@
 											th:text="${v.marca} + ' ' +${v.modelo} + ' ' + ${v.puertas} + 'p'"></h5>
 										<p class="card-text text-monospace text-muted"
 											th:text="${v.combustible} + ' | ' + ${v.anio} + ' | ' + ${v.kilometros} + ' km' + ' | ' + ${v.color}"></p>
+
 									</div>
 								</div>
 							</div>
 						</a>
 					</div>
-				</div>
-				<!--  Final lista de vehiculos/anuncios ///-->
+					<!--  Final lista de vehiculos/anuncios ///-->
 
+				</div>
 			</div>
 		</div>
 	</div>
-	<footer th:replace="fragments/layout :: footer">
-		<!-- Initialize Bootstrap functionality -->
-
-	</footer>
+	<footer th:replace="fragments/layout :: footer"></footer>
 </body>
 </html>
