@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
+import com.adrian.blog.model.ScheduledEmail;
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IProvinciaService;
+import com.adrian.blog.service.IScheduledEmailService;
 import com.adrian.blog.service.IUserService;
 import com.adrian.blog.service.IVehiculoService;
 import com.adrian.blog.utils.EnumRoles;
@@ -57,6 +59,15 @@ public class UserController {
 	@Autowired
 	AuthUserDetailsService userDetailsService;
 
+	@Autowired
+	private IScheduledEmailService scheduledEmailService;
+
+	@RequestMapping("/pruebas")
+	public String pruebas(Model model) {
+		logger.info("pruebas");
+		return "pruebas";
+	}
+
 	@RequestMapping("/login")
 	public String login(Model model) {
 		// model.addAttribute("reqUser", new User());
@@ -71,12 +82,6 @@ public class UserController {
 		model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";
-	}
-
-	@RequestMapping("/subscribe")
-	public String subscribe(Model model) {
-		logger.info("subscribe");
-		return "subscribe";
 	}
 
 	@RequestMapping("/register")
@@ -145,6 +150,7 @@ public class UserController {
 	public String verPerfil(Model model, Authentication authentication) {
 		logger.info("editarCuenta");
 		User u = userDetailsService.getUserDetail(authentication.getName());
+		model.addAttribute("suscripcion", scheduledEmailService.existEmail(u.getEmail()));
 		model.addAttribute("reqUser", u);
 		return "verPerfil";
 	}
@@ -197,7 +203,5 @@ public class UserController {
 		vehiculoService.deleteByIdUser(id);
 		return "login";
 	}
-
-
 
 }

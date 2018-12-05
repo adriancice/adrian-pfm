@@ -1,14 +1,13 @@
 var init = function() {
-	$('#provincias').change(
+	$('#marcas').change(
 			function() {
-
-				var marca = $("#provincias").val();
-				$('#localidades').children().remove()
-				$.post('/cargarlocalidades/{id_marca}', {
-					"codigo_provincia" : marca
+				var marca = $("#marcas").val();
+				$('#modelos').children().remove()
+				$.post('/cargarModelos/{id_marca}', {
+					"id_marca" : marca
 				}, function(modelos) {
 					for (i = 0; i < modelos.length; i++) {
-						$('#localidades').append(
+						$('#modelos').append(
 								new Option(modelos[i].modelo, true, true));
 					}
 				})

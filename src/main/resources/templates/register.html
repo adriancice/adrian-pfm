@@ -1,5 +1,4 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<script src='https://www.google.com/recaptcha/api.js'></script>
 <head th:replace="fragments/layout :: head"></head>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
@@ -42,14 +41,14 @@
 			<option value="" selected>Elige una provincia . . .</option>
 			<option th:each="p : ${listaProvincias}" th:value="${p.provincia}"
 				th:text="${p.provincia}"></option>
-		</select> <input th:field="*{password}" type="password"
-			name="register_password" class="form-control" id="password"
-			placeholder="Password" required="required" /> <input
+		</select> <input th:field="*{telefono}" class="form-control mb-2"
+			name="username" type="text" required placeholder="Teléfono"
+			minlength="9" maxlength="9"> <input th:field="*{password}"
+			type="password" name="register_password" class="form-control"
+			id="password" placeholder="Password" required="required" /> <input
 			th:field="*{password_2}" type="password" name="register_cpassword"
 			class="form-control" id="confirm_password"
 			placeholder="Confirm Password" required="required" />
-		<div class="g-recaptcha"
-			data-sitekey="6LcRoXwUAAAAAI2Fv3FSvvU4G8j7kv8btMkKU4FE"></div>
 		<p>
 			Ya tienes una cuenta, <a th:href="@{/login}">login !</a>
 		</p>

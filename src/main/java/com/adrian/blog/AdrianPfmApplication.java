@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
@@ -16,6 +17,7 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
  * @version 1.0 Date 14/09/2018
  */
 @SpringBootApplication
+@EnableScheduling
 public class AdrianPfmApplication implements WebMvcConfigurer {
 
 	private static final Logger logger = LoggerFactory.getLogger(AdrianPfmApplication.class);

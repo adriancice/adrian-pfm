@@ -101,7 +101,6 @@ public class VehiculoController {
 		model.addAttribute("vehiculo", new Vehiculo());
 		model.addAttribute("titulo", "Crear anuncio");
 		logger.info("crearAnuncio");
-		model.addAttribute("listaProvincias", provinciaService.findAll());
 		model.addAttribute("listaMarcas", marcaService.findAll());
 		model.addAttribute("listaAnios", anioService.findAll());
 		model.addAttribute("listaCombustibles", combustibleService.findAll());
@@ -273,7 +272,29 @@ public class VehiculoController {
 		contacto.setText("Tienes un mensaje sobre tu anuncio en nuestra web\n\n" + descripcion + "\nNombre: " + req.getParameter("username") + "\nTelefono: "
 				+ req.getParameter("telefono") + "\nEmail: " + req.getParameter("email") + "\n\n Por favor no conteste a este correo");
 		emailService.sendEmail(contacto);
+
 		flash.addFlashAttribute("success", "Mensaje enviado correctamente !");
+		return "redirect:/anuncio/detalle/" + id;
+	}
+
+	@RequestMapping(value = "/shareAnuncio", method = RequestMethod.POST)
+	public String shareAnuncio(@RequestParam("email") String email, Model model, Authentication authentication, HttpServletRequest req, RedirectAttributes flash) {
+		logger.info("contactar-anunciante");
+		Integer id = Integer.parseInt(req.getParameter("id"));
+		Vehiculo veh = vehiculoService.findById(id);
+
+		String appUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort();
+
+		// Email message
+		SimpleMailMessage shareEmail = new SimpleMailMessage();
+		shareEmail.setTo(email);
+		shareEmail.setSubject("Coches: Un amigo te recomienda este anuncio");
+		shareEmail.setText("¡Hola!\n" + "Un amigo se ha acordado de ti al ver este anuncio " + veh.getMarca() + " y cee que te puede interesar." + "\n¿Tienes curiosidad?\n"
+				+ appUrl + "/anuncio/detalle/" + id);
+		emailService.sendEmail(shareEmail);
+		model.addAttribute("emailSend", "El correo se envio correctamente");
+		logger.info("Email enviado correctamente");
+
 		return "redirect:/anuncio/detalle/" + id;
 	}
 

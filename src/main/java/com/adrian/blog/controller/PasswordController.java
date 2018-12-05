@@ -53,7 +53,7 @@ public class PasswordController {
 			// Email message
 			SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
 			passwordResetEmail.setTo(optional.getEmail());
-			passwordResetEmail.setSubject("Password Reset Request");
+			passwordResetEmail.setSubject("Password reset request");
 			passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl + "/reset?token=" + optional.getResetToken());
 			emailService.sendEmail(passwordResetEmail);
 			model.addAttribute("emailSend", "El correo se envio correctamente");

@@ -21,12 +21,11 @@ public class AjaxController {
 	@Autowired
 	private IModeloService modeloService;
 
-	@RequestMapping("/cargarlocalidades/{id_marca}")
-	public @ResponseBody List<Modelo> modelos(@RequestParam("codigo_provincia") int id_marca) {
-		logger.info("modelos" + id_marca);
-		System.err.println("Entra controlador " + id_marca);
-		List<Modelo> municipios = modeloService.findByIdMarca(id_marca);
-		return municipios;
+	@RequestMapping("/cargarModelos/{id_marca}")
+	public @ResponseBody List<Modelo> modelos(@RequestParam("id_marca") int id_marca) {
+		logger.info("cargar_modelos");
+		List<Modelo> modelos = modeloService.findByIdMarca(id_marca);
+		return modelos;
 	}
 
 }

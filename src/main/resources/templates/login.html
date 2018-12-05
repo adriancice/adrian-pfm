@@ -33,7 +33,7 @@
 	<!-- end of Bootstrap form -->
 
 
-	<!-- Modal forgot password -->
+	<!--/// Modal forgot password -->
 	<div class="modal fade" id="forgotPasswordModal" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -63,23 +63,8 @@
 			</div>
 		</div>
 	</div>
-
+	<!-- Modal forgot password ///-->
 	<footer th:replace="fragments/layout :: footer"></footer>
-	<!-- Script para resetear los input del modal al cerrarlo-->
-	<script type="text/javascript">
-		$(".modal").on("hidden.bs.modal", function() {
-			$(".modal-body input").val("");
-		});
-	</script>
 
-
-	<script>
-		document.getElementById('change').onclick = changeColor;
-
-		function changeColor() {
-			document.body.style.color = "purple";
-			return false;
-		}
-	</script>
 </body>
 </html>

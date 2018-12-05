@@ -7,3 +7,11 @@ $(function() {
 $(function() {
 	$('[data-toggle="popover"]').popover()
 })
+
+// popover estado suscripcion
+$('#popoverActivo').popover({
+	trigger : "hover"
+});
+$('#popoverDesactivo').popover({
+	trigger : "hover"
+});

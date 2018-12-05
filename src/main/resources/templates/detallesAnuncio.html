@@ -46,13 +46,79 @@
 						<div sec:authorize="isAuthenticated()" class="card-footer">
 							<a th:if="${existeFav == null}"
 								th:href="@{'/addFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
-								class="card-link">Add Favorito</a> <a
-								th:if="${existeFav != null}"
+								class="card-link"><i class="far fa-star"></i>&nbsp;&nbsp;Add
+								Favorito</a> <a th:if="${existeFav != null}"
 								th:href="@{'/deleteFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
-								class="card-link">Quitar favorito</a>
+								class="card-link"><i class="fas fa-star"></i>&nbsp;&nbsp;Quitar
+								favorito</a> <a class="card-link text-primary" data-toggle="popover"
+								data-placement="bottom" data-html="true"
+								data-content="<a href='' data-toggle='modal' data-target='#shareModal'>Correo electrónico</a>"><i
+								class="fas fa-share-alt"></i>&nbsp;&nbsp;Compartir</a>
+
+
+
+
+						</div>
+						<!-- Modal share vehiculo por email-->
+						<div class="modal fade" id="shareModal" tabindex="-1"
+							role="dialog" aria-labelledby="shareModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<form th:action="@{/shareAnuncio}" method="post">
+										<div class="modal-header">
+											<h2 class="text-center">Compartir anuncio</h2>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Introduce el email del destinatario</p>
+											<input type="email" name="email" class="form-control "
+												placeholder="email@ejemplo.com " required />
+										</div>
+										<div class="container px-5">
+											<input class="btn btn-primary btn-block my-3" value="Enviar"
+												type="submit">
+										</div>
+										<input name="idAnunciante" th:field="${vehiculo.id}"
+											type="hidden">
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- Post /////-->
+
+					<!-- Carousel -->
+					<div id="carouselExampleIndicators" class="carousel slide"
+						data-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img class="d-block w-100"
+									th:src="@{'/uploads/' + ${vehiculo.foto}}"
+									th:alt="${vehiculo.foto}">
+							</div>
+							<div th:each="f : ${fotosA}" class="carousel-item">
+								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
+									th:alt="${f.foto}">
+							</div>
+
+						</div>
+						<a class="carousel-control-prev" href="#carouselExampleIndicators"
+							role="button" data-slide="prev"> <span
+							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+							class="sr-only">Previous</span>
+						</a> <a class="carousel-control-next"
+							href="#carouselExampleIndicators" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					<!-- END Carousel -->
+
+
 				</div>
 				<div class="col-md-4">
 					<div class="mb-3">Contacta con el anunciante</div>
