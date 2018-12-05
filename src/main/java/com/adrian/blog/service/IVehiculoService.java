@@ -3,6 +3,9 @@ package com.adrian.blog.service;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.Vehiculo;
 
@@ -31,5 +34,7 @@ public interface IVehiculoService {
 	void deleteByIdUser(int id);
 
 	List<Vehiculo> findVehiculosByUserFavorito(int idUser);
+
+	Page<Vehiculo> findAll(Pageable pageable);
 
 }

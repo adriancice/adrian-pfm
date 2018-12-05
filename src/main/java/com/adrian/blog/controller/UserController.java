@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.ScheduledEmail;
 import com.adrian.blog.model.User;
+import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IProvinciaService;
@@ -75,11 +76,16 @@ public class UserController {
 		return "login";
 	}
 
-	@RequestMapping({ "/index", "/" })
-	public String home(Model model) {
+	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
+	public String home(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("index");
+		Pageable pageRequest = PageRequest.of(page, 3);
+		Page<Vehiculo> vehiculos = vehiculoService.findAll(pageRequest);
+
+		PageRender<Vehiculo> pageRender = new PageRender<>("/index", vehiculos);
+		model.addAttribute("page", pageRender);
 		model.addAttribute("reqFiltro", new Filtro());
-		model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
+		model.addAttribute("listaVehiculos", vehiculos);
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";
 	}
@@ -87,6 +93,7 @@ public class UserController {
 	@RequestMapping("/register")
 	public String register(Model model) {
 		logger.info("register");
+
 		model.addAttribute("reqUser", new User());
 		model.addAttribute("listaProvincias", provinciaService.findAll());
 		return "register";
@@ -124,7 +131,7 @@ public class UserController {
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("listar");
 
-		Pageable pageRequest = PageRequest.of(page, 4);
+		Pageable pageRequest = PageRequest.of(page, 2);
 		Page<User> usuarios = userService.findAll(pageRequest);
 
 		PageRender<User> pageRender = new PageRender<>("/listar", usuarios);
