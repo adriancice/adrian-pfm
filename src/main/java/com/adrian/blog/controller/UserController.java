@@ -77,15 +77,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
-	public String home(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	public String home(Model model) {
 		logger.info("index");
-		Pageable pageRequest = PageRequest.of(page, 3);
-		Page<Vehiculo> vehiculos = vehiculoService.findAll(pageRequest);
 
-		PageRender<Vehiculo> pageRender = new PageRender<>("/index", vehiculos);
-		model.addAttribute("page", pageRender);
 		model.addAttribute("reqFiltro", new Filtro());
-		model.addAttribute("listaVehiculos", vehiculos);
+		model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
 		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
 		return "index";
 	}
