@@ -139,7 +139,6 @@ public class VehiculoController {
 		model.addAttribute("listaProvincias", provinciaService.findAll());
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("titulo", "Editar anuncio");
-		model.addAttribute("listaMarcas", marcaService.findAll());
 		model.addAttribute("listaAnios", anioService.findAll());
 		model.addAttribute("listaCombustibles", combustibleService.findAll());
 		return "crearAnuncio";

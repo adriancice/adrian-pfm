@@ -12,21 +12,44 @@
 		<h4>Detalles del anuncio</h4>
 	</div>
 	<!-- /// Lista de vehiculos/anuncios -->
-	<div class="container">
+
+	<div class="container mt-5">
 		<div class="container-fluid gedf-wrapper">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-9">
+					<!-- Carousel -->
+					<div id="carouselExampleIndicators" class="carousel slide"
+						data-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img class="d-block w-100"
+									th:src="@{'/uploads/' + ${vehiculo.foto}}"
+									th:alt="${vehiculo.foto}">
+							</div>
+							<div th:each="f : ${fotosA}" class="carousel-item">
+								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
+									th:alt="${f.foto}">
+							</div>
+
+						</div>
+						<a class="carousel-control-prev" href="#carouselExampleIndicators"
+							role="button" data-slide="prev"> <span
+							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+							class="sr-only">Previous</span>
+						</a> <a class="carousel-control-next"
+							href="#carouselExampleIndicators" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					<!-- END Carousel -->
 					<div class="card mb-4">
-						<img class="card-img-top"
-							th:src="@{'/uploads/' + ${vehiculo.foto}}"
-							th:alt="${vehiculo.foto}">
 						<div class="card-body">
 							<h5 class="card-title"
 								th:text="${vehiculo.marca} + ' ' +${vehiculo.modelo} + ' ' + ${vehiculo.puertas} + 'p'"></h5>
 							<p class="card-text text-monospace"
 								th:text="${vehiculo.combustible} + ' | ' + ${vehiculo.anio} + ' | ' 
-								+ ${vehiculo.kilometros} + ' km' + ' | ' + ${vehiculo.color}"></p>
-							<p th:text="${vehiculo.provincia}"></p>
+								+ ${vehiculo.kilometros} + ' km' + ' | ' + ${vehiculo.color} + ' | ' + ${vehiculo.provincia} + ' | ' + ${vehiculo.tipoCambio}"></p>
 						</div>
 
 					</div>
@@ -89,37 +112,8 @@
 						</div>
 					</div>
 					<!-- Post /////-->
-
-					<!-- Carousel -->
-					<div id="carouselExampleIndicators" class="carousel slide"
-						data-ride="carousel">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img class="d-block w-100"
-									th:src="@{'/uploads/' + ${vehiculo.foto}}"
-									th:alt="${vehiculo.foto}">
-							</div>
-							<div th:each="f : ${fotosA}" class="carousel-item">
-								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
-									th:alt="${f.foto}">
-							</div>
-
-						</div>
-						<a class="carousel-control-prev" href="#carouselExampleIndicators"
-							role="button" data-slide="prev"> <span
-							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-							class="sr-only">Previous</span>
-						</a> <a class="carousel-control-next"
-							href="#carouselExampleIndicators" role="button" data-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="sr-only">Next</span>
-						</a>
-					</div>
-					<!-- END Carousel -->
-
-
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<div class="mb-3">Contacta con el anunciante</div>
 					<div>
 						<a><i class="fas fa-phone"></i>&nbsp;&nbsp;&nbsp;<span

@@ -50,7 +50,7 @@ public class ScheduledTasks {
 					ScheduledEmail sEmail = new ScheduledEmail();
 					sEmail.setEmail(u.getEmail());
 					scheduledEmailService.save(sEmail);
-					flash.addFlashAttribute("success", "Te has subscrito correctamente");
+					flash.addFlashAttribute("success", "Te has subscrito correctamente !\nRecibiras un correo de prueba cada 5 minutos de nuestra página !");
 				} else {
 					flash.addFlashAttribute("warning", "Ya estas subscrito !");
 				}
