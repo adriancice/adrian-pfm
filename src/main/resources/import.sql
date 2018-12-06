@@ -1,6 +1,6 @@
 /* Creamos algunos usuarios con sus roles */
-INSERT INTO users (id, username, password, email, create_at, provincia, telefono, role) VALUES (1, 'admin', '$2a$10$c4M07uAo.9B6.0fi8RrXV.i0C7NoYIv5PyjD4kHIEmyDZhyWMvxNa', 'admin@gmail.com', NOW(), 'Madrid', 637637637, 1);
-INSERT INTO users (id, username, password, email, create_at, provincia, telefono, role) VALUES (2, 'adrian', '$2a$10$GLVrqBoycZdZyDulq6WoZ.EtqU2a5iyog1Ry9zMRAF1R0vFY77aVK', 'adrian@gmail.com', NOW(), 'Barcelona', 637275754, 2);
+INSERT INTO users (id, username, password, email, create_at, provincia, telefono, role) VALUES (1, 'admin', '$2a$10$c4M07uAo.9B6.0fi8RrXV.i0C7NoYIv5PyjD4kHIEmyDZhyWMvxNa', 'admin@gmail.com', NOW(), 'Madrid', '637637637', 1);
+INSERT INTO users (id, username, password, email, create_at, provincia, telefono, role) VALUES (2, 'adrian', '$2a$10$GLVrqBoycZdZyDulq6WoZ.EtqU2a5iyog1Ry9zMRAF1R0vFY77aVK', 'adrian@gmail.com', NOW(), 'Barcelona', '637275754', 2);
 
 
 /* Rellenamos la tabla 'combustible' */

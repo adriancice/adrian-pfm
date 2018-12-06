@@ -1,7 +1,5 @@
 package com.adrian.blog.controller;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -12,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
-import com.adrian.blog.model.ScheduledEmail;
 import com.adrian.blog.model.User;
-import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.security.AuthUserDetailsService;
+import com.adrian.blog.service.IFavoritoService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IScheduledEmailService;
 import com.adrian.blog.service.IUserService;
@@ -46,22 +44,22 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	GlobalController globalController;
+	private IVehiculoService vehiculoService;
 
 	@Autowired
-	IVehiculoService vehiculoService;
+	private IUserService userService;
 
 	@Autowired
-	IUserService userService;
+	private IProvinciaService provinciaService;
 
 	@Autowired
-	IProvinciaService provinciaService;
-
-	@Autowired
-	AuthUserDetailsService userDetailsService;
+	private AuthUserDetailsService userDetailsService;
 
 	@Autowired
 	private IScheduledEmailService scheduledEmailService;
+
+	@Autowired
+	private IFavoritoService favoritoService;
 
 	@RequestMapping("/pruebas")
 	public String pruebas(Model model) {
@@ -181,30 +179,67 @@ public class UserController {
 		return "editarCuenta";
 	}
 
+	/*
+	 * metodo para editar el perfil del usuario
+	 */
 	@RequestMapping(value = "/editCuenta", method = RequestMethod.POST)
-	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req) {
+	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req, RedirectAttributes flash) {
 		logger.info("editCuenta/");
 
-		String username = reqUser.getUsername();
-		String email = reqUser.getEmail();
-		String provincia = reqUser.getProvincia();
-		System.err.println(reqUser.getId());
-		String oldPass = req.getParameter("oldPass");
-		String pass = req.getParameter("newPass");
-		reqUser.setPassword(pass);
-		User user = reqUser;
-		Date date = reqUser.getCreateAt();
-		user.setCreateAt(date);
-		userService.update(user);
-		return "verPerfil";
+		User user = userService.findById(reqUser.getId());
+		if (reqUser.getEmail() != null) {
+			user.setEmail(reqUser.getEmail());
+		}
+
+		if (reqUser.getProvincia() != null) {
+			user.setProvincia(reqUser.getProvincia());
+		}
+
+		if (reqUser.getTelefono() != null) {
+			user.setTelefono(reqUser.getTelefono());
+		}
+
+		if (!reqUser.getPassword().isEmpty()) {
+			System.err.println("input old pass: " + req.getParameter("oldPass"));
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			if (encoder.matches(req.getParameter("oldPass"), user.getPassword())) {// comprobamos si la pass actual es igual que la pass de la bbdd
+				user.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
+			} else {
+				flash.addFlashAttribute("error", "La contraseña actual no es correcta !");
+				return "redirect:/editarCuenta/" + reqUser.getId();
+
+			}
+		}
+		userService.save(user);
+		flash.addFlashAttribute("success", "Has editado tu perfil correctamente !");
+		return "redirect:/verPerfil";
 	}
 
+	/**
+	 * metodo para eliminar la cuenta del usuario
+	 * 
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/borrarCuenta/{id}")
-	public String borrarCuenta(@PathVariable(value = "id") Integer id, Model model) {
+	public String borrarCuenta(@PathVariable(value = "id") Integer id, Authentication authentication, RedirectAttributes flash) {
 		logger.info("borrarCuenta/{id}");
-		userService.delete(id);
-		vehiculoService.deleteByIdUser(id);
-		return "login";
+		try {
+			User us = userDetailsService.getUserDetail(authentication.getName());
+			if (us.getId() != id) {
+				flash.addFlashAttribute("error", "No tienes poder para eliminar este usuario !");
+				return "redirect:/verPerfil";
+			}
+			scheduledEmailService.delete(us.getEmail());
+			favoritoService.deletebyIdUser(id);
+			userService.delete(id);
+			vehiculoService.deleteByIdUser(id);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/logout";
 	}
 
 }

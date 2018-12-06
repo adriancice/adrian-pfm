@@ -14,4 +14,6 @@ public interface IFavoritoService {
 
 	void delete(Favorito favorito);
 
+	void deletebyIdUser(int id);
+
 }

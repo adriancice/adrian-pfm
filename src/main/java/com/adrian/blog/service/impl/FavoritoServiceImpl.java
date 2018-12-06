@@ -42,4 +42,11 @@ public class FavoritoServiceImpl implements IFavoritoService {
 
 	}
 
+	@Override
+	public void deletebyIdUser(int id) {
+		for (Favorito f : favoritoRepository.findByIdUser(id)) {
+			favoritoRepository.delete(f);
+		}
+	}
+
 }

@@ -47,7 +47,7 @@ public class User {
 
 	private String provincia;
 
-	private int telefono;
+	private String telefono;
 
 	@Column(name = "role")
 	@NotNull
@@ -126,11 +126,11 @@ public class User {
 		this.provincia = provincia;
 	}
 
-	public int getTelefono() {
+	public String getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(int telefono) {
+	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
 
