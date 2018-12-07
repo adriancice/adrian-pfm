@@ -65,6 +65,12 @@
 	</div>
 	<!-- Modal forgot password ///-->
 	<footer th:replace="fragments/layout :: footer"></footer>
+	<!-- Script para que salte automaticamente un modal al cargar la pagina -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#forgotPasswordModal").modal("show");
+		});
+	</script>
 
 </body>
 </html>

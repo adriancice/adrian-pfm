@@ -8,4 +8,6 @@ public interface IMarcaService {
 
 	Collection<Marca> findAll();
 
+	Marca findByIdMarca(int id);
+
 }

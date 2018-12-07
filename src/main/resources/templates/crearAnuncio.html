@@ -107,7 +107,8 @@
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Modelo</label>
 				<div class="col-lg-9">
-					<select id="modelos" class="custom-select mb-2" required>
+					<select th:field="*{modelo}" id="modelos"
+						class="custom-select mb-2" required>
 						<option value="" selected disabled>Elige una marca para
 							ver los modelos . . .</option>
 					</select>

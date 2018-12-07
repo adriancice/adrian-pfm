@@ -8,4 +8,6 @@ import com.adrian.blog.model.Marca;
 @Repository("marcaRepository")
 public interface IMarcaRepository extends JpaRepository<Marca, Integer> {
 
+	Marca findByIdMarca(int id);
+
 }

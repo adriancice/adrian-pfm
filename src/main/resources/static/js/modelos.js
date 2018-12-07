@@ -8,7 +8,7 @@ var init = function() {
 				}, function(modelos) {
 					for (i = 0; i < modelos.length; i++) {
 						$('#modelos').append(
-								new Option(modelos[i].modelo, true, true));
+								new Option(modelos[i].modelo, modelos[i].modelo, true));
 					}
 				})
 			})

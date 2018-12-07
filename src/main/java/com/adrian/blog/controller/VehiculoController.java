@@ -172,7 +172,7 @@ public class VehiculoController {
 			f.setIdVehiculo(vehiculo.getId());
 			fotoService.save(f);
 		}
-
+		veh.setMarca(marcaService.findByIdMarca(Integer.parseInt(veh.getMarca())).getMarca());
 		veh.setProvincia(u.getProvincia());
 		veh.setIdUser(u.getId());
 		if (veh.getFoto() == null) {
