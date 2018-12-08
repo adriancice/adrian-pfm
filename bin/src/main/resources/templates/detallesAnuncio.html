@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/layout :: head">
+
+</head>
+
+<body>
+	<header th:replace="fragments/layout :: header"></header>
+
+	<div class="container">
+		<h4>Detalles del anuncio</h4>
+	</div>
+	<!-- /// Lista de vehiculos/anuncios -->
+
+	<div class="container mt-5">
+		<div class="container-fluid gedf-wrapper">
+			<div class="row">
+				<div class="col-md-9">
+					<!-- Carousel -->
+					<div id="carouselExampleIndicators" class="carousel slide"
+						data-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img class="d-block w-100"
+									th:src="@{'/uploads/' + ${vehiculo.foto}}"
+									th:alt="${vehiculo.foto}">
+							</div>
+							<div th:each="f : ${fotosA}" class="carousel-item">
+								<img class="d-block w-100" th:src="@{'/uploads/' + ${f.foto}}"
+									th:alt="${f.foto}">
+							</div>
+
+						</div>
+						<a class="carousel-control-prev" href="#carouselExampleIndicators"
+							role="button" data-slide="prev"> <span
+							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+							class="sr-only">Previous</span>
+						</a> <a class="carousel-control-next"
+							href="#carouselExampleIndicators" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					<!-- END Carousel -->
+					<div class="card mb-4">
+						<div class="card-body">
+							<h5 class="card-title"
+								th:text="${vehiculo.marca} + ' ' +${vehiculo.modelo} + ' ' + ${vehiculo.puertas} + 'p'"></h5>
+							<p class="card-text text-monospace"
+								th:text="${vehiculo.combustible} + ' | ' + ${vehiculo.anio} + ' | ' 
+								+ ${vehiculo.kilometros} + ' km' + ' | ' + ${vehiculo.color} + ' | ' + ${vehiculo.provincia} + ' | ' + ${vehiculo.tipoCambio}"></p>
+						</div>
+
+					</div>
+					<!-- ///// Post-->
+					<div class="card gedf-card">
+						<div class="card-body">
+							<div class="text-muted h7 mb-2">
+								<i class="fa fa-clock-o"></i>Publicado <span
+									th:text="${vehiculo.createAt}"></span>
+							</div>
+
+							<h5 class="font-weight-bold">Descripcion del anunciante</h5>
+
+							<p th:text="${vehiculo.descripcion}"></p>
+						</div>
+						<div sec:authorize="isAuthenticated()" class="card-footer">
+							<a th:if="${existeFav == null}"
+								th:href="@{'/addFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
+								class="card-link"><i class="far fa-star"></i>&nbsp;&nbsp;Add
+								Favorito</a> <a th:if="${existeFav != null}"
+								th:href="@{'/deleteFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
+								class="card-link"><i class="fas fa-star"></i>&nbsp;&nbsp;Quitar
+								favorito</a> <a class="card-link text-primary" data-toggle="popover"
+								data-placement="bottom" data-html="true"
+								data-content="<a href='' data-toggle='modal' data-target='#shareModal'>Correo electrónico</a>"><i
+								class="fas fa-share-alt"></i>&nbsp;&nbsp;Compartir</a>
+
+
+
+
+						</div>
+						<!-- Modal share vehiculo por email-->
+						<div class="modal fade" id="shareModal" tabindex="-1"
+							role="dialog" aria-labelledby="shareModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<form th:action="@{/shareAnuncio}" method="post">
+										<div class="modal-header">
+											<h2 class="text-center">Compartir anuncio</h2>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Introduce el email del destinatario</p>
+											<input type="email" name="email" class="form-control "
+												placeholder="email@ejemplo.com " required />
+										</div>
+										<div class="container px-5">
+											<input class="btn btn-primary btn-block my-3" value="Enviar"
+												type="submit">
+										</div>
+										<input name="idAnunciante" th:field="${vehiculo.id}"
+											type="hidden">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Post /////-->
+				</div>
+				<div class="col-md-3">
+					<div class="mb-3">Contacta con el anunciante</div>
+					<div>
+						<a><i class="fas fa-phone"></i>&nbsp;&nbsp;&nbsp;<span
+							th:text="${user.telefono}"></span></a>
+					</div>
+					<form th:action="@{/contactar-anunciante}" method="post">
+						<div class="form-group mt-3">
+							<textarea name="descripcion" class="form-control"
+								placeholder="Estoy interesado/a en este vehiculo..."></textarea>
+						</div>
+						<div sec:authorize="isAuthenticated()">
+							<div class="form-group">
+								<label>Tu nombre</label> <input th:field="${myUser.username}"
+									type="text" class="form-control" readonly>
+							</div>
+							<div class="form-group">
+								<label>Email:</label> <input th:field="${myUser.email}"
+									type="email" class="form-control" readonly>
+							</div>
+
+							<div class="form-group">
+								<label>Número de telefono</label> <input type="text"
+									class="form-control" th:field="${myUser.telefono}" readonly>
+							</div>
+
+						</div>
+						<div sec:authorize="!isAuthenticated()">
+							<div class="form-group">
+								<label>Tu nombre</label> <input type="text" class="form-control"
+									name="username" placeholder="Introduce tu nombre">
+							</div>
+							<div class="form-group">
+								<label>Email:</label> <input type="email" class="form-control"
+									name="email" placeholder="Introduce tu email" required>
+							</div>
+							<div class="form-group">
+								<label>Número de telefono</label> <input type="text"
+									class="form-control" name="telefono"
+									placeholder="Introduce tu teléfono" maxlength="9"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+							</div>
+						</div>
+						<input name="idAnunciante" th:field="${vehiculo.id}" type="hidden">
+						<button type="submit" class="btn btn-info">Contactar</button>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  Final lista de vehiculos/anuncios ///-->
+	<footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

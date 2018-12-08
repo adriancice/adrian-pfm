@@ -1,35 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head"></head>
+<!-- Estilo para el mensage de CAPS LOCK -->
+<style>
+#textCapsLock {
+	display: none;
+	color: red
+}
+</style>
 <body>
+
 	<header th:replace="fragments/layout :: header"></header>
+
 	<!-- form Bootstrap -->
-	<form class="form-signin" th:action="@{/login}" method="post">
-		<h1 class="h3 mb-3 font-weight-normal text-center">Inicia sesión</h1>
-		<div th:if="${param.error}"
-			class="alert alert-danger alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			Invalid username or password.
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+				<form class="form-signin" th:action="@{/login}" method="post">
+					<h1 class="h3 mb-3 font-weight-normal text-center">Inicia
+						sesión</h1>
+					<div th:if="${param.error}"
+						class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						Invalid username or password.
+					</div>
+					<div class="form-group has-feedback">
+						<i class="fas fa-user form-control-feedback"></i> <input
+							type="text" name="username" class="form-control"
+							placeholder="Ingrese su nombre de usuario" required>
+					</div>
+					<div class="form-group has-feedback">
+						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está activado</p>
+						<i class="fas fa-key form-control-feedback"></i> <input
+							id="myInput" type="password" name="password" class="form-control"
+							placeholder="Ingrese su contraseña" required>
+					</div>
+
+					<div class="text-center">
+						<p>
+							Aun no tienes cuenta, <a th:href="@{/register}">crea una
+								cuenta !</a>
+						</p>
+						<!-- Link trigger modal -->
+						<a href="" data-toggle="modal" data-target="#forgotPasswordModal">Has
+							olvidado la contraseña ?</a>
+					</div>
+					<input type="submit" value="Inicia sesión"
+						class="btn btn-lg btn-primary btn-block mt-2" />
+				</form>
+			</div>
+			<div class="col"></div>
 		</div>
-		<input type="text" name="username" class="form-control"
-			placeholder="Username" required> <input type="password"
-			name="password" class="form-control" placeholder="Password" required>
 
-
-		<p>
-			Aun no tienes cuenta, <a th:href="@{/register}">crea una cuenta !</a>
-		</p>
-
-		<div class="text-center">
-			<!-- Link trigger modal -->
-			<a href="" data-toggle="modal" data-target="#forgotPasswordModal">Forgot
-				your password ?</a>
-
-		</div>
-		<input type="submit" value="Login"
-			class="btn btn-lg btn-primary btn-block mt-2" />
-	</form>
+	</div>
 	<!-- end of Bootstrap form -->
 
 
@@ -66,11 +91,23 @@
 	<!-- Modal forgot password ///-->
 	<footer th:replace="fragments/layout :: footer"></footer>
 	<!-- Script para que salte automaticamente un modal al cargar la pagina -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#forgotPasswordModal").modal("show");
+	<!-- 	<script type="text/javascript">
+	$(document).ready(function() { $("#forgotPasswordModal").modal("show");
+	});
+		</script> -->
+
+	<!-- Script para ver si 'CAPS LOCK' esta activo -->
+	<script>
+		var input = document.getElementById("myInput");
+		var text = document.getElementById("textCapsLock");
+		input.addEventListener("keyup", function(event) {
+
+			if (event.getModifierState("CapsLock")) {
+				text.style.display = "block";
+			} else {
+				text.style.display = "none"
+			}
 		});
 	</script>
-
 </body>
 </html>

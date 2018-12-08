@@ -25,14 +25,14 @@
 						<div class="form-check">
 							<label class="form-check-label" for="radio1"> <input
 								type="radio" class="form-check-input" id="radio1"
-								name="optradio" value="option1" checked>Los precios mÃ¡s
+								name="optradio" value="option1" checked>Los precios más
 								bajos
 							</label>
 						</div>
 						<div class="form-check">
 							<label class="form-check-label" for="radio1"> <input
 								type="radio" class="form-check-input" id="radio1"
-								name="optradio" value="option1" checked>Los precios mÃ¡s
+								name="optradio" value="option1" checked>Los precios más
 								altos
 							</label>
 						</div>
@@ -62,13 +62,10 @@
 							class="far fa-question-circle" data-toggle="popover"
 							data-trigger="hover" data-placement="right"
 							data-content="Buscar por las palabras clave que describan lo que estas buscando. Solamente obtendrás los vehiculos que tengan todos los elementos que hayas indicado."></i>
-
-						<div class="form-group has-feedback">
-							<i class="fas fa-search form-control-feedback"></i> <input
-								th:field="*{palabra}" type="text" class="form-control"
+						<div class="input-group">
+							<input th:field="*{palabra}" type="text" class="form-control"
 								name="palabra">
 						</div>
-
 						<div class="mt-3">
 							<label class="text-muted">Precio</label>
 							<div class="input-group">
@@ -140,9 +137,8 @@
 										<h5 class="card-text text-justify"
 											th:text="${v.marca} + ' ' +${v.modelo} + ' ' + ${v.puertas} + 'p'"></h5>
 										<p class="card-text text-monospace text-muted"
-											th:text="${v.combustible} + ' | ' + ${v.anio} + ' | ' + ${v.kilometros} + ' km' + ' | ' + ${v.color} + ' | ' + ${v.tipoCambio}"></p>
-										<span class="badge badge-pill badge-light"
-											th:text="${v.createAt}"></span>
+											th:text="${v.combustible} + ' | ' + ${v.anio} + ' | ' + ${v.kilometros} + ' km' + ' | ' + ${v.color}"></p>
+
 									</div>
 								</div>
 							</div>

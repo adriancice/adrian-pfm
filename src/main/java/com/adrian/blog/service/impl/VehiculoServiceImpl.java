@@ -74,6 +74,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	@Override
 	public Collection<Vehiculo> filtrar(Filtro filtro) {
 		Collection<Vehiculo> vehiculos = new ArrayList<>();
+
+		// seteamos los precios, años y km minimo/maximo si el input es vacio
 		int pMin, pMax, anioMin, anioMax, kmMin, kmMax;
 		if (filtro.getPrecioMin().isEmpty()) {
 			pMin = 0;
@@ -111,12 +113,18 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		// buscamos la palabra clave en los campos de:
 		// marca-modelo-descripcion-combustible-provincia-color
 		for (Vehiculo v : vehiculoRepository.findAll()) {
-			if (v.getMarca().toLowerCase().contains(filtro.getPalabra().toLowerCase()) || v.getModelo().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| v.getDescripcion().toLowerCase().contains(filtro.getPalabra().toLowerCase()) || v.getCombustible().toLowerCase().contains(filtro.getPalabra().toLowerCase())
-					|| normalizeString(v.getProvincia()).toLowerCase().contains(normalizeString(filtro.getPalabra()).toLowerCase())
-					|| v.getColor().toLowerCase().contains(filtro.getPalabra().toLowerCase())) {
-				vehiculos.add(v);
+			String palabra = filtro.getPalabra();
+			String[] palabras = palabra.split(" ");
+			for (String s : palabras) {
+				if (v.getMarca().equalsIgnoreCase(s) || v.getModelo().equalsIgnoreCase(s)
+						|| v.getCombustible().equalsIgnoreCase(s) || v.getColor().equalsIgnoreCase(s)
+						|| v.getTipoCambio().equalsIgnoreCase(s)
+						|| normalizeString(v.getProvincia()).equalsIgnoreCase(normalizeString(s))
+						|| v.getDescripcion().contains(s)) {
+					vehiculos.add(v);
+				}
 			}
+
 		}
 
 		// filtramos por: precio-año-kilometros

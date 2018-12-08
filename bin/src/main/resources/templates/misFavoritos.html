@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+
+<body>
+	<header th:replace="fragments/layout :: header"></header>
+
+	<div class="container">
+		<h1>Mostrando tus anuncios Favoritos</h1>
+	</div>
+	<div class="container">
+
+		<div class="alert alert-info" th:if="${vacio != null}">No tienes
+			anuncios favoritos</div>
+
+
+		<div class="container-fluid gedf-wrapper">
+			<div class="row">
+				<div class="card col-md-12 p-3 mb-3" th:each="v : ${listaFavoritos}">
+					<a class="card" th:href="@{'/anuncio/detalle/' + ${v.id}}">
+						<div class="row mb-3">
+							<div class="col-md-4">
+								<img class="w-100" th:src="@{'/uploads/' + ${v.foto}}"
+									th:alt="${v.foto}">
+							</div>
+							<div class="col-md-8">
+								<div class="card-block">
+									<h3 class="card-title text-danger" th:text="${v.precio} + ' €'"></h3>
+									<h5 class="card-text text-justify"
+										th:text="${v.marca} + ' ' +${v.modelo} + ' ' + ${v.puertas} + 'p'"></h5>
+									<p class="card-text text-monospace text-muted"
+										th:text="${v.combustible} + ' | ' + ${v.anio} + ' | ' + ${v.kilometros} + ' km'"></p>
+								</div>
+
+							</div>
+						</div>
+					</a>
+					<div class="btn-group-toggle">
+						<a
+							th:href="@{'/deleteFavoritoUser?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${v.id}}"
+							class="card-link">Quitar favorito</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

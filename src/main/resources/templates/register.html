@@ -1,60 +1,110 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head"></head>
+<!-- Estilo para el mensage de CAPS LOCK -->
+<style>
+#textCapsLock {
+	display: none;
+	color: red
+}
+</style>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
 	<!-- Register form Bootstrap4 -->
-	<form class="form-signin" id="registerForm" th:object="${reqUser}"
-		th:action="@{/user/register}" method="post">
-		<h1 class="h3 mb-3 font-weight-normal text-center">Registrate</h1>
-		<div th:if="${saveUser eq 'success'}"
-			class="alert alert-success alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			<strong>User registered Successfully</strong> Please Login
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+				<form class="form-signin" id="registerForm" th:object="${reqUser}"
+					th:action="@{/user/register}" method="post">
+					<h1 class="h3 mb-3 font-weight-normal text-center">Registrate</h1>
+					<div th:if="${saveUser eq 'success'}"
+						class="alert alert-success alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<strong>User registered Successfully</strong> Please Login
+					</div>
+
+					<div th:if="${saveUser eq 'exist-name'}"
+						class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<strong>Error!</strong> Username already used !!!
+					</div>
+					<div th:if="${saveUser eq 'exist-email'}"
+						class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<strong>Error!</strong> Email already used !!!
+					</div>
+					<div th:if="${saveUser eq 'fail'}"
+						class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<strong>Error!</strong> Unexpected error !!!
+					</div>
+
+					<div class="form-group has-feedback">
+						<i class="fas fa-user form-control-feedback"></i><input
+							th:field="*{username}" type="text" name="register_username"
+							class="form-control" placeholder="Nombre de usuario"
+							required="required" value="" />
+					</div>
+					<div class="form-group has-feedback">
+						<i class="fas fa-at form-control-feedback"></i><input
+							th:field="*{email}" type="email" name="register_email" id="email"
+							class="form-control my-2" placeholder="Correo"
+							required="required" value="" />
+					</div>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">&nbsp;&nbsp;&nbsp;</span> <i
+								class="fas fa-map-marked-alt form-control-feedback"></i>
+						</div>
+						<select th:field="*{provincia}" id="provincia"
+							class="form-control" required>
+							<option value="" selected>Eliga una provincia . . .</option>
+							<option th:each="p : ${listaProvincias}"
+								th:value="${p.provincia}" th:text="${p.provincia}"></option>
+						</select>
+					</div>
+					<div class="form-group has-feedback">
+						<i class="fas fa-phone form-control-feedback"></i><input
+							th:field="*{telefono}" class="form-control mb-2" name="username"
+							type="text" required placeholder="Teléfono" minlength="9"
+							maxlength="9">
+					</div>
+					<div class="form-group has-feedback">
+						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está
+							activado</p>
+						<i class="fas fa-key form-control-feedback"></i> <input
+							th:field="*{password}" type="password" name="register_password"
+							class="form-control" id="password" placeholder="Contraseña"
+							required="required" />
+					</div>
+					<div class="form-group has-feedback">
+						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está
+							activado</p>
+						<i class="fas fa-key form-control-feedback"></i> <input
+							th:field="*{password_2}" type="password"
+							name="register_cpassword" class="form-control my-2"
+							id="confirm_password" placeholder="Confirma contraseña"
+							required="required" />
+					</div>
+					<p>
+						Ya tienes una cuenta, <a th:href="@{/login}">inicia sesión !</a>
+					</p>
+					<input type="submit" value="Crear cuenta"
+						class="btn btn-lg btn-success btn-block" />
+				</form>
+			</div>
+			<div class="col"></div>
 		</div>
 
-		<div th:if="${saveUser eq 'exist-name'}"
-			class="alert alert-danger alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			<strong>Error!</strong> Username already used !!!
-		</div>
-		<div th:if="${saveUser eq 'exist-email'}"
-			class="alert alert-danger alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			<strong>Error!</strong> Email already used !!!
-		</div>
-		<div th:if="${saveUser eq 'fail'}"
-			class="alert alert-danger alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			<strong>Error!</strong> Unexpected error !!!
-		</div>
-		<input th:field="*{username}" type="text" name="register_username"
-			class="form-control" placeholder="Username" required="required"
-			value="" /> <input th:field="*{email}" type="email"
-			name="register_email" id="email" class="form-control my-2"
-			placeholder="Email" required="required" value="" /> <select
-			th:field="*{provincia}" id="provincia" class="custom-select mb-2"
-			required>
-			<option value="" selected>Elige una provincia . . .</option>
-			<option th:each="p : ${listaProvincias}" th:value="${p.provincia}"
-				th:text="${p.provincia}"></option>
-		</select> <input th:field="*{telefono}" class="form-control mb-2"
-			name="username" type="text" required placeholder="Teléfono"
-			minlength="9" maxlength="9"> <input th:field="*{password}"
-			type="password" name="register_password" class="form-control"
-			id="password" placeholder="Password" required="required" /> <input
-			th:field="*{password_2}" type="password" name="register_cpassword"
-			class="form-control" id="confirm_password"
-			placeholder="Confirm Password" required="required" />
-		<p>
-			Ya tienes una cuenta, <a th:href="@{/login}">login !</a>
-		</p>
-		<input type="submit" value="Create account"
-			class="btn btn-lg btn-success btn-block" />
-	</form>
+	</div>
+
+
+
+
 	<!-- End register form Bootstrap4 -->
 
 	<footer th:replace="fragments/layout :: footer"></footer>
@@ -73,6 +123,18 @@
 		password.onchange = validatePassword;
 		confirm_password.onkeyup = validatePassword;
 	</script>
+	<!-- Script para ver si 'CAPS LOCK' esta activo -->
+	<script>
+		var input = document.getElementById("password");
+		var text = document.getElementById("textCapsLock");
+		input.addEventListener("keyup", function(event) {
 
+			if (event.getModifierState("CapsLock")) {
+				text.style.display = "block";
+			} else {
+				text.style.display = "none"
+			}
+		});
+	</script>
 </body>
 </html>
