@@ -588,8 +588,8 @@ INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('443', '33', 'Wr
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('444', '33', 'Wrangler Unlimited');
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('445', '34', 'Carens');
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('446', '34', 'Carnival');
-INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('447', '34', 'cee\'d');
-INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('448', '34', 'cee\'d Sportwagon');
+INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('447', '34', 'ceed');
+INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('448', '34', 'ceed Sportwagon');
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('449', '34', 'Cerato');
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('450', '34', 'Clarus');
 INSERT INTO modelos (`id_modelo`, `id_marca`, `modelo`) VALUES ('451', '34', 'Joice');
