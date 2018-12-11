@@ -2,10 +2,12 @@ package com.adrian.blog.service.impl;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -113,31 +115,17 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		// buscamos la palabra clave en los campos de:
 		// marca-modelo-descripcion-combustible-provincia-color
 		String palabra = filtro.getPalabra();
-		String[] palabras = palabra.split(" ");
+		String[] palabras = palabra.toLowerCase().split(" ");
 		for (Vehiculo v : vehiculoRepository.findAll()) {
+			// concatenamos todos los atributos del vehiculos en un String
 			String c = v.getMarca().concat(" " + v.getModelo()).concat(" " + v.getColor()).concat(" " + v.getCombustible()).concat(" " + v.getTipoCambio())
-					.concat(" " + v.getProvincia()).concat(" " + v.getDescripcion());
+					.concat(" " + v.getProvincia()).concat(" " + v.getDescripcion()).concat(" " + v.getAnio());
 
-//			for (String s : palabras) {
-//				if (v.getMarca().equalsIgnoreCase(s) || v.getModelo().equalsIgnoreCase(s) || v.getCombustible().equalsIgnoreCase(s) || v.getColor().equalsIgnoreCase(s)
-//						|| v.getTipoCambio().equalsIgnoreCase(s) || normalizeString(v.getProvincia()).equalsIgnoreCase(normalizeString(s)) || v.getDescripcion().contains(s)) {
-//					vehiculos.add(v);
-//				}
-//			}
-			// solo funciona cuando metemos 1 o 2 palabras en el campo
-			if (palabra.contains(" ")) {
-				for (int i = 0; i < palabras.length - 1; i++) {
-					if (c.toLowerCase().contains(palabras[i].toLowerCase()) && c.toLowerCase().contains(palabras[i + 1].toLowerCase())) {
-						vehiculos.add(v);
-						break;
-					}
-				}
-			} else {
-				if (c.toLowerCase().contains(palabra.toLowerCase())) {
-					vehiculos.add(v);
-				}
+			// comprobamos si el string que concatenamos mas arriba contiene todos los
+			// string del array de 'palabras'
+			if (Stream.of(palabras).allMatch(c.toLowerCase()::contains)) {
+				vehiculos.add(v);
 			}
-
 		}
 
 		// filtramos por: precio-año-kilometros
@@ -210,11 +198,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
 			return searchVehiculo.get();
 		}
 		return null;
-	}
-
-	@Override
-	public Page<Vehiculo> findAll(Pageable pageable) {
-		return vehiculoRepository.findAll(pageable);
 	}
 
 }

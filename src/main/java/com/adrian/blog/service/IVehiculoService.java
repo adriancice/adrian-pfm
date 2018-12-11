@@ -35,6 +35,4 @@ public interface IVehiculoService {
 
 	List<Vehiculo> findVehiculosByUserFavorito(int idUser);
 
-	Page<Vehiculo> findAll(Pageable pageable);
-
 }
