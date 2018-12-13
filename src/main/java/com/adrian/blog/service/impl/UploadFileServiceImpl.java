@@ -10,12 +10,15 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.adrian.blog.model.Foto;
+import com.adrian.blog.repository.IFotoRepository;
 import com.adrian.blog.service.IUploadFileService;
 
 @Service
@@ -23,8 +26,12 @@ public class UploadFileServiceImpl implements IUploadFileService {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	//private final static String UPLOADS_FOLDER = "src/main/resources/static/images/vehiculos";
+	// private final static String UPLOADS_FOLDER =
+	// "src/main/resources/static/images/vehiculos";
 	private final static String UPLOADS_FOLDER = "uploads";
+
+	@Autowired
+	private IFotoRepository fotoRepository;
 
 	@Override
 	public Resource load(String filename) throws MalformedURLException {
@@ -40,15 +47,19 @@ public class UploadFileServiceImpl implements IUploadFileService {
 	}
 
 	@Override
-	public String copy(MultipartFile file) throws IOException {
+	public String copy(MultipartFile file, int idVehiculo) throws IOException {
 		String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 		Path rootPath = getPath(uniqueFilename);
 
 		log.info("rootPath: " + rootPath);
 
 		Files.copy(file.getInputStream(), rootPath);
-
+		Foto foto = new Foto();
+		foto.setFoto(uniqueFilename);
+		foto.setIdVehiculo(idVehiculo);
+		fotoRepository.save(foto);
 		return uniqueFilename;
+
 	}
 
 	@Override

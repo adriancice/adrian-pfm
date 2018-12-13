@@ -2,7 +2,13 @@ package com.adrian.blog.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -145,33 +151,18 @@ public class VehiculoController {
 	}
 
 	@RequestMapping(value = { "/vehiculo/crearAnuncio" }, method = RequestMethod.POST)
-	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("file") MultipartFile foto, final RedirectAttributes redirectAttributes,
-			Authentication authentication, SessionStatus status, RedirectAttributes flash) {
+	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("files") MultipartFile[] foto, final RedirectAttributes redirectAttributes,
+			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
 		logger.info("/vehiculo/crearAnuncio");
 		String mensaje = "El anuncio se ha creado con exito !";
+
 		if (vehiculo.getId() != 0) {
 			mensaje = "Has editado correctamente el anuncio !";
 			flash.addFlashAttribute("success", mensaje);
 		}
 		User u = userDetailsService.getUserDetail(authentication.getName());
 		Vehiculo veh = vehiculo;
-		if (!foto.isEmpty()) {
-			if (vehiculo.getId() > 0 && vehiculo.getFoto() != null && vehiculo.getFoto().length() > 0) {
-				uploadFileService.delete(vehiculo.getFoto());
-			}
-			String uniqueFilename = null;
-			try {
-				uniqueFilename = uploadFileService.copy(foto);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			veh.setFoto(uniqueFilename);
-			Foto f = new Foto();
-			f.setFoto(uniqueFilename);
-			f.setIdVehiculo(vehiculo.getId());
-			fotoService.save(f);
-		}
+
 		veh.setMarca(marcaService.findByIdMarca(Integer.parseInt(veh.getMarca())).getMarca());
 		veh.setProvincia(u.getProvincia());
 		veh.setIdUser(u.getId());
@@ -179,11 +170,21 @@ public class VehiculoController {
 			veh.setFoto(fotoDefault);
 		}
 		vehiculoService.save(veh);
+		String uniqueFilename = null;
+		Arrays.asList(foto).stream().map(file -> {
+			try {
+				return uploadFileService.copy(file, veh.getId());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return uniqueFilename;
+		}).collect(Collectors.toList());
+		System.err.println("uniqFile: " + uniqueFilename);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensaje);
 		redirectAttributes.addFlashAttribute("saveVehiculo", "success");
-
-		return "redirect:/misAnuncios";
+		return "redirect:/anuncio/detalle/" + veh.getId();
 	}
 
 	/**
@@ -233,10 +234,17 @@ public class VehiculoController {
 		} catch (Exception e) {
 			System.err.println("No hay ningun user logueado !");
 		}
+
+		Collection<Foto> fotos = fotoService.findByIdVehiculo(id);
+		Vehiculo veh = vehiculoService.findById(id);
+		veh.setFoto(fotos.iterator().next().getFoto());
+		vehiculoService.save(veh);
 		Vehiculo vehiculo = vehiculoService.findById(id);
 		model.addAttribute("vehiculo", vehiculo);
 		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
-		model.addAttribute("fotosA", fotoService.findByIdVehiculo(id));
+		List<Foto> fotosA = (List<Foto>) fotos;
+		fotosA.remove(0);
+		model.addAttribute("fotosA", fotosA);
 
 		return "detallesAnuncio";
 	}

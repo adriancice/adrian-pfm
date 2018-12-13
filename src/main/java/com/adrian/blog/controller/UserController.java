@@ -1,5 +1,7 @@
 package com.adrian.blog.controller;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
+import com.adrian.blog.model.Foto;
 import com.adrian.blog.model.User;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IFavoritoService;
+import com.adrian.blog.service.IFotoService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IScheduledEmailService;
 import com.adrian.blog.service.IUserService;
@@ -60,6 +64,9 @@ public class UserController {
 
 	@Autowired
 	private IFavoritoService favoritoService;
+
+	@Autowired
+	private IFotoService fotoService;
 
 	@RequestMapping("/pruebas")
 	public String pruebas(Model model) {

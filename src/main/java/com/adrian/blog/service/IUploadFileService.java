@@ -10,7 +10,7 @@ public interface IUploadFileService {
 
 	public Resource load(String filename) throws MalformedURLException;
 
-	public String copy(MultipartFile file) throws IOException;
+	public String copy(MultipartFile file, int idVehiculo) throws IOException;
 
 	public boolean delete(String filename);
 

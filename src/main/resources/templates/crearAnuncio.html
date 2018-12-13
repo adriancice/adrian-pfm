@@ -68,14 +68,13 @@
 			</div>
 			<!-- upload images -->
 			<div class="container my-5">
-				<strong>Esto es lo que quiero hacer que funcione para
-					añadir multiples fotos</strong>
 				<div class="row">
 					<div class="col-sm-2 imgUp">
 						<label>Foto principal</label>
 						<div class="imagePreview"></div>
 						<label class="btn btn-primary"> Subir foto<input
-							type="file" class="uploadFile img" value="Upload Photo"
+							type="file" class="uploadFile img" name="files"
+							value="Upload Photo"
 							style="width: 0px; height: 0px; overflow: hidden;">
 						</label>
 					</div>
@@ -85,13 +84,6 @@
 				<!-- row -->
 			</div>
 			<!-- upload images -->
-
-			<!--  -->
-			<strong>De momento solo funciona con subir una foto</strong> <input
-				type="file" class="form-control-file" name="file"
-				id="exampleFormControlFile1">
-			<!--  -->
-
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
@@ -211,7 +203,7 @@
 									.closest(".row")
 									.find('.imgAdd')
 									.before(
-											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" name="files" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
 						});
 		$(document).on("click", "i.del", function() {
 			$(this).parent().remove();

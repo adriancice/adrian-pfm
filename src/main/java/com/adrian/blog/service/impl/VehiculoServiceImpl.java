@@ -126,6 +126,7 @@ public class VehiculoServiceImpl implements IVehiculoService {
 			if (Stream.of(palabras).allMatch(c.toLowerCase()::contains)) {
 				vehiculos.add(v);
 			}
+
 		}
 
 		// filtramos por: precio-año-kilometros
