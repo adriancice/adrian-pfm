@@ -42,3 +42,10 @@ a.card.disabled, a.card[disabled] {
 .form-control {
 	padding-left: 30px !important;
 }
+
+/* div filtrar scroll follow */
+.column-fixed {
+	position: fixed;
+	top: 0;
+	z-index: 1;
+}

@@ -17,6 +17,7 @@
 				<form class="form-signin" id="registerForm" th:object="${reqUser}"
 					th:action="@{/user/register}" method="post">
 					<h1 class="h3 mb-3 font-weight-normal text-center">Registrate</h1>
+					<!-- /// mensajes -->
 					<div th:if="${saveUser eq 'success'}"
 						class="alert alert-success alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
@@ -42,7 +43,9 @@
 							aria-hidden="true">&times;</button>
 						<strong>Error!</strong> Unexpected error !!!
 					</div>
+					<!-- mensajes /// -->
 
+					<!-- /// inputs del registro -->
 					<div class="form-group has-feedback">
 						<i class="fas fa-user form-control-feedback"></i><input
 							th:field="*{username}" type="text" name="register_username"
@@ -82,8 +85,6 @@
 							required="required" />
 					</div>
 					<div class="form-group has-feedback">
-						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está
-							activado</p>
 						<i class="fas fa-key form-control-feedback"></i> <input
 							th:field="*{password_2}" type="password"
 							name="register_cpassword" class="form-control my-2"
@@ -95,6 +96,7 @@
 					</p>
 					<input type="submit" value="Crear cuenta"
 						class="btn btn-lg btn-success btn-block" />
+					<!--  inputs del registro /// -->
 				</form>
 			</div>
 			<div class="col"></div>
@@ -128,7 +130,6 @@
 		var input = document.getElementById("password");
 		var text = document.getElementById("textCapsLock");
 		input.addEventListener("keyup", function(event) {
-
 			if (event.getModifierState("CapsLock")) {
 				text.style.display = "block";
 			} else {

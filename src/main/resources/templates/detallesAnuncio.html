@@ -157,8 +157,8 @@
 							</div>
 						</div>
 						<input name="idAnunciante" th:field="${vehiculo.id}" type="hidden">
-						<button type="submit" class="btn btn-info">Contactar</button>
-
+						<button type="submit" id="spn" class="btn btn-info">Enviar
+							mensaje</button>
 					</form>
 				</div>
 			</div>
@@ -166,5 +166,31 @@
 	</div>
 	<!--  Final lista de vehiculos/anuncios ///-->
 	<footer th:replace="fragments/layout :: footer"></footer>
+	<!-- Script para el 'loading button' -->
+	<script type="text/javascript">
+		var spn = document.getElementById("spn")
+		$(document)
+				.ready(
+						function() {
+							$(spn)
+									.on(
+											'click',
+											function() {
+												var $this = $(this);
+												var loadingText = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+												if ($(this).html() !== loadingText) {
+													$this.data('original-text',
+															$(this).html());
+													$this.html(loadingText);
+												}
+												setTimeout(
+														function() {
+															$this
+																	.html($this
+																			.data('original-text'));
+														}, 5000);
+											});
+						})
+	</script>
 </body>
 </html>

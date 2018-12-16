@@ -11,14 +11,15 @@
 		<div class="card bg-light">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
-				<a th:href="@{/register}">Crear usuario</a>
 				<table class="table table-striped table-bordered">
 					<thead class="thead-inverse">
 						<tr>
 							<th>id</th>
 							<th>username</th>
 							<th>email</th>
-							<th>fecha</th>
+							<th>provincia</th>
+							<th>fecha registro</th>
+							<th>teléfono</th>
 							<th>role</th>
 
 						</tr>
@@ -29,7 +30,9 @@
 								th:text="${usuario.id}"></a></td>
 							<td th:text="${usuario.username}"></td>
 							<td th:text="${usuario.email}"></td>
-							<td th:text="${usuario.createAt}"></td>							
+							<td th:text="${usuario.provincia}"></td>
+							<td th:text="${usuario.createAt}"></td>
+							<td th:text="${usuario.telefono}"></td>
 							<td th:text="${usuario.role} == 1 ? 'ADMIN' : 'USER'"></td>
 
 						</tr>

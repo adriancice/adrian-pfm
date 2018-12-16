@@ -3,12 +3,12 @@
 <head th:replace="fragments/layout :: head"></head>
 <style type="text/css">
 /* Css del 'upload image' del 'crear anuncio' */
+/* por alguna razon si guardo este style en el archivo 'css.css' no me funciona */
 .imagePreview {
 	width: 100%;
 	height: 180px;
-	background-position: center center;
-	background:
-		url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+	background-position: center;
+	background: url(images/no-image-available.jpg);
 	background-color: #fff;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -18,7 +18,7 @@
 
 .btn-primary {
 	display: block;
-	border-radius: 3px;
+	border-radius: 0px;
 	box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
 	margin-top: -5px;
 }
@@ -66,6 +66,7 @@
 					aria-hidden="true">&times;</button>
 				<strong>Anuncio creado correctamente</strong>
 			</div>
+
 			<!-- upload images -->
 			<div class="container my-5">
 				<div class="row">
@@ -74,12 +75,12 @@
 						<div class="imagePreview"></div>
 						<label class="btn btn-primary"> Subir foto<input
 							type="file" class="uploadFile img" name="files"
-							value="Upload Photo"
-							style="width: 0px; height: 0px; overflow: hidden;">
+							value="Upload Photo" accept="image/*"
+							style="width: 0px; height: 0px; overflow: hidden;" >
 						</label>
 					</div>
 					<!-- col-2 -->
-					<i class="fa fa-plus imgAdd"></i>
+					<i class="fa fa-plus imgAdd" title="Añadir mas fotos"></i>
 				</div>
 				<!-- row -->
 			</div>
@@ -128,6 +129,8 @@
 					</select>
 				</div>
 			</div>
+
+
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Kilómetros</label>
 				<div class="col-lg-9">
@@ -157,8 +160,6 @@
 				</div>
 			</div>
 
-
-
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Tipo
 					de cambio</label>
@@ -171,7 +172,6 @@
 					</select>
 				</div>
 			</div>
-
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Color</label>
@@ -203,7 +203,7 @@
 									.closest(".row")
 									.find('.imgAdd')
 									.before(
-											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" name="files" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" name="files" value="Upload Photo" accept="image/*" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del" title="Eliminar foto"></i></div>');
 						});
 		$(document).on("click", "i.del", function() {
 			$(this).parent().remove();

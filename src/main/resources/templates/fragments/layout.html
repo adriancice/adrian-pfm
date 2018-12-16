@@ -22,7 +22,7 @@
 <link th:href="@{/css/css.css}" rel="stylesheet" media="screen" />
 <!-- Font awesome CSS  -->
 <link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+	href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 
 
 </head>
@@ -64,7 +64,7 @@
 						mi cuenta</a> <a sec:authorize="isAuthenticated()"
 						class="dropdown-item" th:href="@{/misFavoritos}"><i
 						class="fas fa-star"></i>&nbsp;&nbsp;Favoritos</a><a
-						sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
+						sec:authorize="isAuthenticated()" class="dropdown-item"
 						th:href="@{/misAnuncios}"><i class="fas fa-edit"></i>&nbsp;&nbsp;Mis
 						anuncios</a> <a sec:authorize="isAuthenticated()"
 						class="dropdown-item" th:href="@{/crearAnuncio}"><i
@@ -122,7 +122,7 @@
 
 
 	<footer th:fragment="footer">
-		<div class="container">
+		<div class="container mt-5">
 			<div class="container">
 				<p sec:authorize="isAuthenticated()">
 					Usuario logeado: <span sec:authentication="name"></span> | Roles: <span

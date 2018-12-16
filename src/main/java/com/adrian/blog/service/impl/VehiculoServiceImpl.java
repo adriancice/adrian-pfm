@@ -115,12 +115,14 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		// buscamos la palabra clave en los campos de:
 		// marca-modelo-descripcion-combustible-provincia-color
 		String palabra = filtro.getPalabra();
+		cleanString(palabra);
+		System.out.println("Cuantas veces?" + palabra);
 		String[] palabras = palabra.toLowerCase().split(" ");
 		for (Vehiculo v : vehiculoRepository.findAll()) {
 			// concatenamos todos los atributos del vehiculos en un String
 			String c = v.getMarca().concat(" " + v.getModelo()).concat(" " + v.getColor()).concat(" " + v.getCombustible()).concat(" " + v.getTipoCambio())
 					.concat(" " + v.getProvincia()).concat(" " + v.getDescripcion()).concat(" " + v.getAnio());
-
+			System.err.println("Coche: : " + c);
 			// comprobamos si el string que concatenamos mas arriba contiene todos los
 			// string del array de 'palabras'
 			if (Stream.of(palabras).allMatch(c.toLowerCase()::contains)) {
@@ -163,6 +165,11 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		return str.replaceAll("[^a-z,^A-Z,^0-9]", "");
 	}
 
+	public static String cleanString(String texto) {
+		texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+		return texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+	}
+
 	@Override
 	public Collection<Vehiculo> findAllOrderByPrecio() {
 		Collection<Vehiculo> vehiculos = new ArrayList<>();
@@ -199,6 +206,11 @@ public class VehiculoServiceImpl implements IVehiculoService {
 			return searchVehiculo.get();
 		}
 		return null;
+	}
+
+	@Override
+	public Page<Vehiculo> findAll(Pageable pageable) {
+		return vehiculoRepository.findAll(pageable);
 	}
 
 }

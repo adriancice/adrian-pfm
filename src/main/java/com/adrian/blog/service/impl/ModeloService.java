@@ -25,4 +25,10 @@ public class ModeloService implements IModeloService {
 		return modelos;
 	}
 
+	@Override
+	public void save(Modelo modelo) {
+		modeloRepository.save(modelo);
+
+	}
+
 }

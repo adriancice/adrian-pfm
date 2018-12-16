@@ -34,7 +34,8 @@
 									th:href="@{'/anuncio/eliminar/' + ${v.id}}"
 									class="btn btn-danger"
 									onclick="return confirm('Estás seguro que quieres eliminar ?');">Borrar
-									anuncio</a>
+									anuncio</a> <a th:href="@{'/anuncio/detalle/' + ${v.id}}"
+									class="btn btn-info">Ver anuncio</a>
 							</div>
 						</div>
 					</div>

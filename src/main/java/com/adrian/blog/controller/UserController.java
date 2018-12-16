@@ -1,7 +1,5 @@
 package com.adrian.blog.controller;
 
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -23,12 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
-import com.adrian.blog.model.Foto;
 import com.adrian.blog.model.User;
+import com.adrian.blog.model.Vehiculo;
 import com.adrian.blog.paginator.PageRender;
 import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.IFavoritoService;
-import com.adrian.blog.service.IFotoService;
 import com.adrian.blog.service.IProvinciaService;
 import com.adrian.blog.service.IScheduledEmailService;
 import com.adrian.blog.service.IUserService;
@@ -65,9 +62,6 @@ public class UserController {
 	@Autowired
 	private IFavoritoService favoritoService;
 
-	@Autowired
-	private IFotoService fotoService;
-
 	@RequestMapping("/pruebas")
 	public String pruebas(Model model) {
 		logger.info("pruebas");
@@ -76,113 +70,157 @@ public class UserController {
 
 	@RequestMapping("/login")
 	public String login(Model model) {
-		// model.addAttribute("reqUser", new User());
 		logger.info("login");
 		return "login";
 	}
 
 	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
-	public String home(Model model) {
+	public String home(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("index");
+		try {
+			Pageable pageRequest = PageRequest.of(page, 5);
+			Page<Vehiculo> vehiculos = vehiculoService.findAll(pageRequest);
+			PageRender<Vehiculo> pageRender = new PageRender<>("/", vehiculos);
+			model.addAttribute("page", pageRender);
 
-		model.addAttribute("reqFiltro", new Filtro());
-		model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
-		model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
+			model.addAttribute("reqFiltro", new Filtro());
+			// model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
+			model.addAttribute("listaVehiculos", vehiculos);
+			model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.findAll()));
+			model.addAttribute("paginator", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "index";
 	}
 
 	@RequestMapping("/register")
 	public String register(Model model) {
 		logger.info("register");
-
-		model.addAttribute("reqUser", new User());
-		model.addAttribute("listaProvincias", provinciaService.findAll());
+		try {
+			model.addAttribute("reqUser", new User());
+			model.addAttribute("listaProvincias", provinciaService.findAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "register";
 	}
 
+	/**
+	 * Metodo para registrar un nuevo usuario Por defecto los usuarios que se
+	 * registren tienen el 'ROLE USER'
+	 * 
+	 * @param reqUser
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequestMapping(value = { "/user/register" }, method = RequestMethod.POST)
 	public String register(@ModelAttribute("reqUser") User reqUser, final RedirectAttributes redirectAttributes) {
-
 		logger.info("/user/register");
-		User user = userService.findByUserName(reqUser.getUsername());
-		if (user != null) {
-			redirectAttributes.addFlashAttribute("saveUser", "exist-name");
-			return "redirect:/register";
-		}
-		user = userService.findByEmail(reqUser.getEmail());
-		if (user != null) {
-			redirectAttributes.addFlashAttribute("saveUser", "exist-email");
-			return "redirect:/register";
-		}
+		try {
+			User user = userService.findByUserName(reqUser.getUsername());
+			if (user != null) {
+				redirectAttributes.addFlashAttribute("saveUser", "exist-name");
+				return "redirect:/register";
+			}
+			user = userService.findByEmail(reqUser.getEmail());
+			if (user != null) {
+				redirectAttributes.addFlashAttribute("saveUser", "exist-email");
+				return "redirect:/register";
+			}
 
-		reqUser.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
-		reqUser.setRole(EnumRoles.ROLE_USER.getValue());
+			reqUser.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
+			reqUser.setRole(EnumRoles.ROLE_USER.getValue());
 
-		if (userService.save(reqUser) != null) {
-			redirectAttributes.addFlashAttribute("saveUser", "success");
-		} else {
-			redirectAttributes.addFlashAttribute("saveUser", "fail");
+			if (userService.save(reqUser) != null) {
+				redirectAttributes.addFlashAttribute("saveUser", "success");
+			} else {
+				redirectAttributes.addFlashAttribute("saveUser", "fail");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 		return "redirect:/register";
 	}
 
+	/**
+	 * Metodo para listar los usuarios registrados Solo el user con 'ROLE ADMIN'
+	 * tiene acceso a esta lista
+	 * 
+	 * @param page
+	 * @param model
+	 * @return
+	 */
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = { "/listar" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("listar");
-
-		Pageable pageRequest = PageRequest.of(page, 2);
-		Page<User> usuarios = userService.findAll(pageRequest);
-
-		PageRender<User> pageRender = new PageRender<>("/listar", usuarios);
-		model.addAttribute("titulo", "Listado de usuarios");
-		model.addAttribute("usuarios", usuarios);
-		model.addAttribute("page", pageRender);
-
+		try {
+			Pageable pageRequest = PageRequest.of(page, 2);
+			Page<User> usuarios = userService.findAll(pageRequest);
+			PageRender<User> pageRender = new PageRender<>("/listar", usuarios);
+			model.addAttribute("titulo", "Listado de usuarios");
+			model.addAttribute("usuarios", usuarios);
+			model.addAttribute("page", pageRender);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "listar";
 	}
 
 	@RequestMapping(value = { "/misAnuncios" }, method = RequestMethod.GET)
 	public String misAnuncios(Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("misAnuncios");
-		User u = userDetailsService.getUserDetail(authentication.getName());
-		model.addAttribute("listaVehiculos", vehiculoService.findByIdUser(u.getId()));
-		if (vehiculoService.findByIdUser(u.getId()).isEmpty()) {
-			model.addAttribute("vacio", "vacio");
+		try {
+			User u = userDetailsService.getUserDetail(authentication.getName());
+			model.addAttribute("listaVehiculos", vehiculoService.findByIdUser(u.getId()));
+			if (vehiculoService.findByIdUser(u.getId()).isEmpty()) {
+				model.addAttribute("vacio", "vacio");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 		return "misAnuncios";
 	}
 
 	@RequestMapping("/verPerfil")
 	public String verPerfil(Model model, Authentication authentication) {
 		logger.info("editarCuenta");
-		User u = userDetailsService.getUserDetail(authentication.getName());
-		model.addAttribute("suscripcion", scheduledEmailService.existEmail(u.getEmail()));
-		model.addAttribute("reqUser", u);
+		try {
+			User u = userDetailsService.getUserDetail(authentication.getName());
+			model.addAttribute("suscripcion", scheduledEmailService.existEmail(u.getEmail()));
+			model.addAttribute("reqUser", u);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "verPerfil";
 	}
 
 	@RequestMapping("/editarCuenta/{id}")
 	public String editarCuenta(@PathVariable(value = "id") Integer id, Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("editarCuenta/{id}");
-		User us = userDetailsService.getUserDetail(authentication.getName());
-		if (id > 0) {
-			User u = userService.findById(id);
-			if (u == null) {
-				flash.addFlashAttribute("error", "No existe ningun usuario con este id !");
+		try {
+			User us = userDetailsService.getUserDetail(authentication.getName());
+			if (id > 0) {
+				User u = userService.findById(id);
+				if (u == null) {
+					flash.addFlashAttribute("error", "No existe ningun usuario con este id !");
+					return "redirect:/verPerfil";
+				}
+				if (u.getId() != us.getId()) {
+					flash.addFlashAttribute("error", "No puedes editar este usuario !");
+					return "redirect:/verPerfil";
+				}
+			} else {
+				flash.addFlashAttribute("error", "El id del usuario no puede ser 0 o negativo !");
 				return "redirect:/verPerfil";
 			}
-			if (u.getId() != us.getId()) {
-				flash.addFlashAttribute("error", "No puedes editar este usuario !");
-				return "redirect:/verPerfil";
-			}
-		} else {
-			flash.addFlashAttribute("error", "El id del usuario no puede ser 0 o negativo !");
-			return "redirect:/verPerfil";
+			model.addAttribute("listaProvincias", provinciaService.findAll());
+			model.addAttribute("reqUser", us);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		model.addAttribute("listaProvincias", provinciaService.findAll());
-		model.addAttribute("reqUser", us);
 		return "editarCuenta";
 	}
 
@@ -192,33 +230,36 @@ public class UserController {
 	@RequestMapping(value = "/editCuenta", method = RequestMethod.POST)
 	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req, RedirectAttributes flash) {
 		logger.info("editCuenta/");
-
-		User user = userService.findById(reqUser.getId());
-		if (reqUser.getEmail() != null) {
-			user.setEmail(reqUser.getEmail());
-		}
-
-		if (reqUser.getProvincia() != null) {
-			user.setProvincia(reqUser.getProvincia());
-		}
-
-		if (reqUser.getTelefono() != null) {
-			user.setTelefono(reqUser.getTelefono());
-		}
-
-		if (!reqUser.getPassword().isEmpty()) {
-			System.err.println("input old pass: " + req.getParameter("oldPass"));
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			if (encoder.matches(req.getParameter("oldPass"), user.getPassword())) {// comprobamos si la pass actual es igual que la pass de la bbdd
-				user.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
-			} else {
-				flash.addFlashAttribute("error", "La contraseña actual no es correcta !");
-				return "redirect:/editarCuenta/" + reqUser.getId();
-
+		try {
+			User user = userService.findById(reqUser.getId());
+			if (reqUser.getEmail() != null) {
+				user.setEmail(reqUser.getEmail());
 			}
+
+			if (reqUser.getProvincia() != null) {
+				user.setProvincia(reqUser.getProvincia());
+			}
+
+			if (reqUser.getTelefono() != null) {
+				user.setTelefono(reqUser.getTelefono());
+			}
+
+			if (!reqUser.getPassword().isEmpty()) {
+				System.err.println("input old pass: " + req.getParameter("oldPass"));
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				if (encoder.matches(req.getParameter("oldPass"), user.getPassword())) {// comprobamos si la pass actual es igual que la pass de la bbdd
+					user.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
+				} else {
+					flash.addFlashAttribute("error", "La contraseña actual no es correcta !");
+					return "redirect:/editarCuenta/" + reqUser.getId();
+
+				}
+			}
+			userService.save(user);
+			flash.addFlashAttribute("success", "Has editado tu perfil correctamente !");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		userService.save(user);
-		flash.addFlashAttribute("success", "Has editado tu perfil correctamente !");
 		return "redirect:/verPerfil";
 	}
 

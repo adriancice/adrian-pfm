@@ -6,9 +6,6 @@
 	<header th:replace="fragments/layout :: header"></header>
 
 	<div class="container">
-		<h1>BUSCAR</h1>
-	</div>
-	<div class="container">
 		<div class="container-fluid gedf-wrapper">
 			<div class="d-flex bd-highlight">
 				<div class="p-2 flex-fill bd-highlight">
@@ -25,14 +22,14 @@
 						<div class="form-check">
 							<label class="form-check-label" for="radio1"> <input
 								type="radio" class="form-check-input" id="radio1"
-								name="optradio" value="option1" checked>Los precios mÃ¡s
+								name="optradio" value="option1" checked>Los precios más
 								bajos
 							</label>
 						</div>
 						<div class="form-check">
 							<label class="form-check-label" for="radio1"> <input
 								type="radio" class="form-check-input" id="radio1"
-								name="optradio" value="option1" checked>Los precios mÃ¡s
+								name="optradio" value="option1" checked>Los precios más
 								altos
 							</label>
 						</div>
@@ -53,72 +50,74 @@
 			</div>
 			<div class="row">
 				<div class="col-md-3">
-					<div th:if="${limpiar != null}">
-						<a href="/">Reiniciar busqueda</a>
+					<div id="asd">
+						<h4>BUSCAR</h4>
+						<div th:if="${limpiar != null}">
+							<a href="/">Reiniciar busqueda</a>
+						</div>
+						<form th:action="@{/vehiculos/filtrarPalabraClave/}"
+							th:object="${reqFiltro}">
+							<label class="text-muted">Palabra clave</label> <i
+								class="far fa-question-circle" data-toggle="popover"
+								data-trigger="hover" data-placement="right"
+								data-content="Buscar por las palabras clave que describan lo que estas buscando. Solamente obtendrás los vehiculos que tengan todos los elementos que hayas indicado."></i>
+
+							<div class="form-group has-feedback">
+								<i class="fas fa-search form-control-feedback"></i><input
+									th:field="*{palabra}" type="text" class="form-control"
+									name="palabra">
+							</div>
+
+							<div class="mt-3">
+								<label class="text-muted">Precio</label>
+								<div class="input-group">
+									<input th:field="*{precioMin}" type="text" class="form-control"
+										name="precioMin" placeholder="Precio minimo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="6">
+								</div>
+								<div class="input-group my-1">
+									<input th:field="*{precioMax}" type="text" class="form-control"
+										name="precioMax" placeholder="Precio maximo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="6">
+								</div>
+							</div>
+							<div class="mt-3">
+								<label class="text-muted">Año</label>
+								<div class="input-group">
+									<input th:field="*{anioMin}" type="text" class="form-control"
+										name="anioMin" placeholder="Año minimo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="4">
+								</div>
+								<div class="input-group my-1">
+									<input th:field="*{anioMax}" type="text" class="form-control"
+										name="anioMax" placeholder="Año maximo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="4">
+								</div>
+							</div>
+							<div class="mt-3">
+								<label class="text-muted">Kilómetros</label>
+								<div class="input-group">
+									<input th:field="*{kmMin}" type="text" class="form-control"
+										name="kmMin" placeholder="Kilómetros minimo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="6">
+								</div>
+								<div class="input-group my-1">
+									<input th:field="*{kmMax}" type="text" class="form-control"
+										name="kmMax" placeholder="Kilómetros maximo"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										maxlength="6">
+								</div>
+							</div>
+							<input type="submit" value="Aplicar filtros"
+								class="btn btn-lg btn-success btn-block my-3" />
+						</form>
 					</div>
-					<form th:action="@{/vehiculos/filtrarPalabraClave/}"
-						th:object="${reqFiltro}">
-						<label class="text-muted">Palabra clave</label> <i
-							class="far fa-question-circle" data-toggle="popover"
-							data-trigger="hover" data-placement="right"
-							data-content="Buscar por las palabras clave que describan lo que estas buscando. Solamente obtendrás los vehiculos que tengan todos los elementos que hayas indicado."></i>
-
-						<div class="form-group has-feedback">
-							<i class="fas fa-search form-control-feedback"></i> <input
-								th:field="*{palabra}" type="text" class="form-control"
-								name="palabra">
-						</div>
-
-						<div class="mt-3">
-							<label class="text-muted">Precio</label>
-							<div class="input-group">
-								<input th:field="*{precioMin}" type="text" class="form-control"
-									name="precioMin" placeholder="Precio minimo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="6">
-							</div>
-							<div class="input-group my-1">
-								<input th:field="*{precioMax}" type="text" class="form-control"
-									name="precioMax" placeholder="Precio maximo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="6">
-							</div>
-						</div>
-						<div class="mt-3">
-							<label class="text-muted">Año</label>
-							<div class="input-group">
-								<input th:field="*{anioMin}" type="text" class="form-control"
-									name="anioMin" placeholder="Año minimo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="4">
-							</div>
-							<div class="input-group my-1">
-								<input th:field="*{anioMax}" type="text" class="form-control"
-									name="anioMax" placeholder="Año maximo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="4">
-							</div>
-						</div>
-						<div class="mt-3">
-							<label class="text-muted">Kilómetros</label>
-							<div class="input-group">
-								<input th:field="*{kmMin}" type="text" class="form-control"
-									name="kmMin" placeholder="Kilómetros minimo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="6">
-							</div>
-							<div class="input-group my-1">
-								<input th:field="*{kmMax}" type="text" class="form-control"
-									name="kmMax" placeholder="Kilómetros maximo"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-									maxlength="6">
-							</div>
-						</div>
-						<input type="submit" value="Aplicar filtros"
-							class="btn btn-lg btn-success btn-block my-3" />
-					</form>
 				</div>
-
 
 				<!-- /// Lista de vehiculos/anuncios -->
 				<div class="col-md-9">
@@ -127,7 +126,7 @@
 					<div class="alert alert-warning" th:if="${palabra != null}">Modifica
 						o quita alguno de los filtros seleccionados !</div>
 					<div class="card p-3 mb-3" th:each="v : ${listaVehiculos}">
-						<a class="card" th:href="@{'/anuncio/detalle/' + ${v.id}}">
+						<a class="card h-100" th:href="@{'/anuncio/detalle/' + ${v.id}}">
 							<div class="row mb-3">
 								<div class="col-md-4">
 									<img class="w-100" th:src="@{'/uploads/' + ${v.foto}}"
@@ -148,11 +147,28 @@
 							</div>
 						</a>
 					</div>
+					<div th:if="${paginator}">
+						<nav th:replace="paginator-nav :: paginator"></nav>
+					</div>
 					<!--  Final lista de vehiculos/anuncios ///-->
 				</div>
 			</div>
 		</div>
 	</div>
 	<footer th:replace="fragments/layout :: footer"></footer>
+	<!-- Script para que el div de filtrar/buscar siga el scroll -->
+	<script type="text/javascript">
+		var asd = document.getElementById("asd")
+		$(document).ready(function() {
+			$(window).bind('scroll', function() {
+				var navHeight = 250;
+				if ($(window).scrollTop() > navHeight) {
+					$(asd).addClass('column-fixed');
+				} else {
+					$(asd).removeClass('column-fixed');
+				}
+			});
+		});
+	</script>
 </body>
 </html>
