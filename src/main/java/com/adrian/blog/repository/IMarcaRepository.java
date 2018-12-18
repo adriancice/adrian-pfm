@@ -10,4 +10,6 @@ public interface IMarcaRepository extends JpaRepository<Marca, Integer> {
 
 	Marca findByIdMarca(int id);
 
+	Marca findByMarca(String marca);
+
 }

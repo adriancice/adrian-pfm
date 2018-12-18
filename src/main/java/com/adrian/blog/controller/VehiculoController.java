@@ -33,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.Foto;
+import com.adrian.blog.model.Marca;
 import com.adrian.blog.model.Modelo;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
@@ -145,7 +146,7 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/crearAnuncio/{id}")
-	public String editar(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash, Locale locale, Authentication authentication) {
+	public String editar(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash, Locale locale, Authentication authentication, HttpServletRequest req) {
 		logger.info("editarAnuncio");
 		Vehiculo vehiculo = null;
 		try {
@@ -165,7 +166,10 @@ public class VehiculoController {
 				flash.addFlashAttribute("error", "El id del vehiculo no puede ser 0 o negativo !");
 				return "redirect:/misAnuncios";
 			}
-
+			vehiculo.setMarca(String.valueOf(marcaService.findByMarca(vehiculo.getMarca()).getIdMarca()));
+			System.err.println("1+ " + vehiculo.getModelo());
+			vehiculo.setModelo("2");
+			System.err.println("2+ " + vehiculo.getModelo());
 			model.addAttribute("listaMarcas", marcaService.findAll());
 			model.addAttribute("listaProvincias", provinciaService.findAll());
 			model.addAttribute("vehiculo", vehiculo);
@@ -197,6 +201,7 @@ public class VehiculoController {
 			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
 		logger.info("/vehiculo/crearAnuncio");
 		Vehiculo veh = vehiculo;
+		System.err.println("marca: " + veh.getMarca());
 		try {
 			String mensaje = "El anuncio se ha creado con exito !";
 
@@ -210,22 +215,16 @@ public class VehiculoController {
 			veh.setProvincia(u.getProvincia());
 			veh.setIdUser(u.getId());
 			vehiculoService.save(veh);
-			if (veh.getFoto() == null) {
-				Foto f = new Foto();
-				f.setFoto(fotoDefault);
-				f.setIdVehiculo(veh.getId());
-				fotoService.save(f);
-			} else {
-				String uniqueFilename = null;
-				Arrays.asList(foto).stream().map(file -> {
-					try {
-						return uploadFileService.copy(file, veh.getId());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return uniqueFilename;
-				}).collect(Collectors.toList());
-			}
+
+			String uniqueFilename = null;
+			Arrays.asList(foto).stream().map(file -> {
+				try {
+					return uploadFileService.copy(file, veh.getId());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return uniqueFilename;
+			}).collect(Collectors.toList());
 
 			status.setComplete();
 			flash.addFlashAttribute("success", mensaje);

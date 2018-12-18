@@ -78,7 +78,7 @@ public class UserController {
 	public String home(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		logger.info("index");
 		try {
-			Pageable pageRequest = PageRequest.of(page, 5);
+			Pageable pageRequest = PageRequest.of(page, 10);
 			Page<Vehiculo> vehiculos = vehiculoService.findAll(pageRequest);
 			PageRender<Vehiculo> pageRender = new PageRender<>("/", vehiculos);
 			model.addAttribute("page", pageRender);
