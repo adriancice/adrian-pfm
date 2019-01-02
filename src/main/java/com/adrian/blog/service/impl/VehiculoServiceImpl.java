@@ -4,6 +4,8 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -200,7 +202,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
 
 	@Override
 	public List<Vehiculo> findVehiculosByUserFavorito(int idUser) {
-
 		Optional<List<Vehiculo>> searchVehiculo = vehiculoRepository.findByUserFavorito(idUser);
 		if (searchVehiculo.isPresent()) {
 			return searchVehiculo.get();

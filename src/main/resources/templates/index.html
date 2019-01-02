@@ -7,12 +7,17 @@
 
 	<div class="container">
 		<div class="container-fluid gedf-wrapper">
+
+			<!-- lo que esta encima de losa anuncios -->
 			<div class="d-flex bd-highlight">
 				<div class="p-2 flex-fill bd-highlight">
 					<span style="font-size: 1.5em;" th:text="${total}"></span> <span
 						class="text-muted">Coches de segunda mano</span>
 				</div>
-				<div class="dropdown ml-auto p-2 bd-highlight ">
+
+				
+				<!-- /// ordenar por... -->
+				<!-- <div class="dropdown ml-auto p-2 bd-highlight ">
 					Esto no funciona todavia ->
 					<button class="btn btn-secondary dropdown-toggle" type="button"
 						id="dropdownMenuButton" data-toggle="dropdown"
@@ -46,9 +51,13 @@
 							</label>
 						</div>
 					</div>
-				</div>
+				</div> -->
+				<!-- ordenar por... /// -->
 			</div>
+
+
 			<div class="row">
+				<!-- /// filtro side -->
 				<div class="col-md-3">
 					<div id="asd">
 						<h4>BUSCAR</h4>
@@ -118,6 +127,7 @@
 						</form>
 					</div>
 				</div>
+				<!-- filtro side /// -->
 
 				<!-- /// Lista de vehiculos/anuncios -->
 				<div class="col-md-9">
@@ -125,7 +135,7 @@
 						th:text="${palabra}"></div>
 					<div class="alert alert-warning" th:if="${palabra != null}">Modifica
 						o quita alguno de los filtros seleccionados !</div>
-					<div class="shadow card p-3 mb-3" data-aos="fade-up"
+					<div class="shadow card p-3 mb-3" data-aos="zoom-in-up"
 						th:each="v : ${listaVehiculos}">
 						<a class="card h-100" th:href="@{'/anuncio/detalle/' + ${v.id}}">
 							<div class="row mb-3">

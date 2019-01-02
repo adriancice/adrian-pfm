@@ -416,7 +416,6 @@ public class VehiculoController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return "redirect:/anuncio/detalle/" + id;
 	}
 

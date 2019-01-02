@@ -14,6 +14,7 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link th:href="@{/css/css.css}" rel="stylesheet" media="screen" />
 <title>Hello, world!</title>
 <style type="text/css">
 body {
@@ -98,6 +99,7 @@ body {
 
 	<div class="container">
 		<div class="row">
+
 			<div class="col-sm-2 imgUp">
 				<div class="imagePreview"></div>
 				<label class="btn btn-primary"> Upload<input type="file"
@@ -113,7 +115,7 @@ body {
 		<button type="button" id="spn" class="btn btn-primary btn-lg">Submit
 			Order</button>
 
-		<div class="photo first" data-aos="fade-up">FADE UP</div>
+		<div class="photo first hvr-grow" data-aos="fade-up">FADE UP</div>
 
 
 
@@ -135,6 +137,7 @@ body {
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 	<script type="text/javascript">
 		$(".imgAdd")
 				.click(
