@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import com.adrian.blog.service.IFavoritoService;
 import com.adrian.blog.service.IVehiculoService;
 
 @Controller
+@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 public class FavoritoController {
 	private static final Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 
@@ -32,6 +34,14 @@ public class FavoritoController {
 	@Autowired
 	private AuthUserDetailsService userDetailsService;
 
+	/**
+	 * metodo para ver la lista de los anuncios favoritos
+	 * 
+	 * @param model
+	 * @param authentication
+	 * @param flash
+	 * @return
+	 */
 	@RequestMapping("/misFavoritos")
 	public String misFavoritos(Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("misFavoritos");
@@ -44,6 +54,14 @@ public class FavoritoController {
 		return "misFavoritos";
 	}
 
+	/**
+	 * metodo para añadir un anuncio a la lista de favoritos
+	 * 
+	 * @param flash
+	 * @param idUser
+	 * @param idVehiculo
+	 * @return
+	 */
 	@RequestMapping(value = "/addFavorito", method = RequestMethod.GET)
 	public String addFavorito(RedirectAttributes flash, @RequestParam("id_user") int idUser, @RequestParam("id_vehiculo") int idVehiculo) {
 		logger.info("addFavorito");
@@ -59,6 +77,16 @@ public class FavoritoController {
 		return "redirect:/anuncio/detalle/" + idVehiculo;
 	}
 
+	/**
+	 * metodo para eliminar un anuncio de la lista de favoritos. Este metodo se usa
+	 * desde la vista 'misFavoritos'
+	 * 
+	 * @param idUser
+	 * @param idVehiculo
+	 * @param flash
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/deleteFavoritoUser", method = RequestMethod.GET)
 	public String deleteFavoritoUser(@RequestParam("id_user") int idUser, @RequestParam("id_vehiculo") int idVehiculo, RedirectAttributes flash, HttpServletRequest request) {
 		logger.info("deleteFavorito");
@@ -70,6 +98,16 @@ public class FavoritoController {
 		return "redirect:/misFavoritos";
 	}
 
+	/**
+	 * metodo para eliminar un anuncio de la lista de favoritos. Este metodo se usa
+	 * desde la vista de 'anuncioDetalles'
+	 * 
+	 * @param idUser
+	 * @param idVehiculo
+	 * @param flash
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/deleteFavorito", method = RequestMethod.GET)
 	public String deleteFavorito(@RequestParam("id_user") int idUser, @RequestParam("id_vehiculo") int idVehiculo, RedirectAttributes flash, HttpServletRequest request) {
 		logger.info("deleteFavorito");

@@ -21,6 +21,11 @@ public class AjaxController {
 	@Autowired
 	private IModeloService modeloService;
 
+	/**
+	 * metodo para cargar la lista de los modelos segun la marca del coche
+	 * @param id_marca
+	 * @return
+	 */
 	@RequestMapping("/cargarModelos/{id_marca}")
 	public @ResponseBody List<Modelo> modelos(@RequestParam("id_marca") int id_marca) {
 		logger.info("cargar_modelos");

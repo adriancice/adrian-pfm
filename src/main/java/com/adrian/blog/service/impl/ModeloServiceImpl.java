@@ -11,7 +11,7 @@ import com.adrian.blog.repository.IModeloRepository;
 import com.adrian.blog.service.IModeloService;
 
 @Service
-public class ModeloService implements IModeloService {
+public class ModeloServiceImpl implements IModeloService {
 
 	@Autowired
 	private IModeloRepository modeloRepository;
@@ -27,8 +27,10 @@ public class ModeloService implements IModeloService {
 
 	@Override
 	public void save(Modelo modelo) {
+		// tuve que hacer este apaño porque al guardar un nuevo modelo, se intentaba
+		// guardar con un id que ya existia
+		modelo.setIdModelo(Math.toIntExact(modeloRepository.count() + 1));
 		modeloRepository.save(modelo);
-
 	}
 
 }

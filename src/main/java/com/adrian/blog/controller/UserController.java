@@ -1,9 +1,5 @@
 package com.adrian.blog.controller;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -86,7 +82,7 @@ public class UserController {
 			Page<Vehiculo> vehiculos = vehiculoService.findAll(pageRequest);
 			PageRender<Vehiculo> pageRender = new PageRender<>("/", vehiculos);
 			model.addAttribute("page", pageRender);
-			
+
 			model.addAttribute("reqFiltro", new Filtro());
 			// model.addAttribute("listaVehiculos", vehiculoService.findAllOrderBykm());
 			model.addAttribute("listaVehiculos", vehiculos);

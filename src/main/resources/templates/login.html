@@ -32,7 +32,8 @@
 							placeholder="Ingrese su nombre de usuario" required>
 					</div>
 					<div class="form-group has-feedback">
-						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está activado</p>
+						<p id="textCapsLock">¡ADVERTENCIA! Bloqueo de mayúsculas está
+							activado</p>
 						<i class="fas fa-key form-control-feedback"></i> <input
 							id="myInput" type="password" name="password" class="form-control"
 							placeholder="Ingrese su contraseña" required>
@@ -65,24 +66,26 @@
 			<div class="modal-content">
 				<form th:action="@{/forgot}" method="post">
 					<div class="modal-header">
-						<h2 class="text-center">What's My Password?</h2>
+						<h2 class="text-center">Restablece tu contraseña</h2>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						<p>If you have forgotten your password you can reset it here.</p>
-						<input type="email" name="email" class="form-control "
-							placeholder="Email" required />
+						<p>Introduce tu cuenta de email y te enviaremos un enlace con
+							el que restablecer tu contraseña</p>
+						<i class="fas fa-at form-control-feedback"></i><input type="email"
+							name="email" class="form-control "
+							placeholder="Correo electronico *" required />
 					</div>
 					<div class="container px-5">
 						<input class="btn btn-primary btn-block my-3"
-							value="Send My Reset Link" type="submit">
+							value="Enviar mi enlace de reinicio" type="submit">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
+							data-dismiss="modal">Cerrar</button>
 					</div>
 				</form>
 			</div>

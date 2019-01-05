@@ -23,6 +23,13 @@ import com.adrian.blog.security.AuthUserDetailsService;
 import com.adrian.blog.service.EmailService;
 import com.adrian.blog.service.IScheduledEmailService;
 
+/**
+ * controlador que manda un correo al subscribirnos al 'newsletter' de la pagina
+ * en este caso el correo se manda cada 5 minutos
+ * 
+ * @author Adrian Stan
+ *
+ */
 @Controller
 public class ScheduledTasks {
 

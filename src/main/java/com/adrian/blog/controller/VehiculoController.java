@@ -51,7 +51,6 @@ import com.adrian.blog.service.IUserService;
 import com.adrian.blog.service.IVehiculoService;
 
 @Controller
-@SessionAttributes("vehiculo")
 public class VehiculoController {
 	private static final Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 
@@ -100,9 +99,8 @@ public class VehiculoController {
 	}
 
 	/**
-	 * metodo para añadir un nuevo vehiculo en la bbdd, eligieno una marca podremos
-	 * añadir nuevos modelos de momento no funciona, me da el error -> Duplicate
-	 * entry '0' for key 'PRIMARY' <-
+	 * metodo para añadir un nuevo vehiculo en la bbdd, eligiedo una marca podremos
+	 * añadir nuevos modelos
 	 * 
 	 * @param model
 	 * @param flash
@@ -236,7 +234,7 @@ public class VehiculoController {
 	}
 
 	/**
-	 * metodo para mostrar las fotos que estan en la carpeta 'uploads' de la raiz
+	 * metodo para poder ver las fotos que estan en la carpeta 'uploads' de la raiz
 	 * del proyecto
 	 * 
 	 * @param filename
@@ -294,32 +292,35 @@ public class VehiculoController {
 	@RequestMapping("/anuncio/detalle/{id}")
 	public String anuncioDetalle(@PathVariable(value = "id") int id, Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("anuncio/detalle");
+
 		try {
 			User u = userDetailsService.getUserDetail(authentication.getName());
 			model.addAttribute("myUser", u);
 			if (favoritoService.existeFav(id, u.getId()) != null) {
 				model.addAttribute("existeFav", "existeFav");
 			}
-			Vehiculo veh = vehiculoService.findById(id);
-			if (veh == null) {
-				flash.addFlashAttribute("error", "El anuncio con el id '" + id + "' no existe !");
-				return "redirect:/";
-			}
-			Collection<Foto> fotos = fotoService.findByIdVehiculo(id);
-
-			veh.setFoto(fotos.iterator().next().getFoto());
-			vehiculoService.save(veh);
-			Vehiculo vehiculo = vehiculoService.findById(id);
-			model.addAttribute("vehiculo", vehiculo);
-			model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
-			List<Foto> fotosA = (List<Foto>) fotos;
-			fotosA.remove(0);
-			model.addAttribute("fotosA", fotosA);
 		} catch (Exception e) {
-			System.err.println("No hay ningun user logueado !");
+			System.err.println("No hay usuario logueado, asi que la vista del 'detalles anuncio' es diferente");
 		}
 
+		Vehiculo veh = vehiculoService.findById(id);
+		if (veh == null) {
+			flash.addFlashAttribute("error", "El anuncio con el id '" + id + "' no existe !");
+			return "redirect:/";
+		}
+		Collection<Foto> fotos = fotoService.findByIdVehiculo(id);
+
+		veh.setFoto(fotos.iterator().next().getFoto());
+		vehiculoService.save(veh);
+		Vehiculo vehiculo = vehiculoService.findById(id);
+		model.addAttribute("vehiculo", vehiculo);
+		model.addAttribute("user", userService.findById(vehiculo.getIdUser()));
+		List<Foto> fotosA = (List<Foto>) fotos;
+		fotosA.remove(0);
+		model.addAttribute("fotosA", fotosA);
+
 		return "detallesAnuncio";
+
 	}
 
 	/**

@@ -23,6 +23,12 @@ import com.adrian.blog.service.EmailService;
 import com.adrian.blog.service.IUserService;
 import com.adrian.blog.utils.PassEncoding;
 
+/**
+ * controlador que se encarga de reestablecer la contraseña olvidada
+ * 
+ * @author Adrian Stan
+ *
+ */
 @Controller
 public class PasswordController {
 
@@ -34,6 +40,15 @@ public class PasswordController {
 	@Autowired
 	private EmailService emailService;
 
+	/**
+	 * metodo que manda un correo con un token para reestablecer la contraseña
+	 * 
+	 * @param userEmail
+	 * @param flash
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
 	public String processForgotPasswordForm(@RequestParam("email") String userEmail, final RedirectAttributes flash, HttpServletRequest request, Model model) {
 		logger.info("processForgotPasswordForm");
