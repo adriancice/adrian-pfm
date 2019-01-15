@@ -190,6 +190,7 @@
 			<div class="form-group"></div>
 			<input type="submit" th:value="${titulo}" class="btn btn-primary"
 				onclick="return isEmpty();" />
+				<input th:field="*{id}" type="hidden">
 		</form>
 	</div>
 	<footer th:replace="fragments/layout :: footer"></footer>

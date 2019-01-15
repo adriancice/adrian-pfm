@@ -174,6 +174,7 @@ public class VehiculoController {
 			model.addAttribute("titulo", "Editar anuncio");
 			model.addAttribute("listaAnios", anioService.findAll());
 			model.addAttribute("listaCombustibles", combustibleService.findAll());
+			System.err.println("idVehiculo en 'GET':-> " + vehiculo.getId());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -199,11 +200,14 @@ public class VehiculoController {
 			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
 		logger.info("/vehiculo/crearAnuncio");
 		Vehiculo veh = vehiculo;
+		System.err.println("vehID: " + veh.getId());
+		System.err.println("vehiculoID: " + vehiculo.getId());
 		System.err.println("marca: " + veh.getMarca());
 		try {
 			String mensaje = "El anuncio se ha creado con exito !";
 
 			if (vehiculo.getId() != 0) {
+				vehiculoService.save(vehiculo);
 				mensaje = "Has editado correctamente el anuncio !";
 				flash.addFlashAttribute("success", mensaje);
 			}
