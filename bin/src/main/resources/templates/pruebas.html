@@ -8,11 +8,13 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-	crossorigin="anonymous">
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link th:href="@{/css/css.css}" rel="stylesheet" media="screen" />
 <title>Hello, world!</title>
 <style type="text/css">
 body {
@@ -69,6 +71,26 @@ body {
 	font-size: 15px;
 }
 </style>
+<style type="text/css">
+.first {
+	margin-top: 250px !important;
+}
+
+.photo {
+	width: 200px;
+	height: 200px;
+	margin: 85px auto;
+	padding-top: 90px;
+	background-image:
+		url("http://photos1.blogger.com/blogger/6772/1888/320/beach.jpg");
+	text-align: center;
+	font-size: 30px;
+}
+
+.last {
+	margin-top: 250px;
+}
+</style>
 </head>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
@@ -77,6 +99,7 @@ body {
 
 	<div class="container">
 		<div class="row">
+
 			<div class="col-sm-2 imgUp">
 				<div class="imagePreview"></div>
 				<label class="btn btn-primary"> Upload<input type="file"
@@ -88,10 +111,16 @@ body {
 			<i class="fa fa-plus imgAdd"></i>
 		</div>
 		<!-- row -->
+
+		<button type="button" id="spn" class="btn btn-primary btn-lg">Submit
+			Order</button>
+
+		<div class="photo first hvr-grow" data-aos="fade-up">FADE UP</div>
+
+
+
 	</div>
 	<!-- container -->
-
-
 
 
 	<!-- Optional JavaScript -->
@@ -107,6 +136,8 @@ body {
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 	<script type="text/javascript">
 		$(".imgAdd")
 				.click(
@@ -145,6 +176,36 @@ body {
 
 					});
 		});
+	</script>
+	<script type="text/javascript">
+		var spn = document.getElementById("spn")
+		$(document)
+				.ready(
+						function() {
+							$(spn)
+									.on(
+											'click',
+											function() {
+												var $this = $(this);
+												var loadingText = '<i class="fas fa-spinner fa-spin"></i> loading...';
+												if ($(this).html() !== loadingText) {
+													$this.data('original-text',
+															$(this).html());
+													$this.html(loadingText);
+												}
+												setTimeout(
+														function() {
+															$this
+																	.html($this
+																			.data('original-text'));
+														}, 2000);
+											});
+						})
+	</script>
+	<script type="text/javascript">
+		AOS.init({
+			duration : 1200,
+		})
 	</script>
 </body>
 </html>

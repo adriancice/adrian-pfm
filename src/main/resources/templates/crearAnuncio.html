@@ -71,25 +71,6 @@
 			</div>
 
 			<!-- upload images -->
-			<!-- este div sale cuando editamos un anuncio -->
-			<div th:if="${vehiculo.id > 0}">
-				<div class="container my-5">
-					<div class="row">
-
-						<div class="col-sm-3 imgUp" th:each="f : ${fotos}">
-							<label>Foto principal</label>
-							<div>
-								<img class="w-100" th:src="@{'/uploads/' + ${f.foto}}"
-									th:alt="${f.foto}">
-							</div>
-							<i class="fa fa-times del" title="Eliminar foto"></i>
-						</div>
-						<i class="fa fa-plus imgAdd" title="Añadir mas fotos"></i>
-					</div>
-					<!-- row -->
-				</div>
-			</div>
-			<!-- este div sale cuando creamos un anuncio nuevo -->
 			<div th:if="${vehiculo.id < 1}">
 				<div class="container my-5">
 					<div class="row">

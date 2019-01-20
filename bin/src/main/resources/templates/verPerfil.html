@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head"></head>
+<head th:replace="fragments/layout :: head">
+</head>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
 
@@ -46,6 +47,7 @@
 					data-placement="top">Desactivo</a>
 			</div>
 		</div>
+
 
 		<div class="text-center my-3">
 			<a th:href="@{'/editarCuenta/' + ${reqUser.id}}"

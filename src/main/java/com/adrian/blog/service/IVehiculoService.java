@@ -19,7 +19,7 @@ public interface IVehiculoService {
 
 	Collection<Vehiculo> findByMarca(String marca);
 
-	Collection<Vehiculo> findByIdUser(int id);
+	Collection<Vehiculo> findByIdUserOrderByFechaMilisegundosDesc(int id);
 
 	Vehiculo findById(int id);
 
@@ -36,5 +36,7 @@ public interface IVehiculoService {
 	List<Vehiculo> findVehiculosByUserFavorito(int idUser);
 
 	Page<Vehiculo> findAll(Pageable pageable);
+
+	Page<Vehiculo> findAllByOrderByFechaMilisegundosDesc(Pageable pageable);
 
 }

@@ -2,6 +2,10 @@ package com.adrian.blog.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,14 +30,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.adrian.blog.model.Filtro;
 import com.adrian.blog.model.Foto;
-import com.adrian.blog.model.Marca;
 import com.adrian.blog.model.Modelo;
 import com.adrian.blog.model.User;
 import com.adrian.blog.model.Vehiculo;
@@ -124,7 +126,7 @@ public class VehiculoController {
 	}
 
 	@RequestMapping("/crearAnuncio")
-	public String register(Model model) {
+	public String crearAnuncio(Model model) {
 		model.addAttribute("vehiculo", new Vehiculo());
 		model.addAttribute("titulo", "Crear anuncio");
 		logger.info("crearAnuncio");
@@ -143,8 +145,9 @@ public class VehiculoController {
 	 * @param locale
 	 * @return
 	 */
-	@RequestMapping(value = "/crearAnuncio/{id}")
-	public String editar(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash, Locale locale, Authentication authentication, HttpServletRequest req) {
+	@RequestMapping(value = "/editarAnuncio/{id}")
+	public String editar(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash, Locale locale,
+			Authentication authentication, HttpServletRequest req) {
 		logger.info("editarAnuncio");
 		Vehiculo vehiculo = null;
 		try {
@@ -164,14 +167,10 @@ public class VehiculoController {
 				flash.addFlashAttribute("error", "El id del vehiculo no puede ser 0 o negativo !");
 				return "redirect:/misAnuncios";
 			}
-			System.err.println("Veh marca: " + vehiculo.getMarca());
-			System.err.println("Veh marca: " + vehiculo.getModelo());
 			int idMarca = marcaService.findIdByMarca(vehiculo.getMarca());
 			int idModelo = modeloService.findByIdMarcaAndModelo(idMarca, vehiculo.getModelo()).getIdModelo();
 			vehiculo.setMarca(String.valueOf(idMarca));
 			vehiculo.setModelo(String.valueOf(idModelo));
-			System.err.println("Veh marca despues: " + vehiculo.getMarca());
-			System.err.println("Veh modelo despues: " + vehiculo.getModelo());
 			model.addAttribute("fotos", fotoService.findByIdVehiculo(vehiculo.getId()));
 			model.addAttribute("listaMarcas", marcaService.findAll());
 			model.addAttribute("listaModelos", modeloService.findByIdMarca(idMarca));
@@ -180,12 +179,59 @@ public class VehiculoController {
 			model.addAttribute("titulo", "Editar anuncio");
 			model.addAttribute("listaAnios", anioService.findAll());
 			model.addAttribute("listaCombustibles", combustibleService.findAll());
-
+			System.err.println("fotos size 1: " + fotoService.findByIdVehiculo(vehiculo.getId()).size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "crearAnuncio";
+		return "editarAnuncio";
+	}
+
+	/**
+	 * Metodo para crear un nuevo anuncio
+	 * 
+	 * @param vehiculo
+	 * @param foto
+	 * @param redirectAttributes
+	 * @param authentication
+	 * @param status
+	 * @param flash
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = { "/vehiculo/editarAnuncio" }, method = RequestMethod.POST)
+	public String editarAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo,
+			@RequestParam("files") MultipartFile[] foto, final RedirectAttributes redirectAttributes,
+			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
+		logger.info("/vehiculo/crearAnuncio");
+		System.err.println("fotos size 2: " + fotoService.findByIdVehiculo(vehiculo.getId()).size());
+		try {
+			User u = userDetailsService.getUserDetail(authentication.getName());
+			// si el id es distinto a 0 estamos hacioendo un 'update' de un anuncio
+			if (vehiculo.getId() != 0) {
+				vehiculo.setMarca(marcaService.findByIdMarca(Integer.parseInt(vehiculo.getMarca())).getMarca());
+				vehiculo.setModelo(modeloService.findByIdModelo(Integer.parseInt(vehiculo.getModelo())).getModelo());
+				vehiculo.setIdUser(u.getId());
+				vehiculo.setProvincia(u.getProvincia());
+				vehiculoService.save(vehiculo);
+				String uniqueFilename = null;
+				Arrays.asList(foto).stream().map(file -> {
+					try {
+						return uploadFileService.copy(file, vehiculo.getId());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return uniqueFilename;
+				}).collect(Collectors.toList());
+				status.setComplete();
+				flash.addFlashAttribute("success", "Has editado correctamente el anuncio !");
+			}
+
+		} catch (Exception e2) {
+			flash.addFlashAttribute("success", "Error al editar vehiculo " + e2.getMessage());
+			return "redirect:/misAnuncios";
+		}
+		return "redirect:/anuncio/detalle/" + vehiculo.getId();
 	}
 
 	/**
@@ -201,36 +247,33 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/vehiculo/crearAnuncio" }, method = RequestMethod.POST)
-	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo, @RequestParam("files") MultipartFile[] foto, final RedirectAttributes redirectAttributes,
+	public String crearAnuncio(@ModelAttribute("vehiculo") Vehiculo vehiculo,
+			@RequestParam("files") MultipartFile[] foto, final RedirectAttributes redirectAttributes,
 			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
 		logger.info("/vehiculo/crearAnuncio");
-		Vehiculo veh = vehiculo;
 		System.err.println("vehiculoID: " + vehiculo.getId());
-		System.err.println("marca: " + veh.getMarca());
-		System.err.println("modelo: " + veh.getModelo());
+		System.err.println("marca: " + vehiculo.getMarca());
+		System.err.println("modelo: " + vehiculo.getModelo());
 		try {
-			String mensaje = "El anuncio se ha creado con exito !";
-
-			// si el id es distinto a 0 estamos hacioendo un 'update' de un anuncio
-			if (vehiculo.getId() != 0) {
-				vehiculo.setMarca(marcaService.findByIdMarca(Integer.parseInt(vehiculo.getMarca())).getMarca());
-				vehiculo.setModelo(modeloService.findByIdModelo(Integer.parseInt(vehiculo.getModelo())).getModelo());
-				vehiculoService.save(vehiculo);
-				mensaje = "Has editado correctamente el anuncio !";
-				flash.addFlashAttribute("success", mensaje);
-				return "redirect:/anuncio/detalle/" + vehiculo.getId();
-			}
 			User u = userDetailsService.getUserDetail(authentication.getName());
 
-			veh.setMarca(marcaService.findByIdMarca(Integer.parseInt(veh.getMarca())).getMarca());
-			veh.setProvincia(u.getProvincia());
-			veh.setIdUser(u.getId());
-			vehiculoService.save(veh);
+			vehiculo.setMarca(marcaService.findByIdMarca(Integer.parseInt(vehiculo.getMarca())).getMarca());
+			vehiculo.setModelo(modeloService.findByIdModelo(Integer.parseInt(vehiculo.getModelo())).getModelo());
+			vehiculo.setProvincia(u.getProvincia());
+			vehiculo.setIdUser(u.getId());
+			vehiculo.setFechaMilisegundos(System.currentTimeMillis());
 
+			LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()),
+					ZoneId.systemDefault());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+			String dateTime = date.format(formatter);
+
+			vehiculo.setFecha(dateTime);
+			vehiculoService.save(vehiculo);
 			String uniqueFilename = null;
 			Arrays.asList(foto).stream().map(file -> {
 				try {
-					return uploadFileService.copy(file, veh.getId());
+					return uploadFileService.copy(file, vehiculo.getId());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -238,12 +281,12 @@ public class VehiculoController {
 			}).collect(Collectors.toList());
 
 			status.setComplete();
-			flash.addFlashAttribute("success", mensaje);
+			flash.addFlashAttribute("success", "El anuncio se ha creado con exito !");
 			redirectAttributes.addFlashAttribute("saveVehiculo", "success");
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-		return "redirect:/anuncio/detalle/" + veh.getId();
+		return "redirect:/anuncio/detalle/" + vehiculo.getId();
 	}
 
 	/**
@@ -262,7 +305,9 @@ public class VehiculoController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"").body(recurso);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+				.body(recurso);
 	}
 
 	/**
@@ -282,10 +327,14 @@ public class VehiculoController {
 				Vehiculo vehiculo = vehiculoService.findById(id);
 				vehiculoService.delete(vehiculo);
 				flash.addFlashAttribute("success", "Anuncio eliminado correctamente");
-				if (!vehiculo.getFoto().equals(fotoDefault)) {
-					uploadFileService.delete(vehiculo.getFoto());
-					flash.addFlashAttribute("info", "Foto borrada correctamente");
+				Collection<Foto> fotos = fotoService.findByIdVehiculo(vehiculo.getId());
+				if (!fotos.isEmpty()) {
+					for (Foto f : fotos) {
+						uploadFileService.delete(f.getFoto());
+					}
+					flash.addFlashAttribute("info", "Fotos eliminadas correctamente");
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -303,7 +352,8 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping("/anuncio/detalle/{id}")
-	public String anuncioDetalle(@PathVariable(value = "id") int id, Model model, Authentication authentication, RedirectAttributes flash) {
+	public String anuncioDetalle(@PathVariable(value = "id") int id, Model model, Authentication authentication,
+			RedirectAttributes flash) {
 		logger.info("anuncio/detalle");
 
 		try {
@@ -347,13 +397,15 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping("/vehiculos/filtrarPalabraClave/")
-	public String home(@RequestParam(name = "page", defaultValue = "0") int page, @ModelAttribute("reqFiltro") Filtro reqFiltro, Model model, HttpServletRequest req,
+	public String home(@RequestParam(name = "page", defaultValue = "0") int page,
+			@ModelAttribute("reqFiltro") Filtro reqFiltro, Model model, HttpServletRequest req,
 			final RedirectAttributes redirectAttributes) {
 		logger.info("index");
 		try {
-			model.addAttribute("listaVehiculos", vehiculoService.filtrar(reqFiltro));
-			model.addAttribute("total", vehiculoService.totalVehiculos(vehiculoService.filtrar(reqFiltro)));
-			if (vehiculoService.filtrar(reqFiltro).isEmpty()) {
+			Collection<Vehiculo> vehiculos = vehiculoService.filtrar(reqFiltro);
+			model.addAttribute("listaVehiculos", vehiculos);
+			model.addAttribute("total", vehiculos.size());
+			if (vehiculos.isEmpty()) {
 				model.addAttribute("palabra", "No se han encontrado resultados");
 			}
 			model.addAttribute("limpiar", "limpiar");
@@ -374,7 +426,8 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/contactar-anunciante", method = RequestMethod.POST)
-	public String contactarAnunciante(Model model, Authentication authentication, HttpServletRequest req, RedirectAttributes flash) {
+	public String contactarAnunciante(Model model, Authentication authentication, HttpServletRequest req,
+			RedirectAttributes flash) {
 		logger.info("contactar-anunciante");
 		Integer id = Integer.parseInt(req.getParameter("id"));
 		try {
@@ -389,8 +442,9 @@ public class VehiculoController {
 			SimpleMailMessage contacto = new SimpleMailMessage();
 			contacto.setTo(u.getEmail());
 			contacto.setSubject("Anuncio " + veh.getMarca() + " " + veh.getModelo());
-			contacto.setText("Tienes un mensaje sobre tu anuncio en nuestra web\n\n" + descripcion + "\nNombre: " + req.getParameter("username") + "\nTelefono: "
-					+ req.getParameter("telefono") + "\nEmail: " + req.getParameter("email") + "\n\n Por favor no conteste a este correo");
+			contacto.setText("Tienes un mensaje sobre tu anuncio en nuestra web\n\n" + descripcion + "\nNombre: "
+					+ req.getParameter("username") + "\nTelefono: " + req.getParameter("telefono") + "\nEmail: "
+					+ req.getParameter("email") + "\n\n Por favor no conteste a este correo");
 			emailService.sendEmail(contacto);
 
 			flash.addFlashAttribute("success", "Mensaje enviado correctamente !");
@@ -412,7 +466,8 @@ public class VehiculoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/shareAnuncio", method = RequestMethod.POST)
-	public String shareAnuncio(@RequestParam("email") String email, Model model, Authentication authentication, HttpServletRequest req, RedirectAttributes flash) {
+	public String shareAnuncio(@RequestParam("email") String email, Model model, Authentication authentication,
+			HttpServletRequest req, RedirectAttributes flash) {
 		logger.info("contactar-anunciante");
 		Integer id = Integer.parseInt(req.getParameter("id"));
 		try {
@@ -422,8 +477,9 @@ public class VehiculoController {
 			SimpleMailMessage shareEmail = new SimpleMailMessage();
 			shareEmail.setTo(email);
 			shareEmail.setSubject("Coches: Un amigo te recomienda este anuncio");
-			shareEmail.setText("¡Hola!\n" + "Un amigo se ha acordado de ti al ver este anuncio " + veh.getMarca() + " y cee que te puede interesar." + "\n¿Tienes curiosidad?\n"
-					+ appUrl + "/anuncio/detalle/" + id);
+			shareEmail.setText("¡Hola!\n" + "Un amigo se ha acordado de ti al ver este anuncio " + veh.getMarca()
+					+ " y cree que te puede interesar." + "\n¿Tienes curiosidad?\n" + appUrl + "/anuncio/detalle/"
+					+ id);
 			emailService.sendEmail(shareEmail);
 			model.addAttribute("emailSend", "El correo se envio correctamente");
 			logger.info("Email enviado correctamente");

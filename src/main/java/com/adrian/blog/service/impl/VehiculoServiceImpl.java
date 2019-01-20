@@ -2,10 +2,7 @@ package com.adrian.blog.service.impl;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +54,8 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	}
 
 	@Override
-	public Collection<Vehiculo> findByIdUser(int id) {
-		return vehiculoRepository.findByIdUser(id);
+	public Collection<Vehiculo> findByIdUserOrderByFechaMilisegundosDesc(int id) {
+		return vehiculoRepository.findByIdUserOrderByFechaMilisegundosDesc(id);
 	}
 
 	@Override
@@ -115,19 +112,31 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		}
 
 		// buscamos la palabra clave en los campos de:
-		// marca-modelo-descripcion-combustible-provincia-color
+		// marca-modelo-descripcion-combustible-provincia-color-anio-tipo de cambio
 		String palabra = filtro.getPalabra();
-		cleanString(palabra);
-		System.out.println("Cuantas veces?" + palabra);
+		palabra = cleanString(palabra);
+		System.out.println("Cuantas veces? -> " + palabra);
 		String[] palabras = palabra.toLowerCase().split(" ");
 		for (Vehiculo v : vehiculoRepository.findAll()) {
 			// concatenamos todos los atributos del vehiculos en un String
-			String c = v.getMarca().concat(" " + v.getModelo()).concat(" " + v.getColor()).concat(" " + v.getCombustible()).concat(" " + v.getTipoCambio())
-					.concat(" " + v.getProvincia()).concat(" " + v.getDescripcion()).concat(" " + v.getAnio());
-			System.err.println("Coche: : " + c);
+			/*
+			 * String c = v.getMarca().concat(" " + v.getModelo()).concat(" " +
+			 * v.getColor()) .concat(" " + v.getCombustible()).concat(" " +
+			 * v.getTipoCambio()).concat(" " + v.getProvincia()) .concat(" " +
+			 * v.getDescripcion()).concat(" " + v.getAnio()); System.err.println("Coche: " +
+			 * c);
+			 */
+			// usamos el StringBuilder para que sea mas eficiente
+			StringBuilder sb = new StringBuilder();
+			sb.append(v.getMarca()).append(" " + v.getModelo()).append(" " + v.getColor())
+					.append(" " + v.getCombustible()).append(" " + v.getTipoCambio()).append(" " + v.getProvincia())
+					.append(" " + v.getDescripcion()).append(" " + v.getAnio());
+			String vehiculoString = sb.toString();
+			vehiculoString = cleanString(vehiculoString);
+			System.err.println("StringAppend: " + vehiculoString);
 			// comprobamos si el string que concatenamos mas arriba contiene todos los
 			// string del array de 'palabras'
-			if (Stream.of(palabras).allMatch(c.toLowerCase()::contains)) {
+			if (Stream.of(palabras).allMatch(vehiculoString.toLowerCase()::contains)) {
 				vehiculos.add(v);
 			}
 
@@ -159,14 +168,9 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	/**
 	 * Metodo para ignorar los accentos de los string
 	 * 
-	 * @param str
-	 * @return str sin accentos
+	 * @param texto
+	 * @return texto sin accentos
 	 */
-	public static String normalizeString(String str) {
-		str = Normalizer.normalize(str, Normalizer.Form.NFKD);
-		return str.replaceAll("[^a-z,^A-Z,^0-9]", "");
-	}
-
 	public static String cleanString(String texto) {
 		texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
 		return texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
@@ -212,6 +216,11 @@ public class VehiculoServiceImpl implements IVehiculoService {
 	@Override
 	public Page<Vehiculo> findAll(Pageable pageable) {
 		return vehiculoRepository.findAll(pageable);
+	}
+
+	@Override
+	public Page<Vehiculo> findAllByOrderByFechaMilisegundosDesc(Pageable pageable) {
+		return vehiculoRepository.findAllByOrderByFechaMilisegundosDesc(pageable);
 	}
 
 }

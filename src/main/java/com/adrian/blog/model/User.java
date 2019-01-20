@@ -49,6 +49,8 @@ public class User {
 
 	private String telefono;
 
+	private String fechaRegistro;
+
 	@Column(name = "role")
 	@NotNull
 	private int role;
@@ -140,6 +142,15 @@ public class User {
 
 	public void setRole(int role) {
 		this.role = role;
+
+	}
+
+	public String getFechaRegistro() {
+		return fechaRegistro;
+	}
+
+	public void setFechaRegistro(String fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 
 	public Date getCreateAt() {

@@ -3,12 +3,12 @@
 <head th:replace="fragments/layout :: head"></head>
 <style type="text/css">
 /* Css del 'upload image' del 'crear anuncio' */
+/* por alguna razon si guardo este style en el archivo 'css.css' no me funciona */
 .imagePreview {
 	width: 100%;
 	height: 180px;
-	background-position: center center;
-	background:
-		url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+	background-position: center;
+	background: url(images/no-image-available.jpg);
 	background-color: #fff;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -18,7 +18,7 @@
 
 .btn-primary {
 	display: block;
-	border-radius: 3px;
+	border-radius: 0px;
 	box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
 	margin-top: -5px;
 }
@@ -66,32 +66,25 @@
 					aria-hidden="true">&times;</button>
 				<strong>Anuncio creado correctamente</strong>
 			</div>
+
 			<!-- upload images -->
 			<div class="container my-5">
-				<strong>Esto es lo que quiero hacer que funcione para
-					añadir multiples fotos</strong>
 				<div class="row">
 					<div class="col-sm-2 imgUp">
 						<label>Foto principal</label>
 						<div class="imagePreview"></div>
 						<label class="btn btn-primary"> Subir foto<input
-							type="file" class="uploadFile img" value="Upload Photo"
+							type="file" class="uploadFile img" name="files" id="fotos"
+							value="Upload Photo" accept="image/*"
 							style="width: 0px; height: 0px; overflow: hidden;">
 						</label>
 					</div>
 					<!-- col-2 -->
-					<i class="fa fa-plus imgAdd"></i>
+					<i class="fa fa-plus imgAdd" title="Añadir mas fotos"></i>
 				</div>
 				<!-- row -->
 			</div>
 			<!-- upload images -->
-
-			<!--  -->
-			<strong>De momento solo funciona con subir una foto</strong> <input
-				type="file" class="form-control-file" name="file"
-				id="exampleFormControlFile1">
-			<!--  -->
-
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
@@ -136,13 +129,15 @@
 					</select>
 				</div>
 			</div>
+
+
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Kilómetros</label>
 				<div class="col-lg-9">
 					<input th:field="*{kilometros}" class="form-control" type="text"
 						name="kilometros"
 						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-						placeholder="kilometros">
+						placeholder="kilometros" maxlength="6">
 				</div>
 			</div>
 			<div class="form-group row">
@@ -151,7 +146,7 @@
 					<input th:field="*{precio}" class="form-control" type="text"
 						name="precio"
 						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-						placeholder="precio">
+						placeholder="precio" maxlength="6">
 				</div>
 			</div>
 
@@ -160,26 +155,23 @@
 				<div class="col-lg-9">
 					<input th:field="*{puertas}" class="form-control" type="text"
 						name="puertas"
-						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-						placeholder="puertas">
+						onkeypress='return event.charCode >= 50 && event.charCode <= 57'
+						placeholder="puertas" maxlength="1">
 				</div>
 			</div>
-
-
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Tipo
 					de cambio</label>
 				<div class="col-lg-9">
 					<select th:field="*{tipoCambio}" id="combustible"
-						class="custom-select mb-2" required>
+						class="custom-select mb-2">
 						<option value="" selected>Elige un tipo de cambio . . .</option>
 						<option value="Automático">Automático</option>
 						<option value="Manual">Manual</option>
 					</select>
 				</div>
 			</div>
-
 
 			<div class="form-group row">
 				<label class="col-lg-3 col-form-label form-control-label">Color</label>
@@ -196,7 +188,9 @@
 				</div>
 			</div>
 			<div class="form-group"></div>
-			<input type="submit" th:value="${titulo}" class="btn btn-primary" />
+			<input type="submit" th:value="${titulo}" class="btn btn-primary"
+				onclick="return isEmpty();" />
+				<input th:field="*{id}" type="hidden">
 		</form>
 	</div>
 	<footer th:replace="fragments/layout :: footer"></footer>
@@ -211,7 +205,7 @@
 									.closest(".row")
 									.find('.imgAdd')
 									.before(
-											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+											'<div class="col-sm-2 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" name="files" value="Upload Photo" accept="image/*" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del" title="Eliminar foto"></i></div>');
 						});
 		$(document).on("click", "i.del", function() {
 			$(this).parent().remove();
@@ -241,6 +235,15 @@
 
 					});
 		});
+	</script>
+	<script type="text/javascript">
+		function isEmpty() {
+			if (document.getElementById("fotos").value == "") {
+				alert("Tienes que añadir una o mas fotos !");
+				return false;
+			}
+			return true;
+		}
 	</script>
 </body>
 </html>

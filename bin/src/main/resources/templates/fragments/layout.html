@@ -22,64 +22,72 @@
 <link th:href="@{/css/css.css}" rel="stylesheet" media="screen" />
 <!-- Font awesome CSS  -->
 <link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-
+	href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<!-- Animate On Scroll Library ->AOS<-  -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<!-- Sidebar nav -->
+<link th:href="@{/css/b4_sidebar.css}" rel="stylesheet" media="screen" />
 
 </head>
 
 <body>
 
 	<header class="container py-3 " th:fragment="header">
-		<div
-			class="row flex-nowrap justify-content-between align-items-center">
-			<div class="col-4 pt-1">
-				<a class="text-muted" th:href="@{/pruebas}">Pruebas</a>
-			</div>
+		<nav
+			class="navbar navbar-expand-lg navbar-light bg-transparent sidebarNavigation"
+			data-sidebarClass="navbar-dark bg-transparent">
+			<a class="navbar-brand text-monospace" th:href="@{/}">Coches</a>
+			<button class="navbar-toggler leftNavbarToggler" type="button"
+				data-target="#navbarsExampleDefault"
+				aria-controls="navbarsExampleDefault" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link text-muted"
+						th:href="@{/pruebas}">pruebas <span class="sr-only">(current)</span>
+					</a></li>
+				</ul>
 
-			<div class="col-4 text-center">
-				<a class="display-4 text-monospace text-muted" th:href="@{/}">Coches</a>
-			</div>
-
-
-			<div class="col-4 d-flex justify-content-end align-items-center">
-
-				<a sec:authorize="!isAuthenticated()"
-					class="btn btn-sm btn-outline-secondary mr-2" th:href="@{/login}">Sign
-					in&nbsp;&nbsp;<i class="fas fa-sign-in-alt"></i>
-				</a>
-				<button sec:authorize="isAuthenticated()"
-					class="btn btn-outline-info dropdown-toggle" type="button"
-					id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
-					Welcome <span sec:authentication="name"></span>
-				</button>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					<a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
-						th:href="@{/listar}"><i class="fas fa-users"></i>&nbsp;&nbsp;Ver
-						usuarios</a> <a sec:authorize="hasRole('ROLE_ADMIN')"
-						class="dropdown-item" th:href="@{/vehiculoAdd}"><i
-						class="fas fa-car-crash"></i>&nbsp;&nbsp;Añadir vehiculo</a><a
-						sec:authorize="isAuthenticated()" class="dropdown-item"
-						th:href="@{/verPerfil/}"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;Ver
-						mi cuenta</a> <a sec:authorize="isAuthenticated()"
-						class="dropdown-item" th:href="@{/misFavoritos}"><i
-						class="fas fa-star"></i>&nbsp;&nbsp;Favoritos</a><a
-						sec:authorize="hasRole('ROLE_USER')" class="dropdown-item"
-						th:href="@{/misAnuncios}"><i class="fas fa-edit"></i>&nbsp;&nbsp;Mis
-						anuncios</a> <a sec:authorize="isAuthenticated()"
-						class="dropdown-item" th:href="@{/crearAnuncio}"><i
-						class="fas fa-car"></i>&nbsp;&nbsp;Vender coche</a>
-					<hr>
-					<form id="logoutForm" th:action="@{/logout}" method="post">
-						<button class="dropdown-item" type="submit">
-							<i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout
-						</button>
-
-					</form>
-
+				<div class="nav-item dropdown">
+					<a sec:authorize="!isAuthenticated()"
+						class="btn btn-sm btn-outline-secondary mr-2" th:href="@{/login}">Sign
+						in&nbsp;&nbsp;<i class="fas fa-sign-in-alt"></i>
+					</a>
+					<button sec:authorize="isAuthenticated()"
+						class="btn btn-outline-info dropdown-toggle" type="button"
+						id="dropdownMenuButton" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">
+						Welcome <span sec:authentication="name"></span>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item"
+							th:href="@{/listar}"><i class="fas fa-users"></i>&nbsp;&nbsp;Ver
+							usuarios</a> <a sec:authorize="hasRole('ROLE_ADMIN')"
+							class="dropdown-item" th:href="@{/vehiculoAdd}"><i
+							class="fas fa-car-crash"></i>&nbsp;&nbsp;Añadir vehiculo</a><a
+							sec:authorize="isAuthenticated()" class="dropdown-item"
+							th:href="@{/verPerfil/}"><i class="fas fa-user-edit"></i>&nbsp;&nbsp;Ver
+							mi cuenta</a> <a sec:authorize="isAuthenticated()"
+							class="dropdown-item" th:href="@{/misFavoritos}"><i
+							class="fas fa-star"></i>&nbsp;&nbsp;Favoritos</a><a
+							sec:authorize="isAuthenticated()" class="dropdown-item"
+							th:href="@{/misAnuncios}"><i class="fas fa-edit"></i>&nbsp;&nbsp;Mis
+							anuncios</a> <a sec:authorize="isAuthenticated()"
+							class="dropdown-item" th:href="@{/crearAnuncio}"><i
+							class="fas fa-car"></i>&nbsp;&nbsp;Vender coche</a>
+						<hr>
+						<form id="logoutForm" th:action="@{/logout}" method="post">
+							<button class="dropdown-item" type="submit">
+								<i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout
+							</button>
+						</form>
+					</div>
 				</div>
+
 			</div>
-		</div>
+		</nav>
 		<hr />
 
 		<!-- mensajes  -->
@@ -122,7 +130,7 @@
 
 
 	<footer th:fragment="footer">
-		<div class="container">
+		<div class="container mt-5">
 			<div class="container">
 				<p sec:authorize="isAuthenticated()">
 					Usuario logeado: <span sec:authentication="name"></span> | Roles: <span
@@ -147,12 +155,15 @@
 
 		</div>
 		<script src="/js/js.js" type="text/javascript"></script>
+		<!-- Script para Sidebar nav -->
+		<script src="/js/b4_sidebar.js" type="text/javascript"></script>
 		<!-- Script para resetear los input del modal al cerrarlo-->
 		<script type="text/javascript">
 			$(".modal").on("hidden.bs.modal", function() {
 				$(".modal-body input").val("");
 			});
 		</script>
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 	</footer>
 
 </body>

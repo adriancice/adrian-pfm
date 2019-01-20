@@ -31,52 +31,21 @@ a.card.disabled, a.card[disabled] {
 	pointer-events: none;
 	opacity: .8;
 }
-/* End card css link */
 
-/* signin css */
-.form-signin {
-	width: 100%;
-	max-width: 380px;
-	padding: 15px;
-	margin: auto;
-}
-
-.form-signin .form-control {
-	position: relative;
-	box-sizing: border-box;
-	height: auto;
+/* font awesome input */
+.form-control-feedback {
+	position: absolute;
 	padding: 10px;
-	font-size: 16px;
+	pointer-events: none;
 }
 
-.form-signin .form-control:focus {
-	z-index: 2;
+.form-control {
+	padding-left: 30px !important;
 }
 
-.form-signin input[type="text"] {
-	margin-bottom: -1px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-}
-
-.form-signin input[type="password"] {
-	margin-bottom: 10px;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}
-/* end signin css */
-
-/*
- * Footer
- */
-.blog-footer {
-	padding: 2.5rem 0;
-	color: #999;
-	text-align: center;
-	background-color: #f9f9f9;
-	border-top: .05rem solid #e5e5e5;
-}
-
-.blog-footer p:last-child {
-	margin-bottom: 0;
+/* div filtrar scroll follow */
+.column-fixed {
+	position: fixed;
+	top: 0;
+	z-index: 1;
 }
