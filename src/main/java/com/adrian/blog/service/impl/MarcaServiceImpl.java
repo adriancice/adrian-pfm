@@ -30,4 +30,9 @@ public class MarcaServiceImpl implements IMarcaService {
 		return marcaRepository.findByMarca(marca);
 	}
 
+	@Override
+	public int findIdByMarca(String marca) {
+		return marcaRepository.findByMarca(marca).getIdMarca();
+	}
+
 }

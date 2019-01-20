@@ -10,4 +10,8 @@ public interface IModeloService {
 
 	List<Modelo> findByIdMarca(int idMarca);
 
+	Modelo findByIdMarcaAndModelo(int idMarca, String modelo);
+
+	Modelo findByIdModelo(int idModelo);
+
 }

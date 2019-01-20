@@ -12,4 +12,6 @@ public interface IMarcaService {
 
 	Marca findByMarca(String marca);
 
+	int findIdByMarca(String marca);
+
 }

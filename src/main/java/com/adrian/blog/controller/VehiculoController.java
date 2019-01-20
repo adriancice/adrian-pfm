@@ -157,24 +157,29 @@ public class VehiculoController {
 					return "redirect:/misAnuncios";
 				}
 				if (vehiculo.getIdUser() != u.getId()) {
-					flash.addFlashAttribute("error", "No puedes editar este anuncio !");
+					flash.addFlashAttribute("error", "No tienes permisos para editar este anuncio !");
 					return "redirect:/misAnuncios";
 				}
 			} else {
 				flash.addFlashAttribute("error", "El id del vehiculo no puede ser 0 o negativo !");
 				return "redirect:/misAnuncios";
 			}
-			vehiculo.setMarca(String.valueOf(marcaService.findByMarca(vehiculo.getMarca()).getIdMarca()));
-			System.err.println("1+ " + vehiculo.getModelo());
-			vehiculo.setModelo("2");
-			System.err.println("2+ " + vehiculo.getModelo());
+			System.err.println("Veh marca: " + vehiculo.getMarca());
+			System.err.println("Veh marca: " + vehiculo.getModelo());
+			int idMarca = marcaService.findIdByMarca(vehiculo.getMarca());
+			int idModelo = modeloService.findByIdMarcaAndModelo(idMarca, vehiculo.getModelo()).getIdModelo();
+			vehiculo.setMarca(String.valueOf(idMarca));
+			vehiculo.setModelo(String.valueOf(idModelo));
+			System.err.println("Veh marca despues: " + vehiculo.getMarca());
+			System.err.println("Veh modelo despues: " + vehiculo.getModelo());
+			model.addAttribute("fotos", fotoService.findByIdVehiculo(vehiculo.getId()));
 			model.addAttribute("listaMarcas", marcaService.findAll());
+			model.addAttribute("listaModelos", modeloService.findByIdMarca(idMarca));
 			model.addAttribute("listaProvincias", provinciaService.findAll());
 			model.addAttribute("vehiculo", vehiculo);
 			model.addAttribute("titulo", "Editar anuncio");
 			model.addAttribute("listaAnios", anioService.findAll());
 			model.addAttribute("listaCombustibles", combustibleService.findAll());
-			System.err.println("idVehiculo en 'GET':-> " + vehiculo.getId());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -200,16 +205,20 @@ public class VehiculoController {
 			Authentication authentication, SessionStatus status, RedirectAttributes flash, Model model) {
 		logger.info("/vehiculo/crearAnuncio");
 		Vehiculo veh = vehiculo;
-		System.err.println("vehID: " + veh.getId());
 		System.err.println("vehiculoID: " + vehiculo.getId());
 		System.err.println("marca: " + veh.getMarca());
+		System.err.println("modelo: " + veh.getModelo());
 		try {
 			String mensaje = "El anuncio se ha creado con exito !";
 
+			// si el id es distinto a 0 estamos hacioendo un 'update' de un anuncio
 			if (vehiculo.getId() != 0) {
+				vehiculo.setMarca(marcaService.findByIdMarca(Integer.parseInt(vehiculo.getMarca())).getMarca());
+				vehiculo.setModelo(modeloService.findByIdModelo(Integer.parseInt(vehiculo.getModelo())).getModelo());
 				vehiculoService.save(vehiculo);
 				mensaje = "Has editado correctamente el anuncio !";
 				flash.addFlashAttribute("success", mensaje);
+				return "redirect:/anuncio/detalle/" + vehiculo.getId();
 			}
 			User u = userDetailsService.getUserDetail(authentication.getName());
 

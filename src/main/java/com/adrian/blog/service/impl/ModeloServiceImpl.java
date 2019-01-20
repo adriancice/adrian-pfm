@@ -33,4 +33,14 @@ public class ModeloServiceImpl implements IModeloService {
 		modeloRepository.save(modelo);
 	}
 
+	@Override
+	public Modelo findByIdMarcaAndModelo(int idMarca, String modelo) {
+		return modeloRepository.findByIdMarcaAndModelo(idMarca, modelo);
+	}
+
+	@Override
+	public Modelo findByIdModelo(int idModelo) {
+		return modeloRepository.findByIdModelo(idModelo);
+	}
+
 }
