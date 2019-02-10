@@ -29,7 +29,8 @@
 									th:text="${v.marca} + ' ' +${v.modelo} + ' ' + ${v.puertas} + 'p'"></h5>
 								<p class="card-text text-monospace text-muted"
 									th:text="${v.combustible} + ' | ' + ${v.anio} + ' | ' + ${v.kilometros} + ' km'"></p>
-								<a th:href="@{'/crearAnuncio/' + ${v.id}}"
+								<span class="badge badge-pill badge-light" th:text="${v.fecha}"></span><br>
+								<br> <a th:href="@{'/editarAnuncio/' + ${v.id}}"
 									class="btn btn-warning">Editar anuncio</a> <a
 									th:href="@{'/anuncio/eliminar/' + ${v.id}}"
 									class="btn btn-danger"

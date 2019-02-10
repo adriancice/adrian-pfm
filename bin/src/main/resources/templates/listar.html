@@ -21,7 +21,6 @@
 							<th>fecha registro</th>
 							<th>teléfono</th>
 							<th>role</th>
-
 						</tr>
 					</thead>
 					<tbody>
@@ -31,7 +30,7 @@
 							<td th:text="${usuario.username}"></td>
 							<td th:text="${usuario.email}"></td>
 							<td th:text="${usuario.provincia}"></td>
-							<td th:text="${usuario.createAt}"></td>
+							<td th:text="${usuario.fechaRegistro}"></td>
 							<td th:text="${usuario.telefono}"></td>
 							<td th:text="${usuario.role} == 1 ? 'ADMIN' : 'USER'"></td>
 

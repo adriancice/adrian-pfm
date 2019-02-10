@@ -22,26 +22,27 @@
 						class="alert alert-success alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">&times;</button>
-						<strong>User registered Successfully</strong> Please Login
+						<strong>Usuario creado exitosamente !</strong> Por favor, inicia
+						sesion !
 					</div>
 
 					<div th:if="${saveUser eq 'exist-name'}"
 						class="alert alert-danger alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">&times;</button>
-						<strong>Error!</strong> Username already used !!!
+						<strong>Warning!</strong> Usuario ya registrado !!!
 					</div>
 					<div th:if="${saveUser eq 'exist-email'}"
 						class="alert alert-danger alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">&times;</button>
-						<strong>Error!</strong> Email already used !!!
+						<strong>Warning!</strong> Correo ya registrado !!!
 					</div>
 					<div th:if="${saveUser eq 'fail'}"
 						class="alert alert-danger alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">&times;</button>
-						<strong>Error!</strong> Unexpected error !!!
+						<strong>Error!</strong> Error inesperado !!!
 					</div>
 					<!-- mensajes /// -->
 

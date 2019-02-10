@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head"></head>
+<style type="text/css">
+/* Css del 'upload image' del 'crear anuncio' */
+/* por alguna razon si guardo este style en el archivo 'css.css' no me funciona */
+.imagePreview {
+	width: 100%;
+	height: 150px;
+	background-position: center;
+	background:
+		url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+	background-color: #fff;
+	background-size: cover;
+	background-repeat: no-repeat;
+	display: inline-block;
+	box-shadow: 0px -3px 6px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+	display: block;
+	border-radius: 0px;
+	box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
+	margin-top: -5px;
+}
+
+.imgUp {
+	margin-bottom: 15px;
+}
+
+.del {
+	position: absolute;
+	top: 0px;
+	right: 15px;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	background-color: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+}
+
+.imgAdd {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: #4bd7ef;
+	color: #fff;
+	box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	line-height: 30px;
+	margin-top: 0px;
+	cursor: pointer;
+	font-size: 15px;
+}
+</style>
+<body style="background-color: #ECF0F1">
+	<header th:replace="fragments/layout :: header"></header>
+
+	<div class="container p-3 mb-3" style="background-color: #FFF">
+
+		<!-- /// Formulario -->
+		<form th:object="${vehiculo}" th:action="@{/vehiculo/editarAnuncio}"
+			method="post" enctype="multipart/form-data">
+			<h1 th:text="${titulo}"></h1>
+			<div th:if="${saveVehiculo eq 'success'}"
+				class="alert alert-success alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">&times;</button>
+				<strong>Anuncio creado correctamente</strong>
+			</div>
+
+			<!-- upload images -->
+			<div th:if="${vehiculo.id > 0}">
+				<div class="container my-5">
+					<div class="row">
+
+						<div class="col-sm-3 imgUp" th:each="f : ${fotos}">
+							<label>Foto principal</label>
+							<div>
+								<img class="w-100" th:src="@{'/uploads/' + ${f.foto}}"
+									th:alt="${f.foto}">
+							</div>
+							<i class="fa fa-times del" title="Eliminar foto"></i>
+						</div>
+						<i class="fa fa-plus imgAdd" title="Añadir mas fotos"></i>
+					</div>
+					<!-- row -->
+				</div>
+			</div>
+			<!-- upload images -->
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Marca</label>
+				<div class="col-lg-9">
+					<select th:field="*{marca}" id="marcas" class="custom-select mb-2"
+						required autofocus>
+						<option value="" selected>Elige una marca . . .</option>
+						<option th:each="m : ${listaMarcas}" th:value="${m.idMarca}"
+							th:text="${m.marca}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Modelo</label>
+				<div class="col-lg-9">
+					<select th:field="*{modelo}" id="modelos"
+						class="custom-select mb-2" required>
+						<option value="" selected disabled>Elige una marca para
+							ver los modelos . . .</option>
+						<option th:each="m : ${listaModelos}" th:value="${m.idModelo}"
+							th:text="${m.modelo}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Año</label>
+				<div class="col-lg-9">
+					<select th:field="*{anio}" id="anio" class="custom-select mb-2"
+						required>
+						<option value="0" selected disabled>Elige una año . . .</option>
+						<option th:each="a : ${listaAnios}" th:value="${a.anio}"
+							th:text="${a.anio}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Combustible</label>
+				<div class="col-lg-9">
+					<select th:field="*{combustible}" id="combustible"
+						class="custom-select mb-2" required>
+						<option value="" selected>Elige un combustible . . .</option>
+						<option th:each="c : ${listaCombustibles}"
+							th:value="${c.combustible}" th:text="${c.combustible}"></option>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Kilómetros</label>
+				<div class="col-lg-9">
+					<input th:field="*{kilometros}" class="form-control" type="text"
+						name="kilometros"
+						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+						placeholder="kilometros" maxlength="6">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Precio</label>
+				<div class="col-lg-9">
+					<input th:field="*{precio}" class="form-control" type="text"
+						name="precio"
+						onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+						placeholder="precio" maxlength="6">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Puertas</label>
+				<div class="col-lg-9">
+					<input th:field="*{puertas}" class="form-control" type="text"
+						name="puertas"
+						onkeypress='return event.charCode >= 50 && event.charCode <= 57'
+						placeholder="puertas" maxlength="1">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Tipo
+					de cambio</label>
+				<div class="col-lg-9">
+					<select th:field="*{tipoCambio}" id="combustible"
+						class="custom-select mb-2">
+						<option value="" selected>Elige un tipo de cambio . . .</option>
+						<option value="Automático">Automático</option>
+						<option value="Manual">Manual</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Color</label>
+				<div class="col-lg-9">
+					<input th:field="*{color}" class="form-control" type="text"
+						name="color" placeholder="Color">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 col-form-label form-control-label">Descripcion</label>
+				<div class="col-lg-9">
+					<textarea th:field="*{descripcion}" class="form-control"
+						name="descripcion" placeholder="Descripcion"></textarea>
+				</div>
+			</div>
+			<div class="form-group"></div>
+			<input type="submit" th:value="${titulo}" class="btn btn-primary"
+				onclick="return isEmpty();" /> <input th:field="*{id}"
+				type="hidden"> <input th:field="*{fecha}" type="hidden">
+			<input th:field="*{fechaMilisegundos}" type="hidden">
+
+
+		</form>
+		<!-- Formulario ///-->
+	</div>
+	<footer th:replace="fragments/layout :: footer"></footer>
+	<script type="text/javascript" src="/js/modelos.js"></script>
+
+	<!-- javascript del upload imagenes -->
+	<script type="text/javascript">
+		$(".imgAdd")
+				.click(
+						function() {
+							$(this)
+									.closest(".row")
+									.find('.imgAdd')
+									.before(
+											'<div class="col-sm-3 imgUp"><label>&nbsp;</label><div class="imagePreview"></div><label class="btn btn-primary">Subir foto<input type="file" class="uploadFile img" name="files" value="Upload Photo" accept="image/*" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del" title="Eliminar foto"></i></div>');
+						});
+		$(document).on("click", "i.del", function() {
+			$(this).parent().remove();
+		});
+		$(function() {
+			$(document).on(
+					"change",
+					".uploadFile",
+					function() {
+						var uploadFile = $(this);
+						var files = !!this.files ? this.files : [];
+						if (!files.length || !window.FileReader)
+							return; // no file selected, or no FileReader support
+
+						if (/^image/.test(files[0].type)) { // only image file
+							var reader = new FileReader(); // instance of the FileReader
+							reader.readAsDataURL(files[0]); // read the local file
+
+							reader.onloadend = function() { // set image data as background of div
+								//alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+								uploadFile.closest(".imgUp").find(
+										'.imagePreview').css(
+										"background-image",
+										"url(" + this.result + ")");
+							}
+						}
+
+					});
+		});
+	</script>
+	<script type="text/javascript">
+		function isEmpty() {
+			if (document.getElementById("fotos").value == "") {
+				alert("Tienes que añadir una o mas fotos !");
+				return false;
+			}
+			return true;
+		}
+	</script>
+</body>
+</html>

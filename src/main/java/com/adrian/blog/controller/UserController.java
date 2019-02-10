@@ -68,12 +68,6 @@ public class UserController {
 	@Autowired
 	private IFavoritoService favoritoService;
 
-	@RequestMapping("/pruebas")
-	public String pruebas(Model model) {
-		logger.info("pruebas");
-		return "pruebas";
-	}
-
 	@RequestMapping("/login")
 	public String login(Model model) {
 		logger.info("login");
@@ -139,11 +133,10 @@ public class UserController {
 			reqUser.setPassword(PassEncoding.getInstance().passwordEncoder.encode(reqUser.getPassword()));
 			reqUser.setRole(EnumRoles.ROLE_USER.getValue());
 
-			LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()),
-					ZoneId.systemDefault());
+			LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 			String dateTime = date.format(formatter);
-			
+
 			reqUser.setFechaRegistro(dateTime);
 
 			if (userService.save(reqUser) != null) {
@@ -214,8 +207,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/editarCuenta/{id}")
-	public String editarCuenta(@PathVariable(value = "id") Integer id, Model model, Authentication authentication,
-			RedirectAttributes flash) {
+	public String editarCuenta(@PathVariable(value = "id") Integer id, Model model, Authentication authentication, RedirectAttributes flash) {
 		logger.info("editarCuenta/{id}");
 		try {
 			User us = userDetailsService.getUserDetail(authentication.getName());
@@ -245,8 +237,7 @@ public class UserController {
 	 * metodo para editar el perfil del usuario
 	 */
 	@RequestMapping(value = "/editCuenta", method = RequestMethod.POST)
-	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req,
-			RedirectAttributes flash) {
+	public String guardarEditCuenta(@ModelAttribute("reqUser") User reqUser, Model model, HttpServletRequest req, RedirectAttributes flash) {
 		logger.info("editCuenta/");
 		try {
 			User user = userService.findById(reqUser.getId());
@@ -291,8 +282,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/borrarCuenta/{id}")
-	public String borrarCuenta(@PathVariable(value = "id") Integer id, Authentication authentication,
-			RedirectAttributes flash) {
+	public String borrarCuenta(@PathVariable(value = "id") Integer id, Authentication authentication, RedirectAttributes flash) {
 		logger.info("borrarCuenta/{id}");
 		try {
 			User us = userDetailsService.getUserDetail(authentication.getName());

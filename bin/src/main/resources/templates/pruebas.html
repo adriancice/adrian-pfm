@@ -23,10 +23,21 @@ body {
 
 .imagePreview {
 	width: 100%;
-	height: 180px;
+	height: 150px;
 	background-position: center center;
 	background:
 		url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+	background-color: #fff;
+	background-size: cover;
+	background-repeat: no-repeat;
+	display: inline-block;
+	box-shadow: 0px -3px 6px 2px rgba(0, 0, 0, 0.2);
+}
+
+.imagePreview2 {
+	width: 100%;
+	height: 150px;
+	background-position: center center;
 	background-color: #fff;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -38,7 +49,7 @@ body {
 	display: block;
 	border-radius: 0px;
 	box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.2);
-	margin-top: -5px;
+	margin-top: -7px;
 }
 
 .imgUp {
@@ -71,26 +82,6 @@ body {
 	font-size: 15px;
 }
 </style>
-<style type="text/css">
-.first {
-	margin-top: 250px !important;
-}
-
-.photo {
-	width: 200px;
-	height: 200px;
-	margin: 85px auto;
-	padding-top: 90px;
-	background-image:
-		url("http://photos1.blogger.com/blogger/6772/1888/320/beach.jpg");
-	text-align: center;
-	font-size: 30px;
-}
-
-.last {
-	margin-top: 250px;
-}
-</style>
 </head>
 <body>
 	<header th:replace="fragments/layout :: header"></header>
@@ -99,23 +90,24 @@ body {
 
 	<div class="container">
 		<div class="row">
-
-			<div class="col-sm-2 imgUp">
-				<div class="imagePreview"></div>
+			<div class="col-sm-3 imgUp">
+				<div class="imagePreview2"
+					style="background-image: url(uploads/2af79cd9-60ed-453a-9797-83cf255b6eca_7f7d5d7b-c34c-4331-bf1f-b090427c0a83.jpg)"></div>
 				<label class="btn btn-primary"> Upload<input type="file"
-					class="uploadFile img" value="Upload Photo"
+					class="uploadFile img"
 					style="width: 0px; height: 0px; overflow: hidden;">
 				</label>
 			</div>
 			<!-- col-2 -->
 			<i class="fa fa-plus imgAdd"></i>
 		</div>
-		<!-- row -->
 
-		<button type="button" id="spn" class="btn btn-primary btn-lg">Submit
-			Order</button>
 
-		<div class="photo first hvr-grow" data-aos="fade-up">FADE UP</div>
+
+
+
+		<!-- boton de loading -->
+		<button type="button" id="spn" class="btn btn-primary btn-lg">Cargar</button>
 
 
 
@@ -146,7 +138,7 @@ body {
 									.closest(".row")
 									.find('.imgAdd')
 									.before(
-											'<div class="col-sm-2 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+											'<div class="col-sm-3 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
 						});
 		$(document).on("click", "i.del", function() {
 			$(this).parent().remove();
@@ -187,7 +179,7 @@ body {
 											'click',
 											function() {
 												var $this = $(this);
-												var loadingText = '<i class="fas fa-spinner fa-spin"></i> loading...';
+												var loadingText = '<i class="fas fa-spinner fa-spin"></i> &nbsp;loading . . .';
 												if ($(this).html() !== loadingText) {
 													$this.data('original-text',
 															$(this).html());
