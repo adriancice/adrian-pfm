@@ -68,7 +68,7 @@
 						<div sec:authorize="isAuthenticated()" class="card-footer">
 							<a th:if="${existeFav == null}"
 								th:href="@{'/addFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
-								class="card-link"><i class="far fa-star"></i>&nbsp;&nbsp;Add
+								class="card-link"><i class="far fa-star"></i>&nbsp;&nbsp;Añadir
 								Favorito</a> <a th:if="${existeFav != null}"
 								th:href="@{'/deleteFavorito?id_user=' + ${myUser.id} + '&id_vehiculo=' + ${vehiculo.id}}"
 								class="card-link"><i class="fas fa-star"></i>&nbsp;&nbsp;Quitar
@@ -114,7 +114,7 @@
 					<!-- Post /////-->
 				</div>
 				<div class="col-md-3">
-					<div class="mb-3">Contacta con el anunciante</div>
+					<div class="mb-3">Contactar con el anunciante</div>
 					<div>
 						<a><i class="fas fa-phone"></i>&nbsp;&nbsp;&nbsp;<span
 							th:text="${user.telefono}"></span></a>

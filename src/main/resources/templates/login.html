@@ -18,7 +18,7 @@
 			<div class="col"></div>
 			<div class="col">
 				<form class="form-signin" th:action="@{/login}" method="post">
-					<h1 class="h3 mb-3 font-weight-normal text-center">Inicia
+					<h1 class="h3 mb-3 font-weight-normal text-center">Iniciar
 						sesión</h1>
 					<div th:if="${param.error}"
 						class="alert alert-danger alert-dismissable">
@@ -48,7 +48,7 @@
 						<a href="" data-toggle="modal" data-target="#forgotPasswordModal">Has
 							olvidado la contraseña ?</a>
 					</div>
-					<input type="submit" value="Inicia sesión"
+					<input type="submit" value="Iniciar sesión"
 						class="btn btn-lg btn-primary btn-block mt-2" />
 				</form>
 			</div>
@@ -74,7 +74,7 @@
 					</div>
 					<div class="modal-body">
 						<p>Introduce tu cuenta de email y te enviaremos un enlace con
-							el que restablecer tu contraseña</p>
+							para restablecer tu contraseña</p>
 						<i class="fas fa-at form-control-feedback"></i><input type="email"
 							name="email" class="form-control "
 							placeholder="Correo electronico *" required />

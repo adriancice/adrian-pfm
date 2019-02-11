@@ -4,7 +4,9 @@
 	<header th:replace="fragments/layout :: header"></header>
 
 
-	<div class="container mb-5">Mis Datos personales</div>
+	<div class="container mb-5">
+		<h3>Mis Datos personales</h3>
+	</div>
 	<div class="container col-md-7">
 		<h4 class="m-y-2">Editar mis datos</h4>
 		<form th:action="@{/editCuenta}" method="post" th:object="${reqUser}">

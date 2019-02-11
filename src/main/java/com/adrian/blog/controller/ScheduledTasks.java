@@ -95,7 +95,7 @@ public class ScheduledTasks {
 				email.setTo(sce.getEmail());
 				email.setSubject("Subscribe prueba");
 				email.setText("prueba para ver si se mandan los email de subscribe !\n"
-						+ "Si quieres darte de baja del servicio de Newsletters, tienes que iniciar sesion en la pagina de Cars, ver mi perfil y dar de baja suscripcion");
+						+ "Si quieres darte de baja del servicio de Newsletters, tienes que iniciar sesion en la pagina de 'Coches', ver mi perfil y dar de baja suscripcion");
 				emailService.sendEmail(email);
 				System.err.println("Mensaje enviado a " + sce.getEmail());
 
