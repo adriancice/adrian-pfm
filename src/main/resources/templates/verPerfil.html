@@ -8,7 +8,7 @@
 	<div class="container pb-5">
 		<h3>Mis Datos personales</h3>
 	</div>
-	<div class="container col-md-7 my-3">
+	<div class="container">
 
 		<div class="form-group row">
 			<label class="col-lg-3 col-form-label form-control-label"><h5>Username</h5></label>
@@ -50,7 +50,7 @@
 		</div>
 
 
-		<div class="text-center my-3">
+		<div class="container">
 			<a th:href="@{'/editarCuenta/' + ${reqUser.id}}"
 				class="btn btn-warning">Editar datos</a> <a
 				th:href="@{'/borrarCuenta/' + ${reqUser.id}}" class="btn btn-danger"

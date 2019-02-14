@@ -76,7 +76,8 @@
 							class="fas fa-car"></i>&nbsp;&nbsp;Vender coche</a>
 						<hr>
 						<form id="logoutForm" th:action="@{/logout}" method="post">
-							<button class="dropdown-item" type="submit">
+							<button class="dropdown-item" type="submit"
+								onclick="return confirm('Estás seguro que quieres cerrar la sesión ?');">
 								<i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Logout
 							</button>
 						</form>

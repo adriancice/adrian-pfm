@@ -55,17 +55,9 @@ public class User {
 	@NotNull
 	private int role;
 
-	@Column(name = "create_at")
-	@Temporal(TemporalType.DATE)
-	private Date createAt;
-
 	@Column(name = "last_session")
 	private Date lastSession;
 
-	@PrePersist
-	public void PrePersist() {
-		createAt = new Date();
-	}
 
 	@Column(name = "reset_token")
 	private String resetToken;
@@ -151,14 +143,6 @@ public class User {
 
 	public void setFechaRegistro(String fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
-	}
-
-	public Date getCreateAt() {
-		return createAt;
-	}
-
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
 	}
 
 	public Date getLastSession() {

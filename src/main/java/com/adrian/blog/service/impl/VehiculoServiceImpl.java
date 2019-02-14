@@ -115,7 +115,6 @@ public class VehiculoServiceImpl implements IVehiculoService {
 		// marca-modelo-descripcion-combustible-provincia-color-anio-tipo de cambio
 		String palabra = filtro.getPalabra();
 		palabra = cleanString(palabra);
-		System.out.println("Cuantas veces? -> " + palabra);
 		String[] palabras = palabra.toLowerCase().split(" ");
 		for (Vehiculo v : vehiculoRepository.findAll()) {
 			// concatenamos todos los atributos del vehiculos en un String
@@ -128,12 +127,10 @@ public class VehiculoServiceImpl implements IVehiculoService {
 			 */
 			// usamos el StringBuilder para que sea mas eficiente
 			StringBuilder sb = new StringBuilder();
-			sb.append(v.getMarca()).append(" " + v.getModelo()).append(" " + v.getColor())
-					.append(" " + v.getCombustible()).append(" " + v.getTipoCambio()).append(" " + v.getProvincia())
-					.append(" " + v.getDescripcion()).append(" " + v.getAnio());
+			sb.append(v.getMarca()).append(" " + v.getModelo()).append(" " + v.getColor()).append(" " + v.getCombustible()).append(" " + v.getTipoCambio())
+					.append(" " + v.getProvincia()).append(" " + v.getDescripcion()).append(" " + v.getAnio());
 			String vehiculoString = sb.toString();
 			vehiculoString = cleanString(vehiculoString);
-			System.err.println("StringAppend: " + vehiculoString);
 			// comprobamos si el string que concatenamos mas arriba contiene todos los
 			// string del array de 'palabras'
 			if (Stream.of(palabras).allMatch(vehiculoString.toLowerCase()::contains)) {
